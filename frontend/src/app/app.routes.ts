@@ -5,6 +5,10 @@ import { RegistroComponente } from './pages/auth/registro-componente/registro-co
 import { EnviarInvitacionComponente } from './pages/invitaciones/enviar-invitacion-componente/enviar-invitacion-componente';
 
 export const routes: Routes = [
+  {
+    path: 'principal',
+    loadChildren: () => import('./shell/shell.module').then((m) => m.ShellModule)
+  },
   { 
     path: 'login',
     component: LoginComponente 
