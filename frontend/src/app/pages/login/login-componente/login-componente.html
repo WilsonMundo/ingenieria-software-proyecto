@@ -1,0 +1,88 @@
+<div class="login-page">
+  <div class="background-pattern"></div>
+
+  <div class="login-container">
+    <div class="brand">
+      <div class="brand-icon">
+        <mat-icon>emoji_events</mat-icon>
+      </div>
+
+      <div>
+        <h1>GolTech Solutions S.A.</h1>
+        <p>World Cup 2026</p>
+      </div>
+    </div>
+
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>Inicia sesión</mat-card-title>
+        <mat-card-subtitle>Accede a tu cuenta</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+          <label class="field-label">Correo electrónico</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input
+              matInput
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              required
+              email
+              placeholder="Ejemplo: admin@pronosticos.com"
+            />
+          </mat-form-field>
+
+          <label class="field-label">Contraseña</label>
+          <p class="error-message" *ngIf="mensajeError">{{ mensajeError }}</p>
+          <mat-form-field appearance="outline" class="full-width">
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              name="password"
+              [(ngModel)]="password"
+              required
+              placeholder="Ingresa tu contraseña"
+            />
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              aria-label="Mostrar u ocultar contraseña"
+            >
+              <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <div class="login-options">
+            <mat-checkbox name="rememberMe" [(ngModel)]="rememberMe">
+              Recuérdame
+            </mat-checkbox>
+
+            <a routerLink="/olvido-contrasenia">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="login-button"
+            type="submit"
+            [disabled]="loginForm.invalid"
+          >
+            Iniciar sesión
+          </button>
+        </form>
+
+        <p class="register-text">
+          ¿No tienes una cuenta?
+          <a routerLink="/registro">Registrarse</a>
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <p class="footer-text">World Cup 2026 • USA, Canada & Mexico</p>
+  </div>
+</div>

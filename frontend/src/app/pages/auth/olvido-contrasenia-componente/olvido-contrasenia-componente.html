@@ -1,0 +1,61 @@
+<div class="auth-page">
+  <div class="background-pattern"></div>
+
+  <div class="auth-container">
+    <mat-card class="auth-card forgot-card">
+      <mat-card-header>
+        <mat-card-title>¿Olvidaste tu contraseña?</mat-card-title>
+        <mat-card-subtitle>
+          Ingresa tu correo y te enviaremos un enlace para recuperarla
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form (ngSubmit)="enviarRecuperacion()" #forgotForm="ngForm">
+          <label class="field-label">Correo electrónico</label>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-icon matPrefix>mail</mat-icon>
+            <input
+              matInput
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              required
+              email
+              placeholder="tu@email.com"
+            />
+          </mat-form-field>
+
+          <p class="error-message" *ngIf="mensajeError">
+            {{ mensajeError }}
+          </p>
+
+          <p class="success-message" *ngIf="mensajeExito">
+            {{ mensajeExito }}
+          </p>
+
+          <button
+            mat-raised-button
+            class="primary-button"
+            type="submit"
+            [disabled]="forgotForm.invalid"
+          >
+            Enviar enlace de recuperación
+          </button>
+        </form>
+
+        <a routerLink="/login" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Volver al inicio de sesión</span>
+        </a>
+
+        <div class="info-box">
+          Te enviaremos un correo con las instrucciones para restablecer tu contraseña
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <p class="footer-text">World Cup 2026 • USA, Canada & Mexico</p>
+  </div>
+</div>

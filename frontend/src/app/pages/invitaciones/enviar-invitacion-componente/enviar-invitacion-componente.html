@@ -1,0 +1,94 @@
+<div class="invite-page">
+  <div class="background-pattern"></div>
+
+  <div class="invite-container">
+    <div class="brand">
+      <div class="brand-icon">
+        <mat-icon>mail</mat-icon>
+      </div>
+
+      <div>
+        <h1>Invitaciones</h1>
+        <p>Envía invitaciones para participar en una liga</p>
+      </div>
+    </div>
+
+    <mat-card class="invite-card">
+      <mat-card-header>
+        <mat-card-title>Enviar invitación</mat-card-title>
+        <mat-card-subtitle>
+          Ingresa el correo del usuario que deseas invitar
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form (ngSubmit)="enviarInvitacion()" #inviteForm="ngForm">
+          <label class="field-label">ID de liga</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-icon matPrefix>emoji_events</mat-icon>
+            <input
+              matInput
+              type="number"
+              name="idLiga"
+              [(ngModel)]="idLiga"
+              required
+              min="1"
+              placeholder="Ejemplo: 1"
+            />
+          </mat-form-field>
+
+          <label class="field-label">Correo destino</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-icon matPrefix>mail</mat-icon>
+            <input
+              matInput
+              type="email"
+              name="emailDestino"
+              [(ngModel)]="emailDestino"
+              required
+              email
+              placeholder="usuario@email.com"
+            />
+          </mat-form-field>
+
+          <p class="error-message" *ngIf="mensajeError">
+            {{ mensajeError }}
+          </p>
+
+          <p class="success-message" *ngIf="mensajeExito">
+            {{ mensajeExito }}
+          </p>
+
+          <div class="result-box" *ngIf="enlaceGenerado">
+            <p>
+              <strong>Usuario registrado:</strong>
+              {{ usuarioRegistrado ? 'Sí' : 'No' }}
+            </p>
+
+            <p>
+              <strong>Enlace generado:</strong>
+            </p>
+
+            <a [href]="enlaceGenerado" target="_blank">
+              {{ enlaceGenerado }}
+            </a>
+          </div>
+
+          <button
+            mat-raised-button
+            class="primary-button"
+            type="submit"
+            [disabled]="inviteForm.invalid"
+          >
+            Enviar invitación
+          </button>
+        </form>
+
+        <a routerLink="/login" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Volver al login</span>
+        </a>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
