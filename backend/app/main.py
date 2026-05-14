@@ -1,7 +1,31 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from app.api.controllers.auth_controller import router as auth_router
+from app.api.controllers.invitacion_controller import router as invitacion_router
+
+app = FastAPI(
+    title="Liga Mundial API",
+    version="1.0.0"
+)
+
+origins = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth_router)
+app.include_router(invitacion_router)
+
 
 @app.get("/")
 def root():
-    return {"message": "API de torneo de futbol funcionando"}
+    return "API funcionando correctamente"
