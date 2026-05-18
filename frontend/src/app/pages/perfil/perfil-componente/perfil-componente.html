@@ -1,0 +1,67 @@
+<div class="perfil-page">
+  <mat-card class="perfil-card">
+    <mat-card-header>
+      <div class="perfil-icon">
+        <mat-icon>person</mat-icon>
+      </div>
+
+      <mat-card-title>Perfil de usuario</mat-card-title>
+      <mat-card-subtitle>Información de la sesión actual</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p class="error-message" *ngIf="mensajeError">
+        {{ mensajeError }}
+      </p>
+
+      <div class="perfil-info" *ngIf="usuario">
+        <div class="info-row">
+          <strong>ID Usuario:</strong>
+          <span>{{ usuario.id_usuario }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Nombre completo:</strong>
+          <span>{{ usuario.nombre_completo }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Correo electrónico:</strong>
+          <span>{{ usuario.email }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Rol:</strong>
+          <span>{{ usuario.rol }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Estado:</strong>
+          <span>{{ usuario.estado }}</span>
+        </div>
+      </div>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="action-button"
+        type="button"
+        (click)="irInvitaciones()"
+      >
+        <mat-icon>mail</mat-icon>
+        Ir a invitaciones
+      </button>
+
+      <button
+        mat-raised-button
+        color="warn"
+        class="logout-button"
+        type="button"
+        (click)="cerrarSesion()"
+      >
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>

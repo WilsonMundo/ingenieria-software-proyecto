@@ -1,0 +1,135 @@
+<div class="auth-page">
+  <div class="background-pattern"></div>
+
+  <div class="auth-container register-container">
+    <mat-card class="auth-card register-card">
+      <mat-card-header>
+        <mat-card-title>Crear cuenta</mat-card-title>
+        <mat-card-subtitle>
+          Únete a la comunidad de predictores
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form (ngSubmit)="crearCuenta()" #registerForm="ngForm">
+          <label class="field-label">Nombre completo</label>
+          <mat-form-field appearance="outline" class="full-width compact-field">
+            <mat-icon matPrefix>person</mat-icon>
+            <input
+              matInput
+              type="text"
+              name="nombreCompleto"
+              [(ngModel)]="nombreCompleto"
+              required
+              placeholder="Juan Pérez"
+            />
+          </mat-form-field>
+
+          <label class="field-label">Correo electrónico</label>
+          <mat-form-field appearance="outline" class="full-width compact-field">
+            <mat-icon matPrefix>mail</mat-icon>
+            <input
+              matInput
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              required
+              email
+              placeholder="tu@email.com"
+            />
+          </mat-form-field>
+
+          <label class="field-label">Contraseña</label>
+          <mat-form-field appearance="outline" class="full-width compact-field">
+            <mat-icon matPrefix>lock</mat-icon>
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              name="password"
+              [(ngModel)]="password"
+              required
+              minlength="6"
+              placeholder="Mínimo 6 caracteres"
+            />
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              aria-label="Mostrar u ocultar contraseña"
+            >
+              <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <label class="field-label">Confirmar contraseña</label>
+          <mat-form-field appearance="outline" class="full-width compact-field">
+            <mat-icon matPrefix>lock</mat-icon>
+            <input
+              matInput
+              [type]="hideConfirmPassword ? 'password' : 'text'"
+              name="confirmarPassword"
+              [(ngModel)]="confirmarPassword"
+              required
+              placeholder="Repite tu contraseña"
+            />
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hideConfirmPassword = !hideConfirmPassword"
+              aria-label="Mostrar u ocultar confirmación de contraseña"
+            >
+              <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <p
+            class="password-error"
+            *ngIf="confirmarPassword && !passwordsCoinciden()"
+          >
+            Las contraseñas no coinciden.
+          </p>
+
+          <mat-checkbox
+            class="terms-checkbox"
+            name="aceptaTerminos"
+            [(ngModel)]="aceptaTerminos"
+            required
+          >
+            Acepto los
+            <a href="#">términos y condiciones</a>
+            y la
+            <a href="#">política de privacidad</a>
+          </mat-checkbox>
+
+          <p class="error-message" *ngIf="mensajeError">
+            {{ mensajeError }}
+          </p>
+
+          <p class="success-message" *ngIf="mensajeExito">
+            {{ mensajeExito }}
+          </p>
+
+          <button
+            mat-raised-button
+            class="primary-button"
+            type="submit"
+            [disabled]="registerForm.invalid || !passwordsCoinciden()"
+          >
+            Crear cuenta
+          </button>
+        </form>
+
+        <p class="login-text">
+          ¿Ya tienes una cuenta?
+          <a routerLink="/login">Iniciar sesión</a>
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <p class="footer-text">World Cup 2026 • USA, Canada & Mexico</p>
+  </div>
+</div>

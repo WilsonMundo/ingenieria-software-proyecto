@@ -1,0 +1,98 @@
+.perfil-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #ecfdf5 100%);
+}
+
+.perfil-card {
+  width: 100%;
+  max-width: 560px;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  border: 1px solid #e5e7eb;
+}
+
+mat-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.perfil-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #2563eb, #059669);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 18px;
+}
+
+.perfil-icon mat-icon {
+  font-size: 38px;
+  width: 38px;
+  height: 38px;
+}
+
+mat-card-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+mat-card-subtitle {
+  color: #475569;
+  font-size: 15px;
+}
+
+.perfil-info {
+  margin-top: 28px;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #bfdbfe;
+  color: #1e293b;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row strong {
+  color: #0f172a;
+}
+
+.info-row span {
+  text-align: right;
+  color: #334155;
+}
+
+.action-button,
+.logout-button {
+  width: 100%;
+  height: 48px;
+  margin-top: 18px;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+.error-message {
+  color: #dc2626;
+  text-align: center;
+  font-weight: 700;
+}

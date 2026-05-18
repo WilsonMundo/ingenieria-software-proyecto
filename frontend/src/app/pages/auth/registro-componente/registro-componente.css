@@ -1,0 +1,152 @@
+.auth-page {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #ecfdf5 100%);
+  overflow: hidden;
+}
+
+.background-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.18), transparent 30%);
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-card {
+  border-radius: 18px;
+  padding: 24px 26px 28px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+  border: 1px solid #e5e7eb;
+}
+
+mat-card-header {
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+mat-card-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+mat-card-subtitle {
+  font-size: 16px;
+  color: #475569;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 5px;
+}
+
+.compact-field {
+  margin-bottom: 4px;
+}
+
+mat-icon[matPrefix] {
+  margin-right: 8px;
+  color: #94a3b8;
+}
+
+.terms-checkbox {
+  display: block;
+  margin: 6px 0 18px;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.terms-checkbox a {
+  color: #059669;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.terms-checkbox a:hover {
+  text-decoration: underline;
+}
+
+.password-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+.primary-button {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2563eb, #059669) !important;
+  color: white !important;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+}
+
+.login-text {
+  margin: 34px 0 0;
+  text-align: center;
+  color: #475569;
+  font-size: 15px;
+}
+
+.login-text a {
+  color: #059669;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.footer-text {
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  margin-top: 34px;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 8px 0 12px;
+  text-align: center;
+}
+
+.success-message {
+  color: #059669;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 8px 0 12px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .auth-card {
+    padding: 22px;
+  }
+
+  mat-card-title {
+    font-size: 24px;
+  }
+}
