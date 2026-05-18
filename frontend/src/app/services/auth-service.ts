@@ -4,6 +4,16 @@ import { Observable } from 'rxjs';
 
 import { LoginResponse } from '../models/dto/login-response';
 
+export interface RegistroRequest {
+  nombre_completo: string;
+  email: string;
+  password: string;
+}
+
+export interface OlvidoContraseniaRequest {
+  email: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +29,10 @@ export class AuthService {
     });
   }
 
+  registro(data: RegistroRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/registro`, data);
+  }
+
   registrar(nombre_completo: string, email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/registro`, {
       nombre_completo,
@@ -27,10 +41,8 @@ export class AuthService {
     });
   }
 
-  olvidoContrasenia(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/olvido-contrasenia`, {
-      email
-    });
+  olvidoContrasenia(data: OlvidoContraseniaRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/olvido-contrasenia`, data);
   }
 
   obtenerPerfil(): Observable<any> {
@@ -55,6 +67,10 @@ export class AuthService {
     localStorage.setItem('access_token', response.access_token);
     localStorage.setItem('refresh_token', response.refresh_token);
     localStorage.setItem('usuario', JSON.stringify(response.usuario));
+  }
+
+  guardarToken(token: string): void {
+    localStorage.setItem('access_token', token);
   }
 
   obtenerToken(): string | null {
