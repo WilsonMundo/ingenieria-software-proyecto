@@ -5,6 +5,7 @@ import { RegistroComponente } from './pages/auth/registro-componente/registro-co
 import { OlvidoContraseniaComponente } from './pages/auth/olvido-contrasenia-componente/olvido-contrasenia-componente';
 import { EnviarInvitacionComponente } from './pages/invitaciones/enviar-invitacion-componente/enviar-invitacion-componente';
 import { PerfilComponente } from './pages/perfil/perfil-componente/perfil-componente';
+import { DashboardComponente } from './pages/dashboard/dashboard-componente/dashboard-componente';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,10 @@ export const routes: Routes = [
   {
     path: 'perfil',
     component: PerfilComponente
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponente  
   },
   {
     path: '',

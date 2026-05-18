@@ -49,8 +49,8 @@ export class LoginComponente {
         this.authService.guardarSesion(response);
 
         console.log('Login correcto:', response);
-        //Reditigimos a perfil
-        this.router.navigate(['/perfil']);
+        //Reditigimos a Dashboard
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error('Error en login:', error);
