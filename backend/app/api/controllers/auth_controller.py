@@ -11,10 +11,12 @@ from app.schemas.auth_schema import (
     LogoutRequest,
     MensajeResponse,
     PerfilResponse,
-    RegistroRequest
+    RegistroRequest,
+    CambiarPasswordRequest
 )
 from app.services.auth_service import (
     autenticar_usuario,
+    cambiar_password_usuario,
     cerrar_sesion,
     obtener_perfil_usuario,
     registrar_usuario,
@@ -62,3 +64,16 @@ def perfil(usuario_actual: Usuario = Depends(get_current_user)):
 @router.post("/logout", response_model=MensajeResponse)
 def logout(data: LogoutRequest, db: Session = Depends(get_db)):
     return cerrar_sesion(db, data.refresh_token)
+
+@router.put("/cambiar-password", response_model=MensajeResponse)
+def cambiar_password(
+    data: CambiarPasswordRequest,
+    usuario_actual: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return cambiar_password_usuario(
+        db=db,
+        usuario=usuario_actual,
+        password_actual=data.password_actual,
+        nueva_password=data.nueva_password
+    )

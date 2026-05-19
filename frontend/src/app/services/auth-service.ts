@@ -86,6 +86,26 @@ export class AuthService {
     return usuario ? JSON.parse(usuario) : null;
   }
 
+  obtenerUsuarios(): Observable<any[]> {
+    const token = this.obtenerToken();
+
+    return this.http.get<any[]>('http://127.0.0.1:8000/api/usuarios', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+  });
+  }
+
+  darBajaUsuario(idUsuario: number): Observable<any> {
+    const token = this.obtenerToken();
+
+    return this.http.patch(`http://127.0.0.1:8000/api/usuarios/${idUsuario}/dar-baja`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
   estaAutenticado(): boolean {
     return !!this.obtenerToken();
   }
@@ -94,5 +114,18 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('usuario');
+  }
+
+  cambiarPassword(passwordActual: string, nuevaPassword: string): Observable<any> {
+  const token = this.obtenerToken();
+
+    return this.http.put(`${this.apiUrl}/cambiar-password`, {
+      password_actual: passwordActual,
+      nueva_password: nuevaPassword
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 }

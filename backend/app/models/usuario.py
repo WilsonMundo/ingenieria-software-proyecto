@@ -15,5 +15,6 @@ class Usuario(Base):
     estado = Column(String(20), default="activo", nullable=False)
     id_rol = Column(Integer, ForeignKey("rol.id_rol"), nullable=False)
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
 
     rol = relationship("Rol", back_populates="usuarios")

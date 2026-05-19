@@ -47,6 +47,10 @@ export class DashboardComponente implements OnInit {
     this.router.navigate(['/invitaciones']);
   }
 
+  accionPendiente(nombreModulo: string): void {
+    alert(`${nombreModulo} aún no está disponible. Este módulo será integrado posteriormente.`);
+  }
+
   cerrarSesion(): void {
     this.authService.logout().subscribe({
       next: () => {

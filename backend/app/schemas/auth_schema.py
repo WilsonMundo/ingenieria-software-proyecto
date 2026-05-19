@@ -46,3 +46,7 @@ class PerfilResponse(BaseModel):
 
 class MensajeResponse(BaseModel):
     mensaje: str
+
+class CambiarPasswordRequest(BaseModel):
+    password_actual: str = Field(min_length=6)
+    nueva_password: str = Field(min_length=6)

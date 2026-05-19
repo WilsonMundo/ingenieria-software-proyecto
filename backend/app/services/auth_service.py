@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
+
 from app.core.config import settings
 from app.core.security import crear_access_token, generar_password_hash, verificar_password
 from app.models.usuario import Usuario
@@ -55,6 +56,7 @@ def autenticar_usuario(db: Session, login_data: LoginRequest, ip_address: str | 
         refresh_token=refresh_token,
         fecha_expiracion=fecha_expiracion_refresh,
         revocada=False,
+        estado="activa",
         ip_address=ip_address,
         user_agent=user_agent
     )
@@ -121,7 +123,8 @@ def solicitar_recuperacion_password(db: Session, email: str):
 def cerrar_sesion(db: Session, refresh_token: str):
     sesion = db.query(UserSession).filter(
         UserSession.refresh_token == refresh_token,
-        UserSession.revocada == False
+        UserSession.revocada == False,
+        UserSession.estado == "cerrada"
     ).first()
 
     if not sesion:
@@ -145,4 +148,24 @@ def obtener_perfil_usuario(usuario: Usuario):
         "email": usuario.email,
         "rol": usuario.rol.nombre_rol,
         "estado": usuario.estado
+    }
+
+def cambiar_password_usuario(db: Session, usuario: Usuario, password_actual: str, nueva_password: str):
+    password_correcta = verificar_password(
+        password_actual,
+        usuario.password_hash
+    )
+
+    if not password_correcta:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La contraseña actual no es correcta"
+        )
+
+    usuario.password_hash = generar_password_hash(nueva_password)
+
+    db.commit()
+
+    return {
+        "mensaje": "Contraseña actualizada correctamente"
     }

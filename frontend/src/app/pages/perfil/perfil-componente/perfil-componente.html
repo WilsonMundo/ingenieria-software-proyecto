@@ -1,12 +1,16 @@
 <div class="perfil-page">
   <mat-card class="perfil-card">
     <mat-card-header>
-      <div class="perfil-icon">
-        <mat-icon>person</mat-icon>
-      </div>
+      <div class="perfil-header">
+        <div class="perfil-icon">
+          <mat-icon>person</mat-icon>
+        </div>
 
-      <mat-card-title>Perfil de usuario</mat-card-title>
-      <mat-card-subtitle>Información de la sesión actual</mat-card-subtitle>
+        <div>
+          <mat-card-title>Perfil de usuario</mat-card-title>
+          <mat-card-subtitle>Información de la sesión actual</mat-card-subtitle>
+        </div>
+      </div>
     </mat-card-header>
 
     <mat-card-content>
@@ -14,12 +18,11 @@
         {{ mensajeError }}
       </p>
 
-      <div class="perfil-info" *ngIf="usuario">
-        <div class="info-row">
-          <strong>ID Usuario:</strong>
-          <span>{{ usuario.id_usuario }}</span>
-        </div>
+      <p class="success-message" *ngIf="mensajeExito">
+        {{ mensajeExito }}
+      </p>
 
+      <div class="perfil-info" *ngIf="usuario">
         <div class="info-row">
           <strong>Nombre completo:</strong>
           <span>{{ usuario.nombre_completo }}</span>
@@ -41,27 +44,92 @@
         </div>
       </div>
 
-      <button
-        mat-raised-button
-        color="primary"
-        class="action-button"
-        type="button"
-        (click)="irInvitaciones()"
-      >
-        <mat-icon>mail</mat-icon>
-        Ir a invitaciones
-      </button>
+      <div class="acciones">
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="toggleCambioPassword()"
+        >
+          <mat-icon>lock_reset</mat-icon>
+          Cambiar contraseña
+        </button>
 
-      <button
-        mat-raised-button
-        color="warn"
-        class="logout-button"
-        type="button"
-        (click)="cerrarSesion()"
-      >
-        <mat-icon>logout</mat-icon>
-        Cerrar sesión
-      </button>
+        @if (esAdministrador()) {
+          <button
+            mat-raised-button
+            color="accent"
+            type="button"
+            (click)="irGestionUsuarios()"
+          >
+            <mat-icon>manage_accounts</mat-icon>
+            Gestión de usuarios
+          </button>
+        }
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="irDashboard()"
+        >
+          <mat-icon>dashboard</mat-icon>
+          Volver al dashboard
+        </button>
+
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="cerrarSesion()"
+        >
+          <mat-icon>logout</mat-icon>
+          Cerrar sesión
+        </button>
+      </div>
+
+      <div class="password-panel" *ngIf="mostrarCambioPassword">
+        <h3>Actualizar contraseña</h3>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña actual</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="passwordActual"
+            name="passwordActual"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nueva contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="nuevaPassword"
+            name="nuevaPassword"
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirmar nueva contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="confirmarPassword"
+            name="confirmarPassword"
+          />
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          class="full-width"
+          (click)="cambiarPassword()"
+        >
+          Guardar nueva contraseña
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

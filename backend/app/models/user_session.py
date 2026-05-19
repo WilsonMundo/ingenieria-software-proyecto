@@ -10,6 +10,7 @@ class UserSession(Base):
 
     id_session = Column(Integer, primary_key=True, index=True)
     id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
+    estado = Column(String(20), nullable=False, default="activa")
 
     access_token = Column(Text, nullable=True)
     refresh_token = Column(Text, unique=True, nullable=False)
@@ -18,6 +19,7 @@ class UserSession(Base):
     fecha_expiracion = Column(DateTime(timezone=True), nullable=False)
 
     revocada = Column(Boolean, default=False, nullable=False)
+    estado = Column(String(20), nullable=False, default="activa")
 
     ip_address = Column(String(50), nullable=True)
     user_agent = Column(Text, nullable=True)
