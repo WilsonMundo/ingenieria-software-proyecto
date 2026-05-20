@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>
+  {{ esEdicion ? 'Editar Sede' : 'Nueva Sede' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre de la Sede</mat-label>
+      <input matInput formControlName="nombre" placeholder="Ej: Estadio Azteca" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Ciudad</mat-label>
+      <input matInput formControlName="ciudad" placeholder="Ej: Ciudad de México" />
+      @if (form.get('ciudad')?.hasError('required') && form.get('ciudad')?.touched) {
+        <mat-error>La ciudad es requerida</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>País</mat-label>
+      <input matInput formControlName="pais_sede" placeholder="Ej: México" />
+      @if (form.get('pais_sede')?.hasError('required') && form.get('pais_sede')?.touched) {
+        <mat-error>El país es requerido</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
+    @if (guardando) { <mat-spinner diameter="20" /> }
+    @else { {{ esEdicion ? 'Actualizar' : 'Guardar' }} }
+  </button>
+</mat-dialog-actions>
