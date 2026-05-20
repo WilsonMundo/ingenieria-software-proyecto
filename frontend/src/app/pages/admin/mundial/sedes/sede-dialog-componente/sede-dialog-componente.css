@@ -1,0 +1,3 @@
+.dialog-form { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; }
+.campo-completo { width: 100%; }
+mat-spinner { display: inline-block; }
