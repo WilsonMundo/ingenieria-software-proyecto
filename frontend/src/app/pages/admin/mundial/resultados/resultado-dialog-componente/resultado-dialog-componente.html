@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+  <mat-icon>scoreboard</mat-icon>
+  {{ esEdicion ? 'Editar Resultado' : 'Ingresar Resultado Oficial' }}
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Partido</mat-label>
+      <mat-select formControlName="id_partido" [disabled]="esEdicion">
+        @for (p of partidos; track p.id_partido) {
+          <mat-option [value]="p.id_partido">
+            {{p.equipo_local?.nombre ?? '?'}} vs {{p.equipo_visitante?.nombre ?? '?'}} — {{p.fecha_hora_inicio | date:'dd/MM/yyyy'}}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('id_partido')?.hasError('required') && form.get('id_partido')?.touched) { <mat-error>Selecciona un partido</mat-error> }
+    </mat-form-field>
+
+    @if (nombrePartido) {
+      <div class="marcador-preview">
+        <span class="equipo-nombre">{{ nombrePartido.split(' vs ')[0] }}</span>
+        <div class="marcador-inputs">
+          <mat-form-field appearance="outline" class="goles-field">
+            <input matInput type="number" formControlName="goles_local" min="0" />
+          </mat-form-field>
+          <span class="guion">—</span>
+          <mat-form-field appearance="outline" class="goles-field">
+            <input matInput type="number" formControlName="goles_visitante" min="0" />
+          </mat-form-field>
+        </div>
+        <span class="equipo-nombre">{{ nombrePartido.split(' vs ')[1] }}</span>
+      </div>
+    }
+
+    @if (esEdicion) {
+      <mat-checkbox formControlName="bloqueado" color="warn">
+        Bloquear resultado (no permitir modificaciones)
+      </mat-checkbox>
+    }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
+    @if (guardando) { <mat-spinner diameter="20"/> } @else { {{ esEdicion ? 'Actualizar' : 'Registrar Resultado' }} }
+  </button>
+</mat-dialog-actions>
