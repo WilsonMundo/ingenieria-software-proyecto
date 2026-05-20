@@ -1,0 +1,64 @@
+<mat-toolbar color="primary" class="mundial-toolbar">
+  <mat-icon>emoji_events</mat-icon>
+  <span class="toolbar-title">Administración del Mundial — FIFA 2026</span>
+</mat-toolbar>
+
+<mat-tab-group animationDuration="300ms" class="mundial-tabs">
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">location_city</mat-icon> Sedes
+    </ng-template>
+    <app-sedes-lista />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">stadium</mat-icon> Estadios
+    </ng-template>
+    <app-estadios-lista />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">flag</mat-icon> Países
+    </ng-template>
+    <app-paises-lista />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">groups</mat-icon> Grupos
+    </ng-template>
+    <app-grupos-lista />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">layers</mat-icon> Fases
+    </ng-template>
+    <app-fases-lista />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">sports_soccer</mat-icon> Partidos
+    </ng-template>
+    <app-partidos-lista />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">account_tree</mat-icon> Bracket
+    </ng-template>
+    <app-bracket />
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">scoreboard</mat-icon> Resultados
+    </ng-template>
+    <app-resultados-lista />
+  </mat-tab>
+
+</mat-tab-group>
