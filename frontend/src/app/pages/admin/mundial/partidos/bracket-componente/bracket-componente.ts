@@ -42,6 +42,6 @@ export class BracketComponente implements OnInit {
   }
 
   getResultado(p: Partido): string {
-    return p.estado_partido === 'finalizado' ? 'Finalizado' : p.estado_partido === 'en_juego' ? '🔴 En Juego' : '⏰ Pendiente';
+    return p.estado_partido === 'finalizado' ? 'Finalizado' : p.estado_partido === 'en_juego' ? ' En Juego' : ' Pendiente';
   }
 }
