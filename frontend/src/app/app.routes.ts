@@ -45,5 +45,14 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
-  }
+  },
+  { path: 'admin/mundial',            component: AdminMundialComponente },
+  { path: 'admin/mundial/sedes',      component: SedesListaComponente },
+  { path: 'admin/mundial/estadios',   component: EstadiosListaComponente },
+  { path: 'admin/mundial/paises',     component: PaisesListaComponente },
+  { path: 'admin/mundial/grupos',     component: GruposListaComponente },
+  { path: 'admin/mundial/fases',      component: FasesListaComponente },
+  { path: 'admin/mundial/partidos',   component: PartidosListaComponente },
+  { path: 'admin/mundial/bracket',    component: BracketComponente },
+  { path: 'admin/mundial/resultados', component: ResultadosListaComponente }
 ];
