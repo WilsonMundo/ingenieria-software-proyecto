@@ -49,18 +49,18 @@ def autenticar_usuario(db: Session, login_data: LoginRequest, ip_address: str | 
     refresh_token = str(uuid.uuid4())
     fecha_expiracion_refresh = datetime.now(timezone.utc) + timedelta(days=7)
 
-    nueva_sesion = UserSession(
-        id_usuario=usuario.id_usuario,
-        access_token=access_token,
-        refresh_token=refresh_token,
-        fecha_expiracion=fecha_expiracion_refresh,
-        revocada=False,
-        ip_address=ip_address,
-        user_agent=user_agent
-    )
+    # nueva_sesion = UserSession(
+    #     id_usuario=usuario.id_usuario,
+    #     access_token=access_token,
+    #     refresh_token=refresh_token,
+    #     fecha_expiracion=fecha_expiracion_refresh,
+    #     revocada=False,
+    #     ip_address=ip_address,
+    #     user_agent=user_agent
+    # )
 
-    db.add(nueva_sesion)
-    db.commit()
+    # db.add(nueva_sesion)
+    # db.commit()
 
     return {
         "access_token": access_token,
