@@ -6,7 +6,16 @@ import { MainLayoutComponente } from './containers/main-layout/main-layout-compo
 const routes: Routes = [
   {
     path: '',
-    component: MainLayoutComponente
+    component: MainLayoutComponente,
+    children: [
+      {
+        path: 'ligas',
+        loadChildren: () =>
+          import('../features/leagues/routes/leagues.routes').then(
+            (m) => m.LEAGUES_ROUTES
+          )
+      }
+    ]
   }
 ];
 

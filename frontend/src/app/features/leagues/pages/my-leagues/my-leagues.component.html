@@ -1,0 +1,25 @@
+<section class="leagues-page">
+  <div class="page-header">
+    <div>
+      <h1>Mis Ligas</h1>
+      <p>Gestiona y participa en tus ligas del Mundial 2026</p>
+    </div>
+    <button class="create-button"><mat-icon>add</mat-icon>Crear Liga</button>
+  </div>
+  <div class="filters-section">
+    <div class="search-container">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Buscar ligas..."/>
+    </div>
+    <div class="filters">
+      <button class="filter active">Todas</button>
+      <button class="filter">Apuesta</button>
+      <button class="filter">Diversión</button>
+      <button class="filter">Activas</button>
+      <button class="filter">Finalizadas</button>
+    </div>
+  </div>
+  <div class="leagues-grid">
+    <app-league-card *ngFor="let league of leagues" [league]="league"></app-league-card>
+  </div>
+</section>

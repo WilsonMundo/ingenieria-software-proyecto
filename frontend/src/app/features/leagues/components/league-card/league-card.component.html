@@ -1,0 +1,30 @@
+<mat-card class="league-card">
+  <mat-card-content>
+    <div class="card-header">
+      <div>
+        <h3 class="league-title">{{ league.name }}</h3>
+        <div class="badges">
+          <span class="type-badge">{{ league.sport }}</span>
+          <span class="status-badge" [ngClass]="league.status.toLowerCase()">{{ league.status }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-content">
+      <div class="info-row">
+        <span class="label">Equipos</span>
+        <span class="value">{{ league.teamsCount }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Inicio</span>
+        <span class="value">{{ league.startDate }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Fin</span>
+        <span class="value">{{ league.endDate }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="card-actions">
+    <button mat-flat-button class="view-button">Ver Liga</button>
+  </mat-card-actions>
+</mat-card>
