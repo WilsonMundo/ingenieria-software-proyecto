@@ -1,0 +1,70 @@
+<div class="usuarios-page">
+  <div class="usuarios-card">
+    <header class="usuarios-header">
+      <div>
+        <h1>Gestión de usuarios</h1>
+        <p>Administración de usuarios registrados en la plataforma.</p>
+      </div>
+
+      <button class="back-button" type="button" (click)="volverDashboard()">
+        <mat-icon>arrow_back</mat-icon>
+        Volver
+      </button>
+    </header>
+
+    <p class="error-message" *ngIf="mensajeError">
+      {{ mensajeError }}
+    </p>
+
+    <p class="success-message" *ngIf="mensajeExito">
+      {{ mensajeExito }}
+    </p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Deleted At</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>{{ usuario.nombre_completo }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>
+              <span class="badge role">{{ usuario.rol }}</span>
+            </td>
+            <td>
+              <span
+                class="badge"
+                [class.active]="usuario.estado === 'activo'"
+                [class.inactive]="usuario.estado === 'inactivo'"
+              >
+                {{ usuario.estado }}
+              </span>
+            </td>
+            <td>{{ usuario.deleted_at || '-' }}</td>
+            <td>
+              <button
+                mat-raised-button
+                color="warn"
+                type="button"
+                [disabled]="usuario.estado === 'inactivo' || usuario.id_usuario === usuarioActual?.id_usuario"
+                (click)="darBaja(usuario)"
+              >
+                <mat-icon>person_off</mat-icon>
+                Dar de baja
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
