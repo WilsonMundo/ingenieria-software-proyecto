@@ -50,3 +50,7 @@ class MensajeResponse(BaseModel):
 class CambiarPasswordRequest(BaseModel):
     password_actual: str = Field(min_length=6)
     nueva_password: str = Field(min_length=6)
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    nueva_password: str = Field(min_length=6)

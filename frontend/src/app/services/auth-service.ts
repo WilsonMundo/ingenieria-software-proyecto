@@ -78,7 +78,7 @@ export class AuthService {
   }
 
   obtenerRefreshToken(): string | null {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
   }
 
   obtenerUsuario(): any {
@@ -114,6 +114,11 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('usuario');
+    localStorage.removeItem('recordar_sesion');
+
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('usuario');
   }
 
   cambiarPassword(passwordActual: string, nuevaPassword: string): Observable<any> {
@@ -126,6 +131,13 @@ export class AuthService {
       headers: {
         Authorization: `Bearer ${token}`
       }
+    });
+  }
+
+  resetPassword(token: string, nuevaPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token: token,
+      nueva_password: nuevaPassword
     });
   }
 }

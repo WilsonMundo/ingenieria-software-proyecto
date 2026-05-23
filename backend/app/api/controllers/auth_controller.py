@@ -12,7 +12,8 @@ from app.schemas.auth_schema import (
     MensajeResponse,
     PerfilResponse,
     RegistroRequest,
-    CambiarPasswordRequest
+    CambiarPasswordRequest,
+    ResetPasswordRequest
 )
 from app.services.auth_service import (
     autenticar_usuario,
@@ -20,7 +21,8 @@ from app.services.auth_service import (
     cerrar_sesion,
     obtener_perfil_usuario,
     registrar_usuario,
-    solicitar_recuperacion_password
+    solicitar_recuperacion_password,
+    resetear_password_usuario
 )
 
 router = APIRouter(
@@ -75,5 +77,13 @@ def cambiar_password(
         db=db,
         usuario=usuario_actual,
         password_actual=data.password_actual,
+        nueva_password=data.nueva_password
+    )
+
+@router.post("/reset-password", response_model=MensajeResponse)
+def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
+    return resetear_password_usuario(
+        db=db,
+        token=data.token,
         nueva_password=data.nueva_password
     )

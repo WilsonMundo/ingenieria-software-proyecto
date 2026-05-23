@@ -4,13 +4,14 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-
 from app.core.config import settings
 from app.core.security import crear_access_token, generar_password_hash, verificar_password
 from app.models.usuario import Usuario
 from app.models.rol import Rol
 from app.models.user_session import UserSession
 from app.schemas.auth_schema import LoginRequest, RegistroRequest
+from app.models.password_reset_token import PasswordResetToken
+from app.services.email_service import enviar_correo_recuperacion_password
 
 def autenticar_usuario(db: Session, login_data: LoginRequest, ip_address: str | None = None, user_agent: str | None = None):
     usuario = db.query(Usuario).filter(Usuario.email == login_data.email).first()
@@ -114,17 +115,84 @@ def registrar_usuario(db: Session, registro_data: RegistroRequest):
 
 
 def solicitar_recuperacion_password(db: Session, email: str):
-    usuario = db.query(Usuario).filter(Usuario.email == email).first()
+    usuario = db.query(Usuario).filter(
+        Usuario.email == email,
+        Usuario.estado == "activo",
+        Usuario.deleted_at.is_(None)
+    ).first()
+
+    if not usuario:
+        return {
+            "mensaje": "Si el correo existe, se enviarán instrucciones para recuperar la contraseña"
+        }
+
+    token = str(uuid.uuid4())
+
+    reset_token = PasswordResetToken(
+        id_usuario=usuario.id_usuario,
+        token=token,
+        usado=False,
+        fecha_expiracion=datetime.now(timezone.utc) + timedelta(minutes=30)
+    )
+
+    db.add(reset_token)
+    db.commit()
+
+    enviar_correo_recuperacion_password(
+        email_destino=usuario.email,
+        nombre_usuario=usuario.nombre_completo,
+        token=token
+    )
 
     return {
         "mensaje": "Si el correo existe, se enviarán instrucciones para recuperar la contraseña"
     }
 
+def resetear_password_usuario(db: Session, token: str, nueva_password: str):
+    reset_token = db.query(PasswordResetToken).filter(
+        PasswordResetToken.token == token,
+        PasswordResetToken.usado == False
+    ).first()
+
+    if not reset_token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token inválido o ya utilizado"
+        )
+
+    fecha_actual = datetime.now(timezone.utc)
+
+    if reset_token.fecha_expiracion < fecha_actual:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El token de recuperación ha expirado"
+        )
+
+    usuario = db.query(Usuario).filter(
+        Usuario.id_usuario == reset_token.id_usuario,
+        Usuario.estado == "activo",
+        Usuario.deleted_at.is_(None)
+    ).first()
+
+    if not usuario:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuario no encontrado o inactivo"
+        )
+
+    usuario.password_hash = generar_password_hash(nueva_password)
+    reset_token.usado = True
+
+    db.commit()
+
+    return {
+        "mensaje": "Contraseña restablecida correctamente"
+    }
+
 def cerrar_sesion(db: Session, refresh_token: str):
     sesion = db.query(UserSession).filter(
         UserSession.refresh_token == refresh_token,
-        UserSession.revocada == False,
-        UserSession.estado == "cerrada"
+        UserSession.revocada == False
     ).first()
 
     if not sesion:
@@ -134,6 +202,8 @@ def cerrar_sesion(db: Session, refresh_token: str):
         )
 
     sesion.revocada = True
+    sesion.estado = "cerrada"
+
     db.commit()
 
     return {

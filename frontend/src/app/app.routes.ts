@@ -7,6 +7,7 @@ import { EnviarInvitacionComponente } from './pages/invitaciones/enviar-invitaci
 import { PerfilComponente } from './pages/perfil/perfil-componente/perfil-componente';
 import { DashboardComponente } from './pages/dashboard/dashboard-componente/dashboard-componente';
 import { UsuariosComponente } from './pages/admin/usuarios-componente/usuarios-componente';
+import { ResetPasswordComponente } from './pages/auth/reset-password-componente/reset-password-componente';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,10 @@ export const routes: Routes = [
   {
     path: 'admin/usuarios',
     component: UsuariosComponente
+  },
+  {
+     path: 'reset-password',
+      component: ResetPasswordComponente
   },
   {
     path: '',

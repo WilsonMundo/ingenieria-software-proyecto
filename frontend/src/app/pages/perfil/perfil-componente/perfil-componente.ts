@@ -107,6 +107,10 @@ export class PerfilComponente implements OnInit {
         this.nuevaPassword = '';
         this.confirmarPassword = '';
         this.mostrarCambioPassword = false;
+
+        setTimeout(() => {
+            this.mensajeExito = '';
+          }, 3000);
       },
       error: (error) => {
         console.error('Error cambiando contraseña:', error);
