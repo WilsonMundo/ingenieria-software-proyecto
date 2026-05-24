@@ -1,0 +1,126 @@
+.page-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 30px 32px 48px;
+  color: #f8fafc;
+  background-color: #0d1118;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.page-header p {
+  margin: 10px 0 0;
+  color: #9aa7b7;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.header-actions small {
+  color: #9aa7b7;
+}
+
+.table-card {
+  overflow: hidden;
+  border: 1px solid #304053;
+  border-radius: 8px;
+  background: #151c27;
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+.activity-table {
+  width: 100%;
+  background: #151c27;
+}
+
+th.mat-mdc-header-cell,
+th.mat-header-cell {
+  color: #9aa7b7;
+  background: #111824;
+  font-weight: 700;
+  border-bottom: 1px solid #304053;
+}
+
+td.mat-mdc-cell,
+td.mat-cell {
+  color: #f8fafc;
+  border-bottom-color: #273445;
+}
+
+.operation-chip {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid transparent;
+}
+
+.op-insert {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #60a5fa;
+}
+
+.op-update {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+}
+
+.op-delete {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.35);
+  color: #f87171;
+}
+
+.state-panel,
+.empty-state {
+  display: flex;
+  min-height: 200px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px;
+  color: #9aa7b7;
+}
+
+.state-panel {
+  border: 1px solid #304053;
+  border-radius: 8px;
+  background: #151c27;
+}
+
+.error-panel {
+  color: #f87171;
+}
+
+@media (max-width: 800px) {
+  .page-shell {
+    padding: 24px 18px;
+  }
+
+  .page-header,
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

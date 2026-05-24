@@ -1,0 +1,178 @@
+.page-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 30px 32px 48px;
+  color: #f8fafc;
+  background-color: #0d1118;
+  min-height: 100vh;
+}
+
+.page-header,
+.page-header > div:first-child,
+.header-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.page-header {
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.page-header p {
+  margin: 10px 0 0;
+  color: #9aa7b7;
+}
+
+.content-grid {
+  display: grid;
+  gap: 22px;
+}
+
+.summary-card,
+.table-card {
+  overflow: hidden;
+  border: 1px solid #304053;
+  border-radius: 8px;
+  background: #151c27;
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+.summary-card {
+  padding: 8px 0 16px;
+  background: linear-gradient(135deg, #151c27 0%, #102d35 55%, #142346 100%);
+  border-color: #0bbf8a;
+}
+
+.summary-card mat-icon[mat-card-avatar] {
+  color: #18d39a;
+  background: rgba(11, 191, 138, 0.18);
+  border-radius: 9px;
+}
+
+mat-card-subtitle {
+  color: #9aa7b7;
+}
+
+mat-card-title {
+  color: #ffffff;
+  font-size: 30px !important;
+  font-weight: 800;
+}
+
+.money-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.money-grid div {
+  padding: 16px;
+  border: 1px solid #304053;
+  border-radius: 8px;
+  background: rgba(8, 12, 17, 0.55);
+}
+
+.money-grid span,
+.money-grid strong {
+  display: block;
+}
+
+.money-grid span {
+  color: #9aa7b7;
+  font-size: 13px;
+}
+
+.money-grid strong {
+  margin-top: 8px;
+  color: #18d39a;
+  font-size: 18px;
+}
+
+.table-header {
+  padding: 16px 22px;
+  background: #111824;
+  border-bottom: 1px solid #304053;
+}
+
+.table-header mat-card-title {
+  margin: 0;
+  font-size: 18px !important;
+}
+
+table {
+  width: 100%;
+  background: #151c27;
+}
+
+th.mat-mdc-header-cell,
+th.mat-header-cell {
+  color: #9aa7b7;
+  background: #111824;
+  font-weight: 700;
+  border-bottom: 1px solid #304053;
+}
+
+td.mat-mdc-cell,
+td.mat-cell {
+  color: #f8fafc;
+  border-bottom-color: #273445;
+}
+
+.monto-text {
+  color: #18d39a;
+  font-weight: 800;
+}
+
+.state-panel,
+.empty-state {
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px;
+  border: 1px solid #304053;
+  border-radius: 8px;
+  background: #151c27;
+  color: #9aa7b7;
+  text-align: center;
+}
+
+.state-panel mat-icon {
+  width: 46px;
+  height: 46px;
+  color: #f59e0b;
+  font-size: 46px;
+}
+
+.error-panel h2 {
+  margin: 0;
+  color: #ffffff;
+}
+
+@media (max-width: 850px) {
+  .page-shell {
+    padding: 24px 18px;
+  }
+
+  .page-header,
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .money-grid {
+    grid-template-columns: 1fr;
+  }
+}
