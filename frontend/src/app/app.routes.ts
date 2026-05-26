@@ -14,6 +14,7 @@ import { LigasPremiosComponente } from './pages/premios/ligas-premios-componente
 import { PremiosLigaComponente } from './pages/premios/premios-liga-componente/premios-liga-componente';
 import { ResetPasswordComponente } from './pages/auth/reset-password-componente/reset-password-componente';
 
+import { VaticinioComponent } from './pages/vaticinios/vaticinio.component';
 // ── M5: Administración del Mundial ──────────────────────────────────────────
 import { AdminMundialComponente } from './pages/admin/mundial/admin-mundial-componente/admin-mundial-componente';
 import { SedesListaComponente } from './pages/admin/mundial/sedes/sedes-lista-componente/sedes-lista-componente';
@@ -62,6 +63,15 @@ export const routes: Routes = [
      path: 'reset-password',
       component: ResetPasswordComponente
   },
+
+  {
+    path: 'vaticinios',
+    component: VaticinioComponent
+  },
+  
+
+
+
   {
     path: 'admin/dashboard-global',
     component: DashboardGlobalComponente
