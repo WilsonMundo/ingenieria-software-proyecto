@@ -1,26 +1,7 @@
-
-from BD import Base  
+from app.core.database import Base  
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, String, Boolean  
 from sqlalchemy.sql import func  
 from sqlalchemy.orm import relationship
-
-class Usuario(Base):
-    __tablename__ = "usuario"  
-    id_usuario = Column(Integer, primary_key=True, index=True)  
-    nombre_completo = Column(String(100), nullable=False)  
-    email = Column(String(120), unique=True, nullable=False)  
-    password_hash = Column(String(255), nullable=False)
-    estado = Column(String(20))
-    id_rol = Column(Integer)
-    fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
-    
-    
-    vaticinios = relationship(
-        "Vaticinio", 
-        back_populates="usuario",
-        primaryjoin="Usuario.id_usuario == Vaticinio.id_liga_miembro",
-        viewonly=True
-    )
 
 class Partido(Base):
     __tablename__ = "partido"  
@@ -49,13 +30,10 @@ class Vaticinio(Base):
     fecha_registro = Column(DateTime(timezone=True), server_default=func.now())  
     fecha_modificacion = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     
-    
+    # 🚀 RELACIÓN SEGURA: Usamos el string del modelo global del grupo sin duplicar la clase
     usuario = relationship(
         "Usuario", 
-        back_populates="vaticinios", 
-        primaryjoin="Vaticinio.id_liga_miembro == Usuario.id_usuario", 
-        foreign_keys=[id_liga_miembro],
-        remote_side="Usuario.id_usuario",
+        primaryjoin="Vaticinio.id_liga_miembro == foreign(Usuario.id_usuario)", 
         viewonly=True
     )
     
@@ -71,4 +49,3 @@ class Puntaje(Base):
     acerto_marcador = Column(Boolean, default=False, nullable=False)
 
     vaticinio = relationship("Vaticinio", back_populates="puntaje")
-

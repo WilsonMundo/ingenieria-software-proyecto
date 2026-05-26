@@ -9,6 +9,8 @@ import { DashboardComponente } from './pages/dashboard/dashboard-componente/dash
 import { UsuariosComponente } from './pages/admin/usuarios-componente/usuarios-componente';
 import { ResetPasswordComponente } from './pages/auth/reset-password-componente/reset-password-componente';
 
+import { VaticinioComponent } from './pages/vaticinios/vaticinio.component';
+
 export const routes: Routes = [
   {
     path: 'login',
@@ -42,6 +44,15 @@ export const routes: Routes = [
      path: 'reset-password',
       component: ResetPasswordComponente
   },
+
+  {
+    path: 'vaticinios',
+    component: VaticinioComponent
+  },
+  
+
+
+
   {
     path: '',
     redirectTo: 'login',

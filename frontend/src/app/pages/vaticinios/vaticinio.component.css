@@ -1,0 +1,193 @@
+/* ==========================================================================
+   Contenedor Principal con la Imagen de Fondo Premium
+   ========================================================================== */
+.container {
+  max-width: 550px;
+  margin: 40px auto;
+  padding: 20px; 
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  
+  background-image: url('/fondo-mundial.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 10px;
+    padding: 10px;
+  }
+}
+
+/* ==========================================================================
+   Tarjeta con Efecto de Transparencia Difuminada (Glassmorphism)
+   ========================================================================== */
+.card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(238, 242, 245, 0.4);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ==========================================================================
+   Encabezado Corregido (Alineación perfecta del Título y el Badge)
+   ========================================================================== */
+.card-header {
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+  padding: 20px;
+  color: white;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.card-header h5 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 30px 25px;
+  background-color: transparent; 
+}
+
+.custom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.col-5 {
+  flex: 0 0 42%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.col-2 {
+  flex: 0 0 10%;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color:#4a5568;
+  text-align: center;
+}
+
+label {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color:#1a202c;
+  margin-bottom: 10px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   Controles de Entrada (Marcadores Numéricos)
+   ========================================================================== */
+.form-control {
+  width: 75px;
+  height: 55px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1a202c;
+  background-color: #ffffff;
+  border: 2px solid#cbd5e1;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #2a5298;
+  box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.15);
+  outline: none;
+}
+
+/* ==========================================================================
+   Botón Principal de Guardar Predicción
+   ========================================================================== */
+.btn-success {
+  width: 100%;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.btn-success:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.btn-success:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Alertas de Estado
+   ========================================================================== */
+.alert {
+  padding: 14px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: center;
+  border: 1px solid transparent;
+}
+
+.alert-danger {
+  background-color: rgba(254, 242, 242, 0.95);
+  color:#b91c1c;
+  border-color: #fecaca;
+}
+
+.alert-success {
+  background-color: rgba(236, 253, 245, 0.95);
+  color:#047857;
+  border-color: #a7f3d0;
+}
+
+.alert-warning {
+  background-color: rgba(255, 251, 207, 0.95);
+  color:#b45309;
+  border-color: #fde68a;
+}
+
+/* ==========================================================================
+   Badge de Estado del Partido (Abierto / Cerrado)
+   ========================================================================== */
+.badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 30px;
+  color: white;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.bg-success { background-color: #10b981; }
+.bg-danger { background-color: #ef4444; }
+
+
