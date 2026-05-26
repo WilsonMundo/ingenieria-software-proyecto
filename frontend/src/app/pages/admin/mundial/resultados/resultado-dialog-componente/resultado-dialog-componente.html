@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  <mat-icon>scoreboard</mat-icon>
+  <!-- <mat-icon>scoreboard</mat-icon> -->
   {{ esEdicion ? 'Editar Resultado' : 'Ingresar Resultado Oficial' }}
 </h2>
 <mat-dialog-content>
@@ -9,11 +9,14 @@
       <mat-select formControlName="id_partido" [disabled]="esEdicion">
         @for (p of partidos; track p.id_partido) {
           <mat-option [value]="p.id_partido">
-            {{p.equipo_local?.nombre ?? '?'}} vs {{p.equipo_visitante?.nombre ?? '?'}} — {{p.fecha_hora_inicio | date:'dd/MM/yyyy'}}
+            {{ p.equipo_local?.nombre ?? '?' }} vs {{ p.equipo_visitante?.nombre ?? '?' }} —
+            {{ p.fecha_hora_inicio | date: 'dd/MM/yyyy' }}
           </mat-option>
         }
       </mat-select>
-      @if (form.get('id_partido')?.hasError('required') && form.get('id_partido')?.touched) { <mat-error>Selecciona un partido</mat-error> }
+      @if (form.get('id_partido')?.hasError('required') && form.get('id_partido')?.touched) {
+        <mat-error>Selecciona un partido</mat-error>
+      }
     </mat-form-field>
 
     @if (nombrePartido) {
@@ -42,6 +45,10 @@
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
   <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
-    @if (guardando) { <mat-spinner diameter="20"/> } @else { {{ esEdicion ? 'Actualizar' : 'Registrar Resultado' }} }
+    @if (guardando) {
+      <mat-spinner diameter="20" />
+    } @else {
+      {{ esEdicion ? 'Actualizar' : 'Registrar Resultado' }}
+    }
   </button>
 </mat-dialog-actions>

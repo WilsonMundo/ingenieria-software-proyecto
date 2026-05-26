@@ -18,7 +18,7 @@ import { ResultadoDialogComponente } from '../resultado-dialog-componente/result
   imports: [CommonModule, DatePipe, MatTableModule, MatButtonModule, MatIconModule,
     MatDialogModule, MatSnackBarModule, MatProgressSpinnerModule, MatTooltipModule, MatBadgeModule],
   templateUrl: './resultados-lista-componente.html',
-  styleUrl: './resultados-lista-componente.css',
+  // styleUrl: './resultados-lista-componente.css',
 })
 export class ResultadosListaComponente implements OnInit {
   resultados: ResultadoOficial[] = [];

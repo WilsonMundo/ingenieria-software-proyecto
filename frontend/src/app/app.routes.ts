@@ -70,8 +70,7 @@ export const routes: Routes = [
   { path: 'admin/mundial/fases',      component: FasesListaComponente },
   { path: 'admin/mundial/partidos',   component: PartidosListaComponente },
   { path: 'admin/mundial/bracket',    component: BracketComponente },
-  { path: 'admin/mundial/resultados', component: ResultadosListaComponente }
-
+  { path: 'admin/mundial/resultados', component: ResultadosListaComponente },
   // Redirecciones
   { path: '',   redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' },
