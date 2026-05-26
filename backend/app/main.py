@@ -44,6 +44,7 @@ app.include_router(mundial_router)
 app.include_router(premio_router)
 app.include_router(admin_router)
 
+
 @app.get("/")
 def root():
     return "API funcionando correctamente"

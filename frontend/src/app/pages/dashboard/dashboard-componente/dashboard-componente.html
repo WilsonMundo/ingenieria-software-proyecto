@@ -1,311 +1,205 @@
-<div class="dashboard-layout">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-icon">
-        <mat-icon>emoji_events</mat-icon>
-      </div>
+<section class="welcome">
+  <h1>Bienvenido, {{ usuario?.nombre_completo || 'Usuario' }}</h1>
+  <p>Aqui esta tu resumen de apuestas del Mundial 2026</p>
+</section>
 
-      <div>
-        <h2>GolTech Solutions S.A.</h2>
-        <p>World Cup 2026</p>
+<section class="summary-grid">
+  <div class="summary-card">
+    <div class="summary-header">
+      <span>Puntos Totales</span>
+      <div class="summary-icon green">
+        <mat-icon>trending_up</mat-icon>
       </div>
     </div>
 
-    <nav class="menu">
-      <button class="menu-item active" type="button" (click)="irDashboard()">
-        <mat-icon>dashboard</mat-icon>
-        Dashboard
-      </button>
+    <h2>342</h2>
+    <p>+24 esta semana</p>
+    <div class="bar green-bar"></div>
+  </div>
 
-      <button class="menu-item" type="button">
-        <mat-icon>emoji_events</mat-icon>
-        Mis Ligas
-      </button>
+  <div class="summary-card">
+    <div class="summary-header">
+      <span>Posicion Actual</span>
+      <div class="summary-icon blue">
+        <mat-icon>workspace_premium</mat-icon>
+      </div>
+    </div>
 
-      <button class="menu-item" type="button">
-        <mat-icon>add_circle_outline</mat-icon>
-        Crear Liga
-      </button>
+    <h2>3ro</h2>
+    <p>En Liga Global</p>
+    <div class="bar blue-bar"></div>
+  </div>
 
-      <button class="menu-item" type="button" (click)="irInvitaciones()">
-        <mat-icon>mail</mat-icon>
-        Invitaciones
-      </button>
+  <div class="summary-card">
+    <div class="summary-header">
+      <span>Ligas Activas</span>
+      <div class="summary-icon purple">
+        <mat-icon>groups</mat-icon>
+      </div>
+    </div>
 
-      <button class="menu-item" type="button" (click)="accionPendiente('Predicciones')">
-        <mat-icon>track_changes</mat-icon>
-        Predicciones
-      </button>
+    <h2>5</h2>
+    <p>2 nuevas este mes</p>
+    <div class="bar purple-bar"></div>
+  </div>
+</section>
 
-      <button class="menu-item" type="button" (click)="accionPendiente('Rankings')">
-        <mat-icon>military_tech</mat-icon>
-        Rankings
-      </button>
+<section class="dashboard-grid">
+  <div class="left-column">
+    <div class="panel">
+      <div class="panel-title">
+        <mat-icon>groups</mat-icon>
+        <h3>Mis Ligas</h3>
+      </div>
 
-      <button class="menu-item" type="button" (click)="accionPendiente('Partidos')">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre de Liga</th>
+            <th>Tipo</th>
+            <th>Participantes</th>
+            <th>Tu Rango</th>
+            <th>Premio</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Liga de Campeones</td>
+            <td><span class="badge green-badge">APUESTA</span></td>
+            <td>24</td>
+            <td class="success">#3</td>
+            <td class="success">$500</td>
+            <td class="success">activa</td>
+          </tr>
+
+          <tr>
+            <td>Mundial de Oficina</td>
+            <td><span class="badge blue-badge">DIVERSION</span></td>
+            <td>12</td>
+            <td class="success">#1</td>
+            <td>Sin premio</td>
+            <td class="success">activa</td>
+          </tr>
+
+          <tr>
+            <td>Amigos y Familia</td>
+            <td><span class="badge blue-badge">DIVERSION</span></td>
+            <td>8</td>
+            <td class="success">#5</td>
+            <td>Sin premio</td>
+            <td class="success">activa</td>
+          </tr>
+
+          <tr>
+            <td>Maestros Globales</td>
+            <td><span class="badge green-badge">APUESTA</span></td>
+            <td>156</td>
+            <td class="success">#42</td>
+            <td class="success">$200</td>
+            <td class="success">activa</td>
+          </tr>
+
+          <tr>
+            <td>Guerreros del Fin de Semana</td>
+            <td><span class="badge green-badge">APUESTA</span></td>
+            <td>48</td>
+            <td>-</td>
+            <td class="success">$300</td>
+            <td class="warning">pendiente</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel matches-panel">
+      <div class="panel-title">
         <mat-icon>calendar_today</mat-icon>
-        Partidos
-      </button>
+        <h3>Proximos Partidos</h3>
+      </div>
 
-      <button class="menu-item" type="button" (click)="irPerfil()">
-        <mat-icon>settings</mat-icon>
-        Configuración
-      </button>
+      <div class="match-card">
+        <div class="team">
+          <strong>BR</strong>
+          <div>
+            <h4>Brazil</h4>
+            <p>Odds: 1.8</p>
+          </div>
+        </div>
 
-      <button class="menu-item" type="button" (click)="irPanelGlobal()">
-        <mat-icon>admin_panel_settings</mat-icon>
-        Panel Global
-      </button>
+        <span class="vs">VS</span>
 
-      <button class="menu-item" type="button" (click)="irAuditoria()">
-        <mat-icon>fact_check</mat-icon>
-        Auditoria
-      </button>
+        <div class="team right">
+          <div>
+            <h4>Argentina</h4>
+            <p>Odds: 2.1</p>
+          </div>
+          <strong>AR</strong>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <button class="menu-item" type="button" (click)="irReportes()">
-        <mat-icon>assessment</mat-icon>
-        Reportes
-      </button>
-    </nav>
+  <aside class="ranking-panel panel">
+    <div class="ranking-header">
+      <div class="panel-title">
+        <mat-icon>workspace_premium</mat-icon>
+        <h3>Mejores Clasificaciones</h3>
+      </div>
+      <span>Liga Global</span>
+    </div>
 
-    <div class="sidebar-footer">
-      <strong>World Cup 2026</strong>
-      <span>USA, Canada & Mexico</span>
+    <div class="ranking-list">
+      <div class="ranking-item">
+        <div class="place gold">1</div>
+        <div class="avatar">SJ</div>
+        <div>
+          <strong>Sarah Johnson</strong>
+          <p>485 puntos</p>
+        </div>
+        <span class="success">+2</span>
+      </div>
+
+      <div class="ranking-item">
+        <div class="place silver">2</div>
+        <div class="avatar">MC</div>
+        <div>
+          <strong>Mike Chen</strong>
+          <p>456 puntos</p>
+        </div>
+        <span class="danger">-1</span>
+      </div>
+
+      <div class="ranking-item current">
+        <div class="place bronze">3</div>
+        <div class="avatar">TU</div>
+        <div>
+          <strong>Tu</strong>
+          <p>342 puntos</p>
+        </div>
+        <span class="success">+3</span>
+      </div>
+
+      <div class="ranking-item">
+        <div class="place normal">4</div>
+        <div class="avatar">EW</div>
+        <div>
+          <strong>Emma Wilson</strong>
+          <p>318 puntos</p>
+        </div>
+        <span class="success">+1</span>
+      </div>
+
+      <div class="ranking-item">
+        <div class="place normal">5</div>
+        <div class="avatar">DB</div>
+        <div>
+          <strong>David Brown</strong>
+          <p>295 puntos</p>
+        </div>
+        <span class="danger">-2</span>
+      </div>
     </div>
   </aside>
-
-  <main class="main-content">
-    <header class="topbar">
-      <div class="search-box">
-        <mat-icon>search</mat-icon>
-        <input type="text" placeholder="Buscar ligas o usuarios..." />
-      </div>
-
-      <div class="topbar-user">
-        <div class="notification">
-          <mat-icon>notifications</mat-icon>
-          <span>3</span>
-        </div>
-
-        <div class="user-avatar">
-          <mat-icon>person</mat-icon>
-        </div>
-
-        <div class="user-info" (click)="irPerfil()">
-          <strong>{{ usuario?.nombre_completo || 'Usuario' }}</strong>
-          <span>{{ usuario?.email || 'correo@ejemplo.com' }}</span>
-        </div>
-
-        <button class="logout-mini" type="button" (click)="cerrarSesion()">
-          <mat-icon>logout</mat-icon>
-        </button>
-      </div>
-    </header>
-
-    <section class="welcome">
-      <h1>Bienvenido, {{ usuario?.nombre_completo || 'Usuario' }}</h1>
-      <p>Aquí está tu resumen de apuestas del Mundial 2026</p>
-    </section>
-
-    <section class="summary-grid">
-      <div class="summary-card">
-        <div class="summary-header">
-          <span>Puntos Totales</span>
-          <div class="summary-icon green">
-            <mat-icon>trending_up</mat-icon>
-          </div>
-        </div>
-
-        <h2>342</h2>
-        <p>+24 esta semana</p>
-        <div class="bar green-bar"></div>
-      </div>
-
-      <div class="summary-card">
-        <div class="summary-header">
-          <span>Posición Actual</span>
-          <div class="summary-icon blue">
-            <mat-icon>workspace_premium</mat-icon>
-          </div>
-        </div>
-
-        <h2>3ro</h2>
-        <p>En Liga Global</p>
-        <div class="bar blue-bar"></div>
-      </div>
-
-      <div class="summary-card">
-        <div class="summary-header">
-          <span>Ligas Activas</span>
-          <div class="summary-icon purple">
-            <mat-icon>groups</mat-icon>
-          </div>
-        </div>
-
-        <h2>5</h2>
-        <p>2 nuevas este mes</p>
-        <div class="bar purple-bar"></div>
-      </div>
-    </section>
-
-    <section class="dashboard-grid">
-      <div class="left-column">
-        <div class="panel">
-          <div class="panel-title">
-            <mat-icon>groups</mat-icon>
-            <h3>Mis Ligas</h3>
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre de Liga</th>
-                <th>Tipo</th>
-                <th>Participantes</th>
-                <th>Tu Rango</th>
-                <th>Premio</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td>Liga de Campeones</td>
-                <td><span class="badge green-badge">APUESTA</span></td>
-                <td>24</td>
-                <td class="success">#3</td>
-                <td class="success">$500</td>
-                <td class="success">activa</td>
-              </tr>
-
-              <tr>
-                <td>Mundial de Oficina</td>
-                <td><span class="badge blue-badge">DIVERSIÓN</span></td>
-                <td>12</td>
-                <td class="success">#1</td>
-                <td>Sin premio</td>
-                <td class="success">activa</td>
-              </tr>
-
-              <tr>
-                <td>Amigos y Familia</td>
-                <td><span class="badge blue-badge">DIVERSIÓN</span></td>
-                <td>8</td>
-                <td class="success">#5</td>
-                <td>Sin premio</td>
-                <td class="success">activa</td>
-              </tr>
-
-              <tr>
-                <td>Maestros Globales</td>
-                <td><span class="badge green-badge">APUESTA</span></td>
-                <td>156</td>
-                <td class="success">#42</td>
-                <td class="success">$200</td>
-                <td class="success">activa</td>
-              </tr>
-
-              <tr>
-                <td>Guerreros del Fin de Semana</td>
-                <td><span class="badge green-badge">APUESTA</span></td>
-                <td>48</td>
-                <td>-</td>
-                <td class="success">$300</td>
-                <td class="warning">pendiente</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="panel matches-panel">
-          <div class="panel-title">
-            <mat-icon>calendar_today</mat-icon>
-            <h3>Próximos Partidos</h3>
-          </div>
-
-          <div class="match-card">
-            <div class="team">
-              <strong>BR</strong>
-              <div>
-                <h4>Brazil</h4>
-                <p>Odds: 1.8</p>
-              </div>
-            </div>
-
-            <span class="vs">VS</span>
-
-            <div class="team right">
-              <div>
-                <h4>Argentina</h4>
-                <p>Odds: 2.1</p>
-              </div>
-              <strong>AR</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <aside class="ranking-panel panel">
-        <div class="ranking-header">
-          <div class="panel-title">
-            <mat-icon>workspace_premium</mat-icon>
-            <h3>Mejores Clasificaciones</h3>
-          </div>
-          <span>Liga Global</span>
-        </div>
-
-        <div class="ranking-list">
-          <div class="ranking-item">
-            <div class="place gold">1</div>
-            <div class="avatar">👩🏻‍💼</div>
-            <div>
-              <strong>Sarah Johnson</strong>
-              <p>485 puntos</p>
-            </div>
-            <span class="success">↗ +2</span>
-          </div>
-
-          <div class="ranking-item">
-            <div class="place silver">2</div>
-            <div class="avatar">👩🏽‍🦱</div>
-            <div>
-              <strong>Mike Chen</strong>
-              <p>456 puntos</p>
-            </div>
-            <span class="danger">↘ -1</span>
-          </div>
-
-          <div class="ranking-item current">
-            <div class="place bronze">3</div>
-            <div class="avatar">🧑🏽</div>
-            <div>
-              <strong>Tú</strong>
-              <p>342 puntos</p>
-            </div>
-            <span class="success">↗ +3</span>
-          </div>
-
-          <div class="ranking-item">
-            <div class="place normal">4</div>
-            <div class="avatar">👱🏻‍♀️</div>
-            <div>
-              <strong>Emma Wilson</strong>
-              <p>318 puntos</p>
-            </div>
-            <span class="success">↗ +1</span>
-          </div>
-
-          <div class="ranking-item">
-            <div class="place normal">5</div>
-            <div class="avatar">🧑🏾</div>
-            <div>
-              <strong>David Brown</strong>
-              <p>295 puntos</p>
-            </div>
-            <span class="danger">↘ -2</span>
-          </div>
-        </div>
-      </aside>
-    </section>
-  </main>
-</div>
+</section>

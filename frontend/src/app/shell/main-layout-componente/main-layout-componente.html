@@ -1,0 +1,95 @@
+<div class="shell-layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <mat-icon>emoji_events</mat-icon>
+      </div>
+
+      <div>
+        <h2>GolTech Solutions S.A.</h2>
+        <p>World Cup 2026</p>
+      </div>
+    </div>
+
+    <nav class="menu" aria-label="Navegacion principal">
+      @for (item of mainMenu; track item.route) {
+        <a
+          class="menu-item"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <section class="menu-section">
+      <h3>Administracion</h3>
+      <nav class="menu compact" aria-label="Administracion">
+        @for (item of adminMenu; track item.route) {
+          <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
+    </section>
+
+    <section class="menu-section">
+      <h3>Mundial</h3>
+      <nav class="menu compact" aria-label="Administracion del mundial">
+        @for (item of mundialMenu; track item.route) {
+          <a
+            class="menu-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
+    </section>
+
+    <div class="sidebar-footer">
+      <strong>World Cup 2026</strong>
+      <span>USA, Canada & Mexico</span>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Buscar ligas, usuarios o modulos..." />
+      </div>
+
+      <div class="topbar-user">
+        <div class="notification">
+          <mat-icon>notifications</mat-icon>
+          <span>3</span>
+        </div>
+
+        <div class="user-avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+
+        <a class="user-info" routerLink="/perfil">
+          <strong>{{ usuario?.nombre_completo || 'Usuario' }}</strong>
+          <span>{{ usuario?.email || 'correo@ejemplo.com' }}</span>
+        </a>
+
+        <button class="logout-mini" type="button" (click)="cerrarSesion()" aria-label="Cerrar sesion">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </header>
+
+    <section class="content-shell">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

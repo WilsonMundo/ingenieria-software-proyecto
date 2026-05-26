@@ -34,45 +34,4 @@ export class DashboardComponente implements OnInit {
 
     this.usuario = this.authService.obtenerUsuario();
   }
-
-  irDashboard(): void {
-    this.router.navigate(['/dashboard']);
-  }
-
-  irPerfil(): void {
-    this.router.navigate(['/perfil']);
-  }
-
-  irInvitaciones(): void {
-    this.router.navigate(['/invitaciones']);
-  }
-
-  irPanelGlobal(): void {
-    this.router.navigate(['/admin/dashboard-global']);
-  }
-
-  irAuditoria(): void {
-    this.router.navigate(['/admin/auditoria']);
-  }
-
-  irReportes(): void {
-    this.router.navigate(['/admin/reportes']);
-  }
-
-  accionPendiente(nombreModulo: string): void {
-    alert(`${nombreModulo} aún no está disponible. Este módulo será integrado posteriormente.`);
-  }
-
-  cerrarSesion(): void {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.authService.limpiarSesion();
-        this.router.navigate(['/login']);
-      },
-      error: () => {
-        this.authService.limpiarSesion();
-        this.router.navigate(['/login']);
-      }
-    });
-  }
 }
