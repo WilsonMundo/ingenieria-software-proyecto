@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 import { LeaguesService } from '../../services/leagues.service';
 import { League } from '../../interfaces/league.interface';
@@ -10,6 +11,7 @@ import { League } from '../../interfaces/league.interface';
   standalone: true,
   imports: [
     CommonModule,
+    MatIconModule,
     RouterLink
   ],
   templateUrl: './league-detail.component.html',

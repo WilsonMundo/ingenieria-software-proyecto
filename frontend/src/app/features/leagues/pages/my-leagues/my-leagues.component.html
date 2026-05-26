@@ -1,25 +1,99 @@
 <section class="leagues-page">
+
   <div class="page-header">
+
     <div>
       <h1>Mis Ligas</h1>
-      <p>Gestiona y participa en tus ligas del Mundial 2026</p>
+      <p>
+        Gestiona y participa en tus ligas del Mundial 2026
+      </p>
     </div>
-    <button class="create-button" mat-raised-button color="primary" routerLink="/principal/ligas/crear"><mat-icon>add</mat-icon>Crear Liga</button>
+
+    <button
+      class="create-button"
+      mat-raised-button
+      color="primary"
+      routerLink="/principal/ligas/crear"
+    >
+      <mat-icon>add</mat-icon>
+      Crear Liga
+    </button>
+
   </div>
+
+  <!-- Filters -->
   <div class="filters-section">
+
+    <!-- Search -->
     <div class="search-container">
+
       <mat-icon>search</mat-icon>
-      <input type="text" placeholder="Buscar ligas..."/>
+
+      <input
+        type="text"
+        placeholder="Buscar ligas..."
+        [(ngModel)]="searchQuery"
+        (input)="applyFilters()"
+      />
+
     </div>
+
+    <!-- Buttons -->
     <div class="filters">
-      <button class="filter active">Todas</button>
-      <button class="filter">Apuesta</button>
-      <button class="filter">Diversión</button>
-      <button class="filter">Activas</button>
-      <button class="filter">Finalizadas</button>
+
+      <button
+        class="filter"
+        [class.active]="activeFilter === 'todas'"
+        (click)="setFilter('todas')"
+      >
+        Todas
+      </button>
+
+      <button
+        class="filter"
+        [class.active]="activeFilter === 'apuesta'"
+        (click)="setFilter('apuesta')"
+      >
+        Apuesta
+      </button>
+
+      <button
+        class="filter"
+        [class.active]="activeFilter === 'diversion'"
+        (click)="setFilter('diversion')"
+      >
+        Diversión
+      </button>
+
+      <button
+        class="filter"
+        [class.active]="activeFilter === 'activas'"
+        (click)="setFilter('activas')"
+      >
+        Activas
+      </button>
+
+      <button
+        class="filter"
+        [class.active]="activeFilter === 'finalizadas'"
+        (click)="setFilter('finalizadas')"
+      >
+        Finalizadas
+      </button>
+
     </div>
+
   </div>
+
+  <!-- Cards -->
   <div class="leagues-grid">
-    <app-league-card *ngFor="let league of leagues" [league]="league"></app-league-card>
+
+    <app-league-card
+      *ngFor="let league of filteredLeagues"
+      [league]="league"
+    >
+    </app-league-card>
+
   </div>
+
 </section>

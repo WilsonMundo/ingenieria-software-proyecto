@@ -1,29 +1,15 @@
 <div *ngIf="league" class="league-detail">
   <div class="back-container">
-
-    <button
-      class="back-button"
-      routerLink="/principal/ligas"
-    >
-      ← Volver a Mis Ligas
-    </button>
-
+    <button class="back-button" routerLink="/principal/ligas">← Volver a Mis Ligas</button>
   </div>
-
   <div class="header">
     <div>
       <h1>{{ league.nombre }}</h1>
       <div class="badges">
-        <span class="badge type">
-          {{ league.tipo_liga }}
-        </span>
-        <span class="badge status">
-          {{ league.estado }}
-        </span>
+        <span class="badge type">{{ league.tipo_liga }}</span>
+        <span class="badge status">{{ league.estado }}</span>
       </div>
-      <p class="description">
-        {{ league.descripcion }}
-      </p>
+      <p class="description">{{ league.descripcion }}</p>
     </div>
   </div>
   <div class="stats-grid">
@@ -44,43 +30,17 @@
       <p>{{ league.fecha_inicio }}</p>
     </div>
   </div>
-
+  <!-- Segunda parte del detalle de ligas -->
   <div class="tabs-container">
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'rankings'"
-      (click)="activeTab = 'rankings'"
-    >
-      Rankings
-    </button>
-
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'matches'"
-      (click)="activeTab = 'matches'"
-    >
-      Partidos
-    </button>
-
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'rules'"
-      (click)="activeTab = 'rules'"
-    >
-      Reglas
-    </button>
-
+    <button class="tab-button" [class.active]="activeTab === 'rankings'" (click)="activeTab = 'rankings'">Rankings</button>
+    <button class="tab-button" [class.active]="activeTab === 'matches'" (click)="activeTab = 'matches'">Partidos</button>
+    <button class="tab-button" [class.active]="activeTab === 'rules'" (click)="activeTab = 'rules'">Reglas</button>
   </div>
-
   <div class="tab-content">
-
     <!-- RANKINGS -->
     <div *ngIf="activeTab === 'rankings'" class="content-card">
-
       <h2>Tabla de Posiciones</h2>
-
       <table class="ranking-table">
-
         <thead>
           <tr>
             <th>Posición</th>
@@ -89,82 +49,107 @@
             <th>Precisión</th>
           </tr>
         </thead>
-
         <tbody>
-
           <tr>
             <td>#1</td>
             <td>Sarah Johnson</td>
             <td>485</td>
             <td>78%</td>
           </tr>
-
           <tr>
             <td>#2</td>
             <td>Mike Chen</td>
             <td>456</td>
             <td>75%</td>
           </tr>
-
           <tr>
             <td>#3</td>
             <td>Tú</td>
             <td>342</td>
             <td>71%</td>
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
-
     <!-- PARTIDOS -->
     <div *ngIf="activeTab === 'matches'" class="content-card">
-
       <h2>Próximos Partidos</h2>
-
       <div class="match-card">
-
         <div>
           <h3>Brasil vs Argentina</h3>
           <p>20 Junio 2026 - 16:00</p>
         </div>
-
         <button class="predict-button">
           Predecir
         </button>
-
       </div>
-
       <div class="match-card">
-
         <div>
           <h3>España vs Alemania</h3>
           <p>21 Junio 2026 - 19:00</p>
         </div>
-
         <button class="predict-button">
           Predicho
         </button>
-
       </div>
-
     </div>
-
     <!-- REGLAS -->
     <div *ngIf="activeTab === 'rules'" class="content-card">
-
-      <h2>Reglas de la Liga</h2>
-
-      <ul class="rules-list">
-        <li>Resultado exacto: 5 puntos</li>
-        <li>Ganador correcto: 3 puntos</li>
-        <li>Empate correcto: 2 puntos</li>
-        <li>Las predicciones cierran 1 hora antes</li>
-      </ul>
-
+      <h2 class="section-title">Reglas de la Liga</h2>
+      <div class="rules-container">
+        <!-- Sistema de puntos -->
+        <div class="rule-block">
+          <h3 class="rule-title">
+            <mat-icon class="rule-icon trophy-icon">emoji_events</mat-icon>
+            Sistema de Puntos
+          </h3>
+          <ul class="rules-list">
+            <li>Resultado exacto: 5 puntos</li>
+            <li>Ganador correcto: 3 puntos</li>
+            <li>Empate correcto: 2 puntos</li>
+          </ul>
+        </div>
+        <!-- Fechas importantes -->
+        <div class="rule-block">
+          <h3 class="rule-title">
+            <mat-icon class="rule-icon calendar-icon">
+              calendar_today
+            </mat-icon>
+            Fechas Importantes
+          </h3>
+          <ul class="rules-list">
+            <li>
+              Inicio de la liga:
+              {{ league.fecha_inicio || 'Pendiente' }}
+            </li>
+            <li>
+              Finalización:
+              {{ league.fecha_fin || 'Pendiente' }}
+            </li>
+            <li>
+              Las predicciones cierran 1 hora antes de cada partido
+            </li>
+          </ul>
+        </div>
+        <!-- Premios -->
+        <div class="rule-block">
+          <h3 class="rule-title">
+            <mat-icon class="rule-icon prize-icon">attach_money</mat-icon>
+            Premios
+          </h3>
+          <ul class="rules-list">
+            <li>
+              1er lugar: Q{{ league.precio_participacion }}
+            </li>
+            <li>
+              2do lugar: 30% del premio total
+            </li>
+            <li>
+              3er lugar: 20% del premio total
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-
   </div>
 </div>
