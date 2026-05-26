@@ -1,0 +1,170 @@
+<div *ngIf="league" class="league-detail">
+  <div class="back-container">
+
+    <button
+      class="back-button"
+      routerLink="/principal/ligas"
+    >
+      ← Volver a Mis Ligas
+    </button>
+
+  </div>
+
+  <div class="header">
+    <div>
+      <h1>{{ league.nombre }}</h1>
+      <div class="badges">
+        <span class="badge type">
+          {{ league.tipo_liga }}
+        </span>
+        <span class="badge status">
+          {{ league.estado }}
+        </span>
+      </div>
+      <p class="description">
+        {{ league.descripcion }}
+      </p>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Participantes</h3>
+      <p>24/24</p>
+    </div>
+    <div class="stat-card">
+      <h3>Premio</h3>
+      <p>${{ league.precio_participacion }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Estado</h3>
+      <p>{{ league.estado }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Inicio</h3>
+      <p>{{ league.fecha_inicio }}</p>
+    </div>
+  </div>
+
+  <div class="tabs-container">
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'rankings'"
+      (click)="activeTab = 'rankings'"
+    >
+      Rankings
+    </button>
+
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'matches'"
+      (click)="activeTab = 'matches'"
+    >
+      Partidos
+    </button>
+
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'rules'"
+      (click)="activeTab = 'rules'"
+    >
+      Reglas
+    </button>
+
+  </div>
+
+  <div class="tab-content">
+
+    <!-- RANKINGS -->
+    <div *ngIf="activeTab === 'rankings'" class="content-card">
+
+      <h2>Tabla de Posiciones</h2>
+
+      <table class="ranking-table">
+
+        <thead>
+          <tr>
+            <th>Posición</th>
+            <th>Jugador</th>
+            <th>Puntos</th>
+            <th>Precisión</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>#1</td>
+            <td>Sarah Johnson</td>
+            <td>485</td>
+            <td>78%</td>
+          </tr>
+
+          <tr>
+            <td>#2</td>
+            <td>Mike Chen</td>
+            <td>456</td>
+            <td>75%</td>
+          </tr>
+
+          <tr>
+            <td>#3</td>
+            <td>Tú</td>
+            <td>342</td>
+            <td>71%</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- PARTIDOS -->
+    <div *ngIf="activeTab === 'matches'" class="content-card">
+
+      <h2>Próximos Partidos</h2>
+
+      <div class="match-card">
+
+        <div>
+          <h3>Brasil vs Argentina</h3>
+          <p>20 Junio 2026 - 16:00</p>
+        </div>
+
+        <button class="predict-button">
+          Predecir
+        </button>
+
+      </div>
+
+      <div class="match-card">
+
+        <div>
+          <h3>España vs Alemania</h3>
+          <p>21 Junio 2026 - 19:00</p>
+        </div>
+
+        <button class="predict-button">
+          Predicho
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- REGLAS -->
+    <div *ngIf="activeTab === 'rules'" class="content-card">
+
+      <h2>Reglas de la Liga</h2>
+
+      <ul class="rules-list">
+        <li>Resultado exacto: 5 puntos</li>
+        <li>Ganador correcto: 3 puntos</li>
+        <li>Empate correcto: 2 puntos</li>
+        <li>Las predicciones cierran 1 hora antes</li>
+      </ul>
+
+    </div>
+
+  </div>
+</div>

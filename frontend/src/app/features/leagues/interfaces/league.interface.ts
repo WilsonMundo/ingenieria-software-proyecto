@@ -1,9 +1,10 @@
 export interface League {
-  id: number;
-  name: string;
-  sport: string;
-  teamsCount: number;
-  status: 'Activa' | 'Finalizada' | 'Pendiente';
-  startDate: string;
-  endDate: string;
+  id_liga: number;
+  nombre: string;
+  tipo_liga: string;
+  precio_participacion: string;
+  estado: string;
+  descripcion?: string;
+  fecha_inicio?: string;
+  fecha_fin?: string;
 }

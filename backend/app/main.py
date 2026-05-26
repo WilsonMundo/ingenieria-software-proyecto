@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.controllers.auth_controller import router as auth_router
 from app.api.controllers.invitacion_controller import router as invitacion_router
+from app.api.controllers.liga_controller import router as liga_router
+
 from app.core.logging import configure_logging
 
 configure_logging()
@@ -31,6 +33,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(invitacion_router)
+app.include_router(liga_router)
 
 
 @app.middleware("http")

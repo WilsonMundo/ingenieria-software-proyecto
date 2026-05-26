@@ -1,0 +1,163 @@
+.back-container {
+  margin-bottom: 2rem;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: #00f5b0;
+}
+
+.league-detail {
+  padding: 2rem;
+  color: white;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.badges {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.type {
+  background: rgba(0,255,170,0.1);
+  color: #00ffaa;
+}
+
+.status {
+  background: rgba(0,120,255,0.1);
+  color: #4da3ff;
+}
+
+.description {
+  color: #9ca3af;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+}
+
+.stat-card h3 {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.stat-card p {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  color: white;
+}
+
+.tab-button.active {
+  color: #00f5b0;
+  border-bottom: 2px solid #00f5b0;
+}
+
+.tab-content {
+  margin-top: 1rem;
+}
+
+.content-card {
+  background: #111827;
+  border: 1px solid #233047;
+  border-radius: 18px;
+  padding: 2rem;
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.ranking-table th,
+.ranking-table td {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid #233047;
+}
+
+.ranking-table th {
+  color: #9ca3af;
+}
+
+.match-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f172a;
+  border: 1px solid #233047;
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.predict-button {
+  background: #00f5b0;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rules-list {
+  margin-top: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.rules-list li {
+  margin-bottom: 1rem;
+}

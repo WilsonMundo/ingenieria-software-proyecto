@@ -17,7 +17,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data);
   }
 
-   registro(data: any): Observable<any> {
+  registro(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/registro`, data);
   }
 

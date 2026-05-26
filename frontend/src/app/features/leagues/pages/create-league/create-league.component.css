@@ -1,0 +1,33 @@
+.create-page {
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.create-card {
+  width: 100%;
+  max-width: 700px;
+
+  background: #111827;
+  color: white;
+  border-radius: 16px;
+}
+
+.league-form {
+  margin-top: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 12px;
+}

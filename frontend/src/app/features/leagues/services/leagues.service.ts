@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import { League } from '../interfaces/league.interface';
 
@@ -7,29 +8,43 @@ import { League } from '../interfaces/league.interface';
   providedIn: 'root'
 })
 export class LeaguesService {
-
-  private leagues: League[] = [
-    {
-      id: 1,
-      name: 'Liga Nacional',
-      sport: 'Fútbol',
-      teamsCount: 10,
-      status: 'Activa',
-      startDate: '2026-01-10',
-      endDate: '2026-06-10'
-    },
-    {
-      id: 2,
-      name: 'Copa Universitaria',
-      sport: 'Baloncesto',
-      teamsCount: 8,
-      status: 'Pendiente',
-      startDate: '2026-02-15',
-      endDate: '2026-05-20'
-    }
-  ];
+  private apiUrl = 'http://127.0.0.1:8000';
+  constructor(
+    private http: HttpClient
+  ) {}
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  }
 
   getLeagues(): Observable<League[]> {
-    return of(this.leagues);
+    return this.http.get<League[]>(
+      `${this.apiUrl}/api/ligas`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
   }
+
+  getLeagueById(id: number): Observable<League> {
+    return this.http.get<League>(
+      `${this.apiUrl}/api/ligas/${id}`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  createLeague(data: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/api/ligas`,
+      data,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
 }
