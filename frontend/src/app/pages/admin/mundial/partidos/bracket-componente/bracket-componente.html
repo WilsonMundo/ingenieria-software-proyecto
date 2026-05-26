@@ -1,0 +1,41 @@
+<div class="bracket-header">
+  <h2 class="lista-titulo"><mat-icon>account_tree</mat-icon> Bracket del Torneo — FIFA 2026</h2>
+</div>
+
+@if (cargando) {
+  <div class="spinner-container"><mat-spinner diameter="48"/></div>
+} @else {
+  <div class="bracket-container">
+    @for (bloque of partidosPorFase; track bloque.fase.id_fase) {
+      <div class="fase-columna">
+        <div class="fase-titulo">{{ bloque.fase.nombre }}</div>
+        @for (partido of bloque.partidos; track partido.id_partido) {
+          <mat-card class="partido-card" [class.finalizado]="partido.estado_partido === 'finalizado'" [class.en-juego]="partido.estado_partido === 'en_juego'">
+            <mat-card-content>
+              <div class="equipo local">
+                <span class="bandera">🏳</span>
+                <span class="equipo-nombre">{{ partido.equipo_local?.nombre ?? 'Por definir' }}</span>
+                <span class="codigo">{{ partido.equipo_local?.codigo_fifa ?? '???' }}</span>
+              </div>
+              <div class="vs-separator">VS</div>
+              <div class="equipo visitante">
+                <span class="bandera">🏳</span>
+                <span class="equipo-nombre">{{ partido.equipo_visitante?.nombre ?? 'Por definir' }}</span>
+                <span class="codigo">{{ partido.equipo_visitante?.codigo_fifa ?? '???' }}</span>
+              </div>
+              <div class="partido-meta">
+                <small>{{ partido.fecha_hora_inicio | date:'dd/MM HH:mm' }}</small>
+                <mat-chip [color]="partido.estado_partido === 'finalizado' ? '' : partido.estado_partido === 'en_juego' ? 'accent' : 'primary'" highlighted>
+                  {{ getResultado(partido) }}
+                </mat-chip>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+        @if (bloque.partidos.length === 0) {
+          <div class="sin-partidos">Sin partidos en esta fase</div>
+        }
+      </div>
+    }
+  </div>
+}

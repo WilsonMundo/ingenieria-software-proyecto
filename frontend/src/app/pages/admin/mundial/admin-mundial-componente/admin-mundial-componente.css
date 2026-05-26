@@ -1,0 +1,26 @@
+.mundial-toolbar {
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.mundial-tabs {
+  height: calc(100vh - 64px);
+}
+
+.tab-icon {
+  margin-right: 6px;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+::ng-deep .mat-mdc-tab-body-content {
+  padding: 16px;
+  overflow-y: auto;
+}

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar Estadio' : 'Nuevo Estadio' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Sede</mat-label>
+      <mat-select formControlName="id_sede">
+        @for (sede of sedes; track sede.id_sede) {
+          <mat-option [value]="sede.id_sede">{{ sede.nombre }} — {{ sede.ciudad }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('id_sede')?.hasError('required') && form.get('id_sede')?.touched) {
+        <mat-error>Selecciona una sede</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre del Estadio</mat-label>
+      <input matInput formControlName="nombre" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Capacidad</mat-label>
+      <input matInput type="number" formControlName="capacidad" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
+    @if (guardando) { <mat-spinner diameter="20" /> } @else { {{ esEdicion ? 'Actualizar' : 'Guardar' }} }
+  </button>
+</mat-dialog-actions>

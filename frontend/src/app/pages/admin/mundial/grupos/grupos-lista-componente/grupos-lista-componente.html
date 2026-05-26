@@ -1,0 +1,21 @@
+<div class="lista-header">
+  <h2 class="lista-titulo"><mat-icon>groups</mat-icon> Grupos del Torneo</h2>
+  <button mat-raised-button color="primary" (click)="abrirDialog()"><mat-icon>add</mat-icon> Nuevo Grupo</button>
+</div>
+@if (cargando) { <div class="spinner-container"><mat-spinner diameter="48"/></div>
+} @else {
+  <table mat-table [dataSource]="grupos" class="mat-elevation-z2 tabla-completa">
+    <ng-container matColumnDef="id_grupo"><th mat-header-cell *matHeaderCellDef>#</th><td mat-cell *matCellDef="let g">{{g.id_grupo}}</td></ng-container>
+    <ng-container matColumnDef="nombre"><th mat-header-cell *matHeaderCellDef>Grupo</th><td mat-cell *matCellDef="let g"><strong>{{g.nombre}}</strong></td></ng-container>
+    <ng-container matColumnDef="id_torneo"><th mat-header-cell *matHeaderCellDef>Torneo ID</th><td mat-cell *matCellDef="let g">{{g.id_torneo}}</td></ng-container>
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let g">
+        <button mat-icon-button color="accent" matTooltip="Editar" (click)="abrirDialog(g)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(g)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+  </table>
+}

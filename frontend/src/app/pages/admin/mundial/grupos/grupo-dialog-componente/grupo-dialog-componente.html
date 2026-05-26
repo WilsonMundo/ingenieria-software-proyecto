@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar Grupo' : 'Nuevo Grupo' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Torneo</mat-label>
+      <mat-select formControlName="id_torneo">
+        @for (t of torneos; track t.id_torneo) { <mat-option [value]="t.id_torneo">{{t.nombre}} {{t.anio}}</mat-option> }
+      </mat-select>
+      @if (form.get('id_torneo')?.hasError('required') && form.get('id_torneo')?.touched) { <mat-error>Selecciona un torneo</mat-error> }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre del Grupo (ej: Grupo A)</mat-label>
+      <input matInput formControlName="nombre" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) { <mat-error>Requerido</mat-error> }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
+    @if (guardando) { <mat-spinner diameter="20"/> } @else { {{ esEdicion ? 'Actualizar' : 'Guardar' }} }
+  </button>
+</mat-dialog-actions>

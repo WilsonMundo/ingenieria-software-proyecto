@@ -1,0 +1,130 @@
+<section class="page-shell">
+
+  <header class="page-header">
+    <div class="header-left">
+      <mat-icon class="header-icon">emoji_events</mat-icon>
+      <div>
+        <h1>Gestión de Premios</h1>
+        <p *ngIf="ultimaActualizacion">
+          Actualizado {{ ultimaActualizacion | date:'shortTime' }} —
+          {{ ligasAbiertas.length }} pendiente(s) de cierre,
+          {{ ligasCerradas.length }} cerrada(s)
+        </p>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary" (click)="cargarLigas()" [disabled]="cargando">
+      <mat-icon>refresh</mat-icon>
+      {{ cargando ? 'Actualizando...' : 'Actualizar' }}
+    </button>
+  </header>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="state-panel">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Cargando ligas de apuesta...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !cargando" class="state-panel error-panel">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="cargarLigas()">Reintentar</button>
+  </div>
+
+  <ng-container *ngIf="!cargando && !error">
+
+    <!-- Sin ligas -->
+    <div *ngIf="ligas.length === 0" class="state-panel">
+      <mat-icon>sports_soccer</mat-icon>
+      <h3>No hay ligas de apuesta registradas</h3>
+      <p>Cuando se cree una liga con modalidad "apuesta" aparecerá aquí.</p>
+    </div>
+
+    <!-- Ligas pendientes de cierre -->
+    <ng-container *ngIf="ligasAbiertas.length > 0">
+      <div class="section-label">
+        <mat-icon class="label-icon warn">schedule</mat-icon>
+        <span>Pendientes de cierre ({{ ligasAbiertas.length }})</span>
+      </div>
+
+      <div class="ligas-grid">
+        <mat-card class="liga-card liga-card--abierta" *ngFor="let liga of ligasAbiertas">
+          <div class="card-top">
+            <div class="card-title-row">
+              <span class="liga-nombre">{{ liga.nombre }}</span>
+              <span class="badge badge--abierta">Abierta</span>
+            </div>
+            <div class="card-meta">
+              <span matTooltip="Estado de la liga">
+                <mat-icon>circle</mat-icon> {{ liga.estado }}
+              </span>
+              <span matTooltip="Miembros activos">
+                <mat-icon>group</mat-icon> {{ liga.miembros_activos }} miembro(s)
+              </span>
+              <span matTooltip="Precio de participación">
+                <mat-icon>paid</mat-icon> Q {{ liga.precio_participacion | number:'1.2-2' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-pozo">
+            <span class="pozo-label">Pozo estimado</span>
+            <span class="pozo-valor">
+              Q {{ (liga.precio_participacion * liga.miembros_activos) | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <div class="card-actions">
+            <button mat-flat-button color="warn" (click)="irADetalle(liga)">
+              <mat-icon>gavel</mat-icon>
+              Ejecutar cierre
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </ng-container>
+
+    <!-- Ligas ya cerradas -->
+    <ng-container *ngIf="ligasCerradas.length > 0">
+      <div class="section-label" [class.mt-section]="ligasAbiertas.length > 0">
+        <mat-icon class="label-icon success">check_circle</mat-icon>
+        <span>Cerradas ({{ ligasCerradas.length }})</span>
+      </div>
+
+      <div class="ligas-grid">
+        <mat-card class="liga-card liga-card--cerrada" *ngFor="let liga of ligasCerradas">
+          <div class="card-top">
+            <div class="card-title-row">
+              <span class="liga-nombre">{{ liga.nombre }}</span>
+              <span class="badge badge--cerrada">Cerrada</span>
+            </div>
+            <div class="card-meta">
+              <span matTooltip="Miembros activos">
+                <mat-icon>group</mat-icon> {{ liga.miembros_activos }} miembro(s)
+              </span>
+              <span matTooltip="Fecha de cierre">
+                <mat-icon>event</mat-icon> {{ liga.fecha_cierre | date:'mediumDate' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-pozo card-pozo--cerrada">
+            <span class="pozo-label">Total recaudado</span>
+            <span class="pozo-valor pozo-valor--cerrada">
+              Q {{ liga.total_recaudado | number:'1.2-2' }}
+            </span>
+          </div>
+
+          <div class="card-actions">
+            <button mat-stroked-button color="primary" (click)="irADetalle(liga)">
+              <mat-icon>workspace_premium</mat-icon>
+              Ver premios
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </ng-container>
+
+  </ng-container>
+</section>

@@ -13,19 +13,20 @@ from app.schemas.auth_schema import LoginRequest, RegistroRequest
 from app.models.password_reset_token import PasswordResetToken
 from app.services.email_service import enviar_correo_recuperacion_password
 
+
 def autenticar_usuario(db: Session, login_data: LoginRequest, ip_address: str | None = None, user_agent: str | None = None):
     usuario = db.query(Usuario).filter(Usuario.email == login_data.email).first()
 
     if not usuario:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Correo o contraseña incorrectos"
+            detail="Correo o contraseÃ±a incorrectos"
         )
 
     if usuario.estado != "activo":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="El usuario no está activo"
+            detail="El usuario no estÃ¡ activo"
         )
 
     password_correcta = verificar_password(
@@ -36,7 +37,7 @@ def autenticar_usuario(db: Session, login_data: LoginRequest, ip_address: str | 
     if not password_correcta:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Correo o contraseña incorrectos"
+            detail="Correo o contraseÃ±a incorrectos"
         )
 
     access_token = crear_access_token(
@@ -86,7 +87,7 @@ def registrar_usuario(db: Session, registro_data: RegistroRequest):
     if usuario_existente:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El correo ya está registrado"
+            detail="El correo ya estÃ¡ registrado"
         )
 
     rol_jugador = db.query(Rol).filter(Rol.nombre_rol == "jugador").first()
@@ -123,7 +124,7 @@ def solicitar_recuperacion_password(db: Session, email: str):
 
     if not usuario:
         return {
-            "mensaje": "Si el correo existe, se enviarán instrucciones para recuperar la contraseña"
+            "mensaje": "Si el correo existe, se enviarÃ¡n instrucciones para recuperar la contraseÃ±a"
         }
 
     token = str(uuid.uuid4())
@@ -145,8 +146,9 @@ def solicitar_recuperacion_password(db: Session, email: str):
     )
 
     return {
-        "mensaje": "Si el correo existe, se enviarán instrucciones para recuperar la contraseña"
+        "mensaje": "Si el correo existe, se enviarÃ¡n instrucciones para recuperar la contraseÃ±a"
     }
+
 
 def resetear_password_usuario(db: Session, token: str, nueva_password: str):
     reset_token = db.query(PasswordResetToken).filter(
@@ -157,7 +159,7 @@ def resetear_password_usuario(db: Session, token: str, nueva_password: str):
     if not reset_token:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Token inválido o ya utilizado"
+            detail="Token invÃ¡lido o ya utilizado"
         )
 
     fecha_actual = datetime.now(timezone.utc)
@@ -165,7 +167,7 @@ def resetear_password_usuario(db: Session, token: str, nueva_password: str):
     if reset_token.fecha_expiracion < fecha_actual:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El token de recuperación ha expirado"
+            detail="El token de recuperaciÃ³n ha expirado"
         )
 
     usuario = db.query(Usuario).filter(
@@ -186,8 +188,9 @@ def resetear_password_usuario(db: Session, token: str, nueva_password: str):
     db.commit()
 
     return {
-        "mensaje": "Contraseña restablecida correctamente"
+        "mensaje": "ContraseÃ±a restablecida correctamente"
     }
+
 
 def cerrar_sesion(db: Session, refresh_token: str):
     sesion = db.query(UserSession).filter(
@@ -198,7 +201,7 @@ def cerrar_sesion(db: Session, refresh_token: str):
     if not sesion:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Sesión no encontrada o ya cerrada"
+            detail="SesiÃ³n no encontrada o ya cerrada"
         )
 
     sesion.revocada = True
@@ -207,7 +210,7 @@ def cerrar_sesion(db: Session, refresh_token: str):
     db.commit()
 
     return {
-        "mensaje": "Sesión cerrada correctamente"
+        "mensaje": "SesiÃ³n cerrada correctamente"
     }
 
 
@@ -220,6 +223,7 @@ def obtener_perfil_usuario(usuario: Usuario):
         "estado": usuario.estado
     }
 
+
 def cambiar_password_usuario(db: Session, usuario: Usuario, password_actual: str, nueva_password: str):
     password_correcta = verificar_password(
         password_actual,
@@ -229,7 +233,7 @@ def cambiar_password_usuario(db: Session, usuario: Usuario, password_actual: str
     if not password_correcta:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La contraseña actual no es correcta"
+            detail="La contraseÃ±a actual no es correcta"
         )
 
     usuario.password_hash = generar_password_hash(nueva_password)
@@ -237,5 +241,5 @@ def cambiar_password_usuario(db: Session, usuario: Usuario, password_actual: str
     db.commit()
 
     return {
-        "mensaje": "Contraseña actualizada correctamente"
+        "mensaje": "ContraseÃ±a actualizada correctamente"
     }

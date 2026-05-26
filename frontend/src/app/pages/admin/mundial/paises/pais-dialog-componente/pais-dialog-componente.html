@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar País' : 'Nuevo País' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre del País</mat-label>
+      <input matInput formControlName="nombre" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) { <mat-error>Requerido</mat-error> }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Código FIFA (3 letras)</mat-label>
+      <input matInput formControlName="codigo_fifa" maxlength="3" style="text-transform:uppercase" />
+      @if (form.get('codigo_fifa')?.touched && form.get('codigo_fifa')?.invalid) { <mat-error>Debe tener exactamente 3 letras</mat-error> }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Confederación</mat-label>
+      <mat-select formControlName="confederacion">
+        <mat-option value="">— Sin asignar —</mat-option>
+        @for (conf of ['UEFA','CONMEBOL','CONCACAF','CAF','AFC','OFC']; track conf) {
+          <mat-option [value]="conf">{{conf}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Grupo</mat-label>
+      <mat-select formControlName="id_grupo">
+        <mat-option [value]="null">— Sin grupo —</mat-option>
+        @for (g of grupos; track g.id_grupo) { <mat-option [value]="g.id_grupo">{{g.nombre}}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="guardando">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
+    @if (guardando) { <mat-spinner diameter="20" /> } @else { {{ esEdicion ? 'Actualizar' : 'Guardar' }} }
+  </button>
+</mat-dialog-actions>

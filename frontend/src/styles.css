@@ -1,1 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+/* ── Estilos globales M5 ─────────────────────────────────────────────────── */
+.lista-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lista-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.tabla-completa { width: 100%; }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 24px;
+  color: #888;
+  font-style: italic;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  min-width: 400px;
+}
+
+.campo-completo { width: 100%; }
+
+/* Snackbar colores */
+.snack-success { background-color: #2e7d32 !important; color: white !important; }
+.snack-error   { background-color: #c62828 !important; color: white !important; }
+
+.marcador {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}/* You can add global styles to this file, and also import other style files */
