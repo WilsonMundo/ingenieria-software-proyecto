@@ -1,0 +1,35 @@
+<div class="lista-header">
+  <h2 class="lista-titulo"><mat-icon>sports_soccer</mat-icon> Partidos del Torneo</h2>
+  <button mat-raised-button color="primary" (click)="abrirDialog()"><mat-icon>add</mat-icon> Nuevo Partido</button>
+</div>
+@if (cargando) { <div class="spinner-container"><mat-spinner diameter="48"/></div>
+} @else {
+  <table mat-table [dataSource]="partidos" class="mat-elevation-z2 tabla-completa">
+    <ng-container matColumnDef="id_partido"><th mat-header-cell *matHeaderCellDef>#</th><td mat-cell *matCellDef="let p">{{p.id_partido}}</td></ng-container>
+    <ng-container matColumnDef="equipos">
+      <th mat-header-cell *matHeaderCellDef>Partido</th>
+      <td mat-cell *matCellDef="let p">
+        <strong>{{p.equipo_local?.nombre ?? '?'}}</strong> vs <strong>{{p.equipo_visitante?.nombre ?? '?'}}</strong>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="fecha"><th mat-header-cell *matHeaderCellDef>Fecha / Hora</th><td mat-cell *matCellDef="let p">{{p.fecha_hora_inicio | date:'dd/MM/yyyy HH:mm'}}</td></ng-container>
+    <ng-container matColumnDef="estadio"><th mat-header-cell *matHeaderCellDef>Estadio</th><td mat-cell *matCellDef="let p">{{p.estadio?.nombre ?? '—'}}</td></ng-container>
+    <ng-container matColumnDef="fase"><th mat-header-cell *matHeaderCellDef>Fase</th><td mat-cell *matCellDef="let p">{{p.fase?.nombre ?? '—'}}</td></ng-container>
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let p">
+        <mat-chip [color]="estadoColor(p.estado_partido)" highlighted>{{p.estado_partido}}</mat-chip>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-icon-button color="accent" matTooltip="Editar" (click)="abrirDialog(p)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(p)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    <tr class="mat-row" *matNoDataRow><td class="mat-cell sin-datos" [attr.colspan]="columnas.length">No hay partidos registrados.</td></tr>
+  </table>
+}

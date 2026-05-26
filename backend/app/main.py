@@ -5,6 +5,8 @@ from app.api.controllers.auth_controller import router as auth_router
 from app.api.controllers.invitacion_controller import router as invitacion_router
 from app.api.controllers.usuario_controller import router as usuario_router
 
+from app.modules.mundial.router import mundial_router
+
 app = FastAPI(
     title="Liga Mundial API",
     version="1.0.0"
@@ -17,7 +19,8 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # allow_origins=origins,
+    allow_origins=["http://localhost:4200"],  # En producción: URL real del frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,6 +30,7 @@ app.include_router(auth_router)
 app.include_router(invitacion_router)
 app.include_router(usuario_router)
 
+app.include_router(mundial_router)
 
 @app.get("/")
 def root():

@@ -1,0 +1,24 @@
+<div class="lista-header">
+  <h2 class="lista-titulo"><mat-icon>flag</mat-icon> Países Clasificados</h2>
+  <button mat-raised-button color="primary" (click)="abrirDialog()"><mat-icon>add</mat-icon> Nuevo País</button>
+</div>
+@if (cargando) { <div class="spinner-container"><mat-spinner diameter="48" /></div>
+} @else {
+  <table mat-table [dataSource]="paises" class="mat-elevation-z2 tabla-completa">
+    <ng-container matColumnDef="id_pais"><th mat-header-cell *matHeaderCellDef>#</th><td mat-cell *matCellDef="let p">{{p.id_pais}}</td></ng-container>
+    <ng-container matColumnDef="nombre"><th mat-header-cell *matHeaderCellDef>País</th><td mat-cell *matCellDef="let p">{{p.nombre}}</td></ng-container>
+    <ng-container matColumnDef="codigo_fifa"><th mat-header-cell *matHeaderCellDef>FIFA</th><td mat-cell *matCellDef="let p"><code>{{p.codigo_fifa}}</code></td></ng-container>
+    <ng-container matColumnDef="confederacion"><th mat-header-cell *matHeaderCellDef>Confederación</th><td mat-cell *matCellDef="let p">{{p.confederacion ?? '—'}}</td></ng-container>
+    <ng-container matColumnDef="grupo"><th mat-header-cell *matHeaderCellDef>Grupo</th><td mat-cell *matCellDef="let p">{{p.grupo?.nombre ?? '—'}}</td></ng-container>
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-icon-button color="accent" matTooltip="Editar" (click)="abrirDialog(p)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminar(p)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    <tr class="mat-row" *matNoDataRow><td class="mat-cell sin-datos" [attr.colspan]="columnas.length">No hay países registrados.</td></tr>
+  </table>
+}
