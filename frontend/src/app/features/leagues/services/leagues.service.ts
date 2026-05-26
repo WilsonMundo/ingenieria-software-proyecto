@@ -47,4 +47,28 @@ export class LeaguesService {
     );
   }
 
+  getMatches(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/api/partidos`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  createPrediction(
+    idLiga: number,
+    data: any
+  ): Observable<any> {
+
+    return this.http.post(
+      `${this.apiUrl}/api/vaticinios/${idLiga}`,
+      data,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+
+  }
+
 }

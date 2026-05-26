@@ -7,6 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.controllers.auth_controller import router as auth_router
 from app.api.controllers.invitacion_controller import router as invitacion_router
 from app.api.controllers.liga_controller import router as liga_router
+from app.api.controllers.partido_controller import router as partido_router
+from app.api.controllers.vaticinio_controller import router as vaticinio_router
+
 
 from app.core.logging import configure_logging
 
@@ -34,7 +37,8 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(invitacion_router)
 app.include_router(liga_router)
-
+app.include_router(partido_router)
+app.include_router(vaticinio_router)
 
 @app.middleware("http")
 async def log_server_errors(request: Request, call_next):
@@ -60,9 +64,7 @@ async def log_server_errors(request: Request, call_next):
             response.status_code,
             duration_ms,
         )
-
     return response
-
 
 @app.get("/")
 def root():

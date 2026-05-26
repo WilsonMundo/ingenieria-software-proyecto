@@ -74,23 +74,18 @@
     <!-- PARTIDOS -->
     <div *ngIf="activeTab === 'matches'" class="content-card">
       <h2>Próximos Partidos</h2>
-      <div class="match-card">
-        <div>
-          <h3>Brasil vs Argentina</h3>
-          <p>20 Junio 2026 - 16:00</p>
+      <div class="matches-list">
+        <div class="match-card" *ngFor="let match of matches">
+          <div class="match-info">
+            <h3>
+              {{ match.encuentro }}
+            </h3>
+            <p>
+              {{ match.fecha_y_hora }}
+            </p>
+          </div>
+          <button class="predict-button" mat-flat-button color="primary" (click)="openPredictionModal(match)">Predecir</button>
         </div>
-        <button class="predict-button">
-          Predecir
-        </button>
-      </div>
-      <div class="match-card">
-        <div>
-          <h3>España vs Alemania</h3>
-          <p>21 Junio 2026 - 19:00</p>
-        </div>
-        <button class="predict-button">
-          Predicho
-        </button>
       </div>
     </div>
     <!-- REGLAS -->
