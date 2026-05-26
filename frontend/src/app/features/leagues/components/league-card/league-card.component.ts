@@ -22,8 +22,6 @@ import { League } from '../../interfaces/league.interface';
   styleUrls: ['./league-card.component.css']
 })
 export class LeagueCardComponent {
-
   @Input({ required: true })
   league!: League;
-
 }

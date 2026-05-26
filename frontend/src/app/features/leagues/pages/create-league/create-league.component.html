@@ -1,98 +1,42 @@
 <div class="create-page">
-
   <mat-card class="create-card">
-
     <mat-card-header>
-      <mat-card-title>
-        Crear Liga
-      </mat-card-title>
-
-      <mat-card-subtitle>
-        Configura una nueva liga para el Mundial 2026
-      </mat-card-subtitle>
+      <mat-card-title>Crear Liga</mat-card-title>
+      <mat-card-subtitle>Configura una nueva liga para el Mundial 2026</mat-card-subtitle>
     </mat-card-header>
-
     <mat-card-content>
-
-      <form
-        [formGroup]="leagueForm"
-        (ngSubmit)="crearLiga()"
-        class="league-form"
-      >
-
+      <form [formGroup]="leagueForm" (ngSubmit)="crearLiga()" class="league-form">
         <mat-form-field appearance="outline">
           <mat-label>Nombre de la liga</mat-label>
-
-          <input
-            matInput
-            formControlName="nombre"
-          />
-
-          <mat-error>
-            El nombre es obligatorio
-          </mat-error>
+          <input matInput formControlName="nombre"/>
+          <mat-error>El nombre es obligatorio</mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
           <mat-label>Tipo de liga</mat-label>
-
           <mat-select formControlName="tipo_liga">
-
-            <mat-option value="publica">
-              Pública
+            <mat-option value="Apuesta">
+              Apuesta
             </mat-option>
-
-            <mat-option value="privada">
-              Privada
+            <mat-option value="Diversion">
+              Diversión
             </mat-option>
-
           </mat-select>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
           <mat-label>Precio participación</mat-label>
-
-          <input
-            matInput
-            type="number"
-            formControlName="precio_participacion"
-          />
+          <input matInput type="number" formControlName="precio_participacion"/>
         </mat-form-field>
-
         <mat-form-field appearance="outline">
           <mat-label>Nombre de tu equipo</mat-label>
-
-          <input
-            matInput
-            formControlName="nombre_equipo"
-          />
+          <input matInput formControlName="nombre_equipo"/>
         </mat-form-field>
-
         <div class="actions">
-
-          <button
-            mat-stroked-button
-            type="button"
-            routerLink="/principal/ligas"
-          >
-            Cancelar
-          </button>
-
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="loading"
-          >
+          <button mat-stroked-button type="button" routerLink="/principal/ligas">Cancelar</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
             {{ loading ? 'Creando...' : 'Crear Liga' }}
           </button>
-
         </div>
-
       </form>
-
     </mat-card-content>
-
   </mat-card>
-
 </div>

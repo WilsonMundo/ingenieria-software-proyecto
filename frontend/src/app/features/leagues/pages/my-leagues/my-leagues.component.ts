@@ -31,29 +31,24 @@ export class MyLeaguesComponent implements OnInit {
   constructor(
     private leaguesService: LeaguesService
   ) {}
-
   ngOnInit(): void {
     this.loadLeagues();
   }
-
   loadLeagues(): void {
     this.leaguesService.getLeagues().subscribe({
       next: (response) => {
         this.leagues = response;
         this.filteredLeagues = response;
       },
-
       error: (error) => {
         console.error(error);
       }
     });
   }
-
   setFilter(filter: string): void {
     this.activeFilter = filter;
     this.applyFilters();
   }
-
   applyFilters(): void {
     let filtered = [...this.leagues];
     // Buscador
@@ -64,7 +59,6 @@ export class MyLeaguesComponent implements OnInit {
           .includes(this.searchQuery.toLowerCase())
       );
     }
-
     // Filtros
     switch (this.activeFilter) {
       case 'apuesta':
@@ -73,21 +67,18 @@ export class MyLeaguesComponent implements OnInit {
             league.tipo_liga?.toLowerCase() === 'apuesta'
         );
         break;
-
       case 'diversion':
         filtered = filtered.filter(
           (league) =>
             league.tipo_liga?.toLowerCase() === 'diversion'
         );
         break;
-
       case 'activas':
         filtered = filtered.filter(
           (league) =>
             league.estado?.toLowerCase() === 'activa'
         );
         break;
-
       case 'finalizadas':
         filtered = filtered.filter(
           (league) =>
