@@ -6,6 +6,8 @@ from app.api.controllers.invitacion_controller import router as invitacion_route
 from app.api.controllers.usuario_controller import router as usuario_router
 
 from app.modules.mundial.router import mundial_router
+from app.api.controllers.premio_controller import router as premio_router
+from app.api.controllers.admin_controller import router as admin_router
 
 app = FastAPI(
     title="Liga Mundial API",
@@ -31,6 +33,8 @@ app.include_router(invitacion_router)
 app.include_router(usuario_router)
 
 app.include_router(mundial_router)
+app.include_router(premio_router)
+app.include_router(admin_router)
 
 @app.get("/")
 def root():

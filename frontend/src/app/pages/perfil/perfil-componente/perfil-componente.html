@@ -14,6 +14,14 @@
     </mat-card-header>
 
     <mat-card-content>
+      <p class="error-message" *ngIf="mensajeError">
+        {{ mensajeError }}
+      </p>
+
+      <p class="success-message" *ngIf="mensajeExito">
+        {{ mensajeExito }}
+      </p>
+
       <div class="perfil-info" *ngIf="usuario">
         <div class="info-row">
           <strong>Nombre completo:</strong>

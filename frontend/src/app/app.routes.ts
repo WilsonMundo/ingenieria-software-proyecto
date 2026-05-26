@@ -7,6 +7,11 @@ import { EnviarInvitacionComponente } from './pages/invitaciones/enviar-invitaci
 import { PerfilComponente } from './pages/perfil/perfil-componente/perfil-componente';
 import { DashboardComponente } from './pages/dashboard/dashboard-componente/dashboard-componente';
 import { UsuariosComponente } from './pages/admin/usuarios-componente/usuarios-componente';
+import { DashboardGlobalComponente } from './pages/admin/dashboard-global-componente/dashboard-global-componente';
+import { AuditLogComponente } from './pages/admin/audit-log-componente/audit-log-componente';
+import { ReportesActividadComponente } from './pages/admin/reportes-actividad-componente/reportes-actividad-componente';
+import { LigasPremiosComponente } from './pages/premios/ligas-premios-componente/ligas-premios-componente';
+import { PremiosLigaComponente } from './pages/premios/premios-liga-componente/premios-liga-componente';
 import { ResetPasswordComponente } from './pages/auth/reset-password-componente/reset-password-componente';
 
 // ── M5: Administración del Mundial ──────────────────────────────────────────
@@ -50,17 +55,37 @@ export const routes: Routes = [
     component: UsuariosComponente
   },
   {
+    path: 'admin/mundial',
+    component: AdminMundialComponente
+  },
+  {
      path: 'reset-password',
       component: ResetPasswordComponente
+  },
+  {
+    path: 'admin/dashboard-global',
+    component: DashboardGlobalComponente
+  },
+  {
+    path: 'admin/auditoria',
+    component: AuditLogComponente
+  },
+  {
+    path: 'admin/reportes',
+    component: ReportesActividadComponente
+  },
+  {
+    path: 'admin/premios',
+    component: LigasPremiosComponente
+  },
+  {
+    path: 'premios/liga/:id',
+    component: PremiosLigaComponente
   },
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: 'login'
   },
   { path: 'admin/mundial',            component: AdminMundialComponente },
   { path: 'admin/mundial/sedes',      component: SedesListaComponente },
@@ -72,6 +97,8 @@ export const routes: Routes = [
   { path: 'admin/mundial/bracket',    component: BracketComponente },
   { path: 'admin/mundial/resultados', component: ResultadosListaComponente },
   // Redirecciones
-  { path: '',   redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' },
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

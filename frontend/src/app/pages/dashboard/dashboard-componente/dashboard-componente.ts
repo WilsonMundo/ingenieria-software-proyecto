@@ -47,6 +47,18 @@ export class DashboardComponente implements OnInit {
     this.router.navigate(['/invitaciones']);
   }
 
+  irPanelGlobal(): void {
+    this.router.navigate(['/admin/dashboard-global']);
+  }
+
+  irAuditoria(): void {
+    this.router.navigate(['/admin/auditoria']);
+  }
+
+  irReportes(): void {
+    this.router.navigate(['/admin/reportes']);
+  }
+
   accionPendiente(nombreModulo: string): void {
     alert(`${nombreModulo} aún no está disponible. Este módulo será integrado posteriormente.`);
   }

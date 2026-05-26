@@ -47,3 +47,21 @@ def get_current_user(
         )
 
     return usuario
+
+
+def get_current_admin(
+    usuario_actual: Usuario = Depends(get_current_user)
+):
+    """
+    Dependencia que exige que el usuario autenticado tenga rol
+    'administrador'. Reutiliza get_current_user y agrega la
+    validacion de rol para los endpoints del panel global (M7)
+    y para las acciones criticas del motor de premios (M6).
+    """
+    if usuario_actual.rol.nombre_rol != "administrador":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Solo un administrador puede realizar esta accion"
+        )
+
+    return usuario_actual

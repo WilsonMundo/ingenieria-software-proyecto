@@ -11,6 +11,7 @@ class Liga(Base):
     id_liga = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(100), unique=True, nullable=False)
     tipo_liga = Column(String(20), nullable=False)
+    modalidad_liga = Column(String(30), default="diversion", nullable=False)
     precio_participacion = Column(Numeric(10, 2), default=0.00)
     id_creador_usuario = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
     id_admin_usuario = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
