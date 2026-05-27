@@ -52,7 +52,11 @@ export class PaisDialogComponente implements OnInit {
       : this.paisService.create(this.form.value);
     accion$.subscribe({
       next: () => { this.snackBar.open(this.esEdicion ? 'País actualizado' : 'País creado', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] }); this.dialogRef.close(true); },
-      error: () => { this.snackBar.open('Error al guardar', 'Cerrar', { duration: 3500, panelClass: ['snack-error'] }); this.guardando = false; },
+      error: (error) => {
+        const mensaje = error?.error?.detail ?? 'Error al guardar';
+        this.snackBar.open(mensaje, 'Cerrar', { duration: 3500, panelClass: ['snack-error'] });
+        this.guardando = false;
+      },
     });
   }
   cancelar(): void { this.dialogRef.close(false); }

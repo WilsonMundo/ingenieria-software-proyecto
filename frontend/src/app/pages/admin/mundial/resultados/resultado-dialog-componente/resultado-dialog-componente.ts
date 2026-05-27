@@ -67,7 +67,11 @@ export class ResultadoDialogComponente implements OnInit {
       : this.resultadoService.create(payload);
     accion$.subscribe({
       next: () => { this.snackBar.open(this.esEdicion ? 'Resultado actualizado' : '¡Resultado registrado! Se calculan puntos automáticamente.', 'Cerrar', { duration: 4000, panelClass: ['snack-success'] }); this.dialogRef.close(true); },
-      error: () => { this.snackBar.open('Error al guardar el resultado', 'Cerrar', { duration: 3500, panelClass: ['snack-error'] }); this.guardando = false; },
+      error: (error) => {
+        const mensaje = error?.error?.detail ?? 'Error al guardar el resultado';
+        this.snackBar.open(mensaje, 'Cerrar', { duration: 3500, panelClass: ['snack-error'] });
+        this.guardando = false;
+      },
     });
   }
   cancelar(): void { this.dialogRef.close(false); }

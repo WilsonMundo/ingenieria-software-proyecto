@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+
 from app.database.session import get_db
 from app.models.pais import Pais
-from pydantic import BaseModel
 
-router = APIRouter(prefix="/paises", tags=["Países"])
+router = APIRouter(prefix="/paises", tags=["Paises"])
 
-
-# ─── Schemas ─────────────────────────────────────────────────────────────────
 
 class PaisSchema(BaseModel):
     id_pais: int
@@ -35,9 +36,32 @@ class PaisUpdate(BaseModel):
     id_grupo: Optional[int] = None
 
 
-# ─── Endpoints ───────────────────────────────────────────────────────────────
+def normalizar_codigo_fifa(codigo_fifa: str) -> str:
+    return codigo_fifa.strip().upper()
 
-@router.get("/", response_model=List[PaisSchema])
+
+def validar_codigo_fifa_disponible(
+    db: Session,
+    codigo_fifa: str,
+    id_pais_actual: int | None = None
+):
+    existe = db.query(Pais).filter(Pais.codigo_fifa == codigo_fifa).first()
+
+    if existe and existe.id_pais != id_pais_actual:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Ya existe un pais con ese codigo FIFA"
+        )
+
+
+def manejar_error_integridad():
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Ya existe un pais con ese codigo FIFA"
+    )
+
+
+@router.get("", response_model=List[PaisSchema])
 def listar_paises(db: Session = Depends(get_db)):
     return db.query(Pais).order_by(Pais.nombre).all()
 
@@ -46,15 +70,25 @@ def listar_paises(db: Session = Depends(get_db)):
 def obtener_pais(id_pais: int, db: Session = Depends(get_db)):
     pais = db.query(Pais).filter(Pais.id_pais == id_pais).first()
     if not pais:
-        raise HTTPException(status_code=404, detail="País no encontrado")
+        raise HTTPException(status_code=404, detail="Pais no encontrado")
     return pais
 
 
-@router.post("/", response_model=PaisSchema, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=PaisSchema, status_code=status.HTTP_201_CREATED)
 def crear_pais(data: PaisCreate, db: Session = Depends(get_db)):
-    pais = Pais(**data.model_dump())
+    valores = data.model_dump()
+    valores["codigo_fifa"] = normalizar_codigo_fifa(valores["codigo_fifa"])
+    validar_codigo_fifa_disponible(db, valores["codigo_fifa"])
+
+    pais = Pais(**valores)
     db.add(pais)
-    db.commit()
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        manejar_error_integridad()
+
     db.refresh(pais)
     return pais
 
@@ -63,10 +97,22 @@ def crear_pais(data: PaisCreate, db: Session = Depends(get_db)):
 def actualizar_pais(id_pais: int, data: PaisUpdate, db: Session = Depends(get_db)):
     pais = db.query(Pais).filter(Pais.id_pais == id_pais).first()
     if not pais:
-        raise HTTPException(status_code=404, detail="País no encontrado")
-    for key, value in data.model_dump(exclude_unset=True).items():
+        raise HTTPException(status_code=404, detail="Pais no encontrado")
+
+    valores = data.model_dump(exclude_unset=True)
+    if "codigo_fifa" in valores and valores["codigo_fifa"] is not None:
+        valores["codigo_fifa"] = normalizar_codigo_fifa(valores["codigo_fifa"])
+        validar_codigo_fifa_disponible(db, valores["codigo_fifa"], id_pais)
+
+    for key, value in valores.items():
         setattr(pais, key, value)
-    db.commit()
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        manejar_error_integridad()
+
     db.refresh(pais)
     return pais
 
@@ -75,6 +121,6 @@ def actualizar_pais(id_pais: int, data: PaisUpdate, db: Session = Depends(get_db
 def eliminar_pais(id_pais: int, db: Session = Depends(get_db)):
     pais = db.query(Pais).filter(Pais.id_pais == id_pais).first()
     if not pais:
-        raise HTTPException(status_code=404, detail="País no encontrado")
+        raise HTTPException(status_code=404, detail="Pais no encontrado")
     db.delete(pais)
     db.commit()
