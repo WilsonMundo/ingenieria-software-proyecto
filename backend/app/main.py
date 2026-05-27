@@ -6,6 +6,7 @@ from app.core.database import engine, Base
 from app.api.controllers.auth_controller import router as auth_router
 from app.api.controllers.invitacion_controller import router as invitacion_router
 from app.api.controllers.usuario_controller import router as usuario_router
+from app.api.controllers.clasificacion_controller import router as clasificacion_router
 
 from app.api.controllers.vaticinio import router as vaticinios_router
 
@@ -38,6 +39,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(invitacion_router)
 app.include_router(usuario_router)
+app.include_router(clasificacion_router)
 
 app.include_router(vaticinios_router)
 app.include_router(mundial_router)

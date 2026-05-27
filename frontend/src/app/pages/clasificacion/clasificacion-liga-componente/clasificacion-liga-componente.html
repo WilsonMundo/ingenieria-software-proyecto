@@ -1,0 +1,181 @@
+<section class="clasificacion-page">
+  <header class="page-header">
+    <div>
+      <h1>Rankings</h1>
+      <p>Clasificacion en tiempo real de {{ clasificacion?.nombre_liga || 'la liga' }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        class="icon-button"
+        type="button"
+        matTooltip="Actualizar tabla"
+        aria-label="Actualizar tabla"
+        (click)="refrescar()"
+      >
+        <mat-icon>refresh</mat-icon>
+      </button>
+
+      <button class="primary-button" type="button" [disabled]="recalculando" (click)="recalcular()">
+        <mat-icon>calculate</mat-icon>
+        Recalcular
+      </button>
+    </div>
+  </header>
+
+  <section class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-header">
+        <span>Puntos Lider</span>
+        <div class="summary-icon green">
+          <mat-icon>trending_up</mat-icon>
+        </div>
+      </div>
+      <h2>{{ lider?.puntos || 0 }}</h2>
+      <p>{{ lider?.nombre_usuario || 'Sin datos' }}</p>
+      <div class="bar green-bar"></div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-header">
+        <span>Participantes</span>
+        <div class="summary-icon blue">
+          <mat-icon>groups</mat-icon>
+        </div>
+      </div>
+      <h2>{{ clasificacion?.total_miembros || 0 }}</h2>
+      <p>Liga {{ idLiga }}</p>
+      <div class="bar blue-bar"></div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-header">
+        <span>Precision Lider</span>
+        <div class="summary-icon purple">
+          <mat-icon>track_changes</mat-icon>
+        </div>
+      </div>
+      <h2>{{ precisionLider }}%</h2>
+      <p>{{ totalAciertosLider }} aciertos registrados</p>
+      <div class="bar purple-bar"></div>
+    </div>
+  </section>
+
+  <section class="leader-panel panel" *ngIf="lider as jugador">
+    <div class="leader-info">
+      <div class="place gold">1</div>
+      <div class="avatar">{{ iniciales(jugador.nombre_usuario) }}</div>
+      <div>
+        <h2>Lider de la Liga</h2>
+        <strong>{{ jugador.nombre_usuario }}</strong>
+        <p>{{ jugador.nombre_equipo }}</p>
+      </div>
+    </div>
+
+    <div class="leader-stats">
+      <div>
+        <span>Puntos</span>
+        <strong>{{ jugador.puntos }}</strong>
+      </div>
+      <div>
+        <span>Exactos</span>
+        <strong>{{ jugador.aciertos_exactos }}</strong>
+      </div>
+      <div>
+        <span>Resultado</span>
+        <strong>{{ jugador.aciertos_resultado }}</strong>
+      </div>
+      <div>
+        <span>Movimiento</span>
+        <strong [ngClass]="movimientoClase(jugador)">{{ movimientoTexto(jugador) }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <div class="status success-box" *ngIf="mensajeExito">{{ mensajeExito }}</div>
+  <div class="status error-box" *ngIf="mensajeError">{{ mensajeError }}</div>
+
+  <section class="panel">
+    <div class="ranking-toolbar">
+      <div class="panel-title">
+        <mat-icon>workspace_premium</mat-icon>
+        <h3>Tabla de Posiciones</h3>
+      </div>
+
+      <label class="filter-box">
+        <mat-icon>search</mat-icon>
+        <input
+          type="search"
+          placeholder="Buscar jugadores..."
+          [value]="busqueda"
+          (input)="actualizarBusqueda($event)"
+        />
+      </label>
+    </div>
+
+    <div class="loading" *ngIf="cargando">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+
+    <div class="mobile-list" *ngIf="!cargando">
+      <article class="ranking-item" *ngFor="let miembro of jugadoresFiltrados; trackBy: trackByMiembro">
+        <div class="place" [ngClass]="{ gold: miembro.posicion === 1, silver: miembro.posicion === 2, bronze: miembro.posicion === 3, normal: miembro.posicion > 3 }">
+          {{ miembro.posicion }}
+        </div>
+        <div class="avatar">{{ iniciales(miembro.nombre_usuario) }}</div>
+        <div>
+          <strong>{{ miembro.nombre_usuario }}</strong>
+          <p>{{ miembro.nombre_equipo }} · {{ miembro.puntos }} puntos</p>
+        </div>
+        <span [ngClass]="movimientoClase(miembro)">{{ movimientoTexto(miembro) }}</span>
+      </article>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!cargando">
+      <table>
+        <thead>
+          <tr>
+            <th>Posicion</th>
+            <th>Jugador</th>
+            <th>Equipo</th>
+            <th>Puntos</th>
+            <th>Exactos</th>
+            <th>Resultado</th>
+            <th>Tendencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let miembro of jugadoresFiltrados; trackBy: trackByMiembro">
+            <td>
+              <div class="place" [ngClass]="{ gold: miembro.posicion === 1, silver: miembro.posicion === 2, bronze: miembro.posicion === 3, normal: miembro.posicion > 3 }">
+                {{ miembro.posicion }}
+              </div>
+            </td>
+            <td>
+              <div class="player-cell">
+                <div class="avatar">{{ iniciales(miembro.nombre_usuario) }}</div>
+                <strong>{{ miembro.nombre_usuario }}</strong>
+              </div>
+            </td>
+            <td>{{ miembro.nombre_equipo }}</td>
+            <td class="strong">{{ miembro.puntos }}</td>
+            <td>{{ miembro.aciertos_exactos }}</td>
+            <td class="success">{{ miembro.aciertos_resultado }}</td>
+            <td>
+              <span class="trend" [ngClass]="movimientoClase(miembro)">
+                <mat-icon *ngIf="miembro.movimiento > 0">trending_up</mat-icon>
+                <mat-icon *ngIf="miembro.movimiento < 0">trending_down</mat-icon>
+                <mat-icon *ngIf="miembro.movimiento === 0">remove</mat-icon>
+                {{ movimientoTexto(miembro) }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="jugadoresFiltrados.length === 0">
+            <td colspan="7" class="empty">No hay jugadores para mostrar.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

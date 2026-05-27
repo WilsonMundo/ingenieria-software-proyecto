@@ -65,6 +65,13 @@ export const routes: Routes = [
           import('./pages/vaticinios/vaticinio.component').then((m) => m.VaticinioComponent)
       },
       {
+        path: 'clasificacion/liga/:idLiga',
+        loadComponent: () =>
+          import(
+            './pages/clasificacion/clasificacion-liga-componente/clasificacion-liga-componente'
+          ).then((m) => m.ClasificacionLigaComponente)
+      },
+      {
         path: 'admin/usuarios',
         loadComponent: () =>
           import('./pages/admin/usuarios-componente/usuarios-componente').then(
