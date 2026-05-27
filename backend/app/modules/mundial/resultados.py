@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.partido import Partido
 from app.models.resultado_oficial import ResultadoOficial
+from app.modules.mundial.partidos import obtener_partido as obtener_partido_detallado
 
 router = APIRouter(prefix="/resultados", tags=["Resultados"])
 
@@ -20,6 +21,7 @@ class ResultadoSchema(BaseModel):
     goles_visitante: int
     fecha_registro: datetime
     bloqueado: bool
+    partido: Optional[dict] = None
 
     class Config:
         from_attributes = True
@@ -78,9 +80,22 @@ def manejar_error_integridad():
     )
 
 
+def resultado_resumen(resultado: ResultadoOficial, db: Session) -> dict:
+    return {
+        "id_resultado": resultado.id_resultado,
+        "id_partido": resultado.id_partido,
+        "goles_local": resultado.goles_local,
+        "goles_visitante": resultado.goles_visitante,
+        "fecha_registro": resultado.fecha_registro,
+        "bloqueado": resultado.bloqueado,
+        "partido": obtener_partido_detallado(resultado.id_partido, db),
+    }
+
+
 @router.get("", response_model=List[ResultadoSchema])
 def listar_resultados(db: Session = Depends(get_db)):
-    return db.query(ResultadoOficial).all()
+    resultados = db.query(ResultadoOficial).order_by(ResultadoOficial.id_resultado).all()
+    return [resultado_resumen(resultado, db) for resultado in resultados]
 
 
 @router.get("/partido/{id_partido}", response_model=ResultadoSchema)
@@ -92,7 +107,7 @@ def resultado_por_partido(id_partido: int, db: Session = Depends(get_db)):
     )
     if not resultado:
         raise HTTPException(status_code=404, detail="Resultado no encontrado")
-    return resultado
+    return resultado_resumen(resultado, db)
 
 
 @router.post("", response_model=ResultadoSchema, status_code=status.HTTP_201_CREATED)
@@ -121,7 +136,7 @@ def registrar_resultado(data: ResultadoCreate, db: Session = Depends(get_db)):
             manejar_error_integridad()
 
         db.refresh(existente)
-        return existente
+        return resultado_resumen(existente, db)
 
     resultado = ResultadoOficial(**data.model_dump())
     db.add(resultado)
@@ -134,7 +149,7 @@ def registrar_resultado(data: ResultadoCreate, db: Session = Depends(get_db)):
         manejar_error_integridad()
 
     db.refresh(resultado)
-    return resultado
+    return resultado_resumen(resultado, db)
 
 
 @router.put("/{id_resultado}", response_model=ResultadoSchema)
@@ -169,7 +184,7 @@ def actualizar_resultado(
         manejar_error_integridad()
 
     db.refresh(resultado)
-    return resultado
+    return resultado_resumen(resultado, db)
 
 
 @router.delete("/{id_resultado}", status_code=status.HTTP_204_NO_CONTENT)

@@ -6,9 +6,16 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.database.session import get_db
+from app.models.grupo import Grupo
 from app.models.pais import Pais
 
 router = APIRouter(prefix="/paises", tags=["Paises"])
+
+
+class GrupoResumenSchema(BaseModel):
+    id_grupo: int
+    id_torneo: int
+    nombre: str
 
 
 class PaisSchema(BaseModel):
@@ -17,9 +24,7 @@ class PaisSchema(BaseModel):
     codigo_fifa: str
     confederacion: Optional[str] = None
     id_grupo: Optional[int] = None
-
-    class Config:
-        from_attributes = True
+    grupo: Optional[GrupoResumenSchema] = None
 
 
 class PaisCreate(BaseModel):
@@ -40,6 +45,36 @@ def normalizar_codigo_fifa(codigo_fifa: str) -> str:
     return codigo_fifa.strip().upper()
 
 
+def grupo_resumen(grupo: Grupo | None) -> dict | None:
+    if not grupo:
+        return None
+    return {
+        "id_grupo": grupo.id_grupo,
+        "id_torneo": grupo.id_torneo,
+        "nombre": grupo.nombre,
+    }
+
+
+def pais_resumen(pais: Pais, grupo: Grupo | None = None) -> dict:
+    return {
+        "id_pais": pais.id_pais,
+        "nombre": pais.nombre,
+        "codigo_fifa": pais.codigo_fifa,
+        "confederacion": pais.confederacion,
+        "id_grupo": pais.id_grupo,
+        "grupo": grupo_resumen(grupo),
+    }
+
+
+def obtener_pais_con_grupo(db: Session, id_pais: int):
+    return (
+        db.query(Pais, Grupo)
+        .outerjoin(Grupo, Grupo.id_grupo == Pais.id_grupo)
+        .filter(Pais.id_pais == id_pais)
+        .first()
+    )
+
+
 def validar_codigo_fifa_disponible(
     db: Session,
     codigo_fifa: str,
@@ -54,6 +89,15 @@ def validar_codigo_fifa_disponible(
         )
 
 
+def validar_grupo(db: Session, id_grupo: int | None):
+    if id_grupo is None:
+        return
+
+    grupo = db.query(Grupo).filter(Grupo.id_grupo == id_grupo).first()
+    if not grupo:
+        raise HTTPException(status_code=404, detail="Grupo no encontrado")
+
+
 def manejar_error_integridad():
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
@@ -63,15 +107,22 @@ def manejar_error_integridad():
 
 @router.get("", response_model=List[PaisSchema])
 def listar_paises(db: Session = Depends(get_db)):
-    return db.query(Pais).order_by(Pais.nombre).all()
+    filas = (
+        db.query(Pais, Grupo)
+        .outerjoin(Grupo, Grupo.id_grupo == Pais.id_grupo)
+        .order_by(Pais.nombre)
+        .all()
+    )
+    return [pais_resumen(pais, grupo) for pais, grupo in filas]
 
 
 @router.get("/{id_pais}", response_model=PaisSchema)
 def obtener_pais(id_pais: int, db: Session = Depends(get_db)):
-    pais = db.query(Pais).filter(Pais.id_pais == id_pais).first()
-    if not pais:
+    fila = obtener_pais_con_grupo(db, id_pais)
+    if not fila:
         raise HTTPException(status_code=404, detail="Pais no encontrado")
-    return pais
+    pais, grupo = fila
+    return pais_resumen(pais, grupo)
 
 
 @router.post("", response_model=PaisSchema, status_code=status.HTTP_201_CREATED)
@@ -79,6 +130,7 @@ def crear_pais(data: PaisCreate, db: Session = Depends(get_db)):
     valores = data.model_dump()
     valores["codigo_fifa"] = normalizar_codigo_fifa(valores["codigo_fifa"])
     validar_codigo_fifa_disponible(db, valores["codigo_fifa"])
+    validar_grupo(db, valores.get("id_grupo"))
 
     pais = Pais(**valores)
     db.add(pais)
@@ -90,7 +142,9 @@ def crear_pais(data: PaisCreate, db: Session = Depends(get_db)):
         manejar_error_integridad()
 
     db.refresh(pais)
-    return pais
+    fila = obtener_pais_con_grupo(db, pais.id_pais)
+    pais, grupo = fila
+    return pais_resumen(pais, grupo)
 
 
 @router.put("/{id_pais}", response_model=PaisSchema)
@@ -104,6 +158,9 @@ def actualizar_pais(id_pais: int, data: PaisUpdate, db: Session = Depends(get_db
         valores["codigo_fifa"] = normalizar_codigo_fifa(valores["codigo_fifa"])
         validar_codigo_fifa_disponible(db, valores["codigo_fifa"], id_pais)
 
+    if "id_grupo" in valores:
+        validar_grupo(db, valores["id_grupo"])
+
     for key, value in valores.items():
         setattr(pais, key, value)
 
@@ -114,7 +171,9 @@ def actualizar_pais(id_pais: int, data: PaisUpdate, db: Session = Depends(get_db
         manejar_error_integridad()
 
     db.refresh(pais)
-    return pais
+    fila = obtener_pais_con_grupo(db, pais.id_pais)
+    pais, grupo = fila
+    return pais_resumen(pais, grupo)
 
 
 @router.delete("/{id_pais}", status_code=status.HTTP_204_NO_CONTENT)

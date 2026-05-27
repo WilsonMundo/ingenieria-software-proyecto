@@ -4,12 +4,39 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
 
+def asegurar_audit_log(db: Session):
+    db.execute(text("""
+        CREATE TABLE IF NOT EXISTS audit_log (
+            id_audit_log     SERIAL       PRIMARY KEY,
+            tabla_afectada   VARCHAR(100) NOT NULL,
+            operacion        VARCHAR(10)  NOT NULL CHECK (operacion IN ('INSERT', 'UPDATE', 'DELETE')),
+            id_registro      TEXT,
+            datos_anteriores JSONB,
+            datos_nuevos     JSONB,
+            usuario_bd       VARCHAR(100) NOT NULL DEFAULT CURRENT_USER,
+            fecha_evento     TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+        )
+    """))
+    db.execute(text(
+        "CREATE INDEX IF NOT EXISTS idx_audit_log_fecha_evento ON audit_log(fecha_evento DESC)"
+    ))
+    db.execute(text(
+        "CREATE INDEX IF NOT EXISTS idx_audit_log_tabla ON audit_log(tabla_afectada)"
+    ))
+    db.execute(text(
+        "CREATE INDEX IF NOT EXISTS idx_audit_log_operacion ON audit_log(operacion)"
+    ))
+    db.commit()
+
+
 def listar_audit_log(
     db: Session,
     tabla: str | None = None,
     operacion: str | None = None,
     limite: int = 50
 ):
+    asegurar_audit_log(db)
+
     query = """
         SELECT
             id_audit_log,
@@ -91,6 +118,8 @@ def obtener_dashboard_global(db: Session):
 
 def obtener_reporte_actividad(db: Session):
     try:
+        asegurar_audit_log(db)
+
         actividad = db.execute(
             text("""
                 SELECT

@@ -9,6 +9,11 @@ from app.models.usuario import Usuario
 
 from app.schemas.liga_schema import LigaCreate
 
+
+def obtener_modalidad_liga(tipo_liga: str) -> str:
+    return "apuesta" if tipo_liga.strip().lower() == "apuesta" else "diversion"
+
+
 def obtener_ligas_usuario(
     db: Session,
     usuario_actual: Usuario
@@ -59,6 +64,7 @@ def crear_liga(
     nueva_liga = Liga(
         nombre=data.nombre,
         tipo_liga=data.tipo_liga,
+        modalidad_liga=obtener_modalidad_liga(data.tipo_liga),
         precio_participacion=data.precio_participacion,
         id_creador_usuario=usuario_actual.id_usuario,
         id_admin_usuario=usuario_actual.id_usuario
