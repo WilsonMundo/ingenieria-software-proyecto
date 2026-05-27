@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database.session import get_db
-from app.models.sede import Sede
+from app.modules.sede import Sede
 from pydantic import BaseModel
 from typing import Optional
 

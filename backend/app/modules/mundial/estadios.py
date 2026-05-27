@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.database.session import get_db
-from app.models.estadio import Estadio
+from app.modules.estadio import Estadio
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/estadios", tags=["Estadios"])
