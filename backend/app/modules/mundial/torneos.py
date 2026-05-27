@@ -14,7 +14,7 @@ class TorneoSchema(BaseModel):
     id_torneo: int
     nombre: str
     anio: int
-    descripcion: Optional[str] = None
+    estado: str
 
     class Config:
         from_attributes = True
@@ -23,13 +23,13 @@ class TorneoSchema(BaseModel):
 class TorneoCreate(BaseModel):
     nombre: str
     anio: int
-    descripcion: Optional[str] = None
+    estado: str
 
 
 class TorneoUpdate(BaseModel):
     nombre: Optional[str] = None
     anio: Optional[int] = None
-    descripcion: Optional[str] = None
+    estado: Optional[str] = None
 
 
 # ─── Endpoints ───────────────────────────────────────────────────────────────

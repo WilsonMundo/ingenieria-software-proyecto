@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.database.session import get_db
-from app.modules.estadio import Estadio
+from app.models.estadio import Estadio
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/estadios", tags=["Estadios"])
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/estadios", tags=["Estadios"])
 class EstadioSchema(BaseModel):
     id_estadio: int
     nombre: str
-    capacidad: int
+    capacidad: Optional[int] = None
     id_sede: int
 
     class Config:
@@ -22,7 +22,7 @@ class EstadioSchema(BaseModel):
 
 class EstadioCreate(BaseModel):
     nombre: str
-    capacidad: int
+    capacidad: Optional[int] = None
     id_sede: int
 
 

@@ -13,6 +13,7 @@ router = APIRouter(prefix="/paises", tags=["Países"])
 class PaisSchema(BaseModel):
     id_pais: int
     nombre: str
+    codigo_fifa: str
     confederacion: Optional[str] = None
     id_grupo: Optional[int] = None
 
@@ -22,12 +23,14 @@ class PaisSchema(BaseModel):
 
 class PaisCreate(BaseModel):
     nombre: str
+    codigo_fifa: str
     confederacion: Optional[str] = None
     id_grupo: Optional[int] = None
 
 
 class PaisUpdate(BaseModel):
     nombre: Optional[str] = None
+    codigo_fifa: Optional[str] = None
     confederacion: Optional[str] = None
     id_grupo: Optional[int] = None
 

@@ -300,6 +300,39 @@ INSERT INTO puntaje (id_vaticinio, puntos, acerto_resultado, acerto_marcador) VA
 (3, 3, TRUE,  FALSE),
 (4, 1, FALSE, FALSE);
 
+-- Sincroniza las secuencias SERIAL despues de cargar datos iniciales.
+-- Evita errores de llave duplicada cuando la app crea nuevos registros.
+DO $$
+DECLARE
+    r RECORD;
+    max_id BIGINT;
+BEGIN
+    FOR r IN
+        SELECT
+            quote_ident(seq_ns.nspname) || '.' || quote_ident(seq.relname) AS sequence_name,
+            quote_ident(tab_ns.nspname) || '.' || quote_ident(tab.relname) AS table_name,
+            quote_ident(att.attname) AS column_name
+        FROM pg_class seq
+        JOIN pg_namespace seq_ns ON seq_ns.oid = seq.relnamespace
+        JOIN pg_depend dep ON dep.objid = seq.oid AND dep.deptype IN ('a', 'i')
+        JOIN pg_class tab ON tab.oid = dep.refobjid
+        JOIN pg_namespace tab_ns ON tab_ns.oid = tab.relnamespace
+        JOIN pg_attribute att ON att.attrelid = tab.oid AND att.attnum = dep.refobjsubid
+        WHERE seq.relkind = 'S'
+          AND tab_ns.nspname = 'public'
+    LOOP
+        EXECUTE format('SELECT COALESCE(MAX(%s), 0) FROM %s', r.column_name, r.table_name)
+        INTO max_id;
+
+        EXECUTE format(
+            'SELECT setval(%L::regclass, %s, %L)',
+            r.sequence_name,
+            GREATEST(max_id, 1),
+            max_id > 0
+        );
+    END LOOP;
+END $$;
+
 -- ============================================================
 -- FIN INIT.SQL
 -- ============================================================

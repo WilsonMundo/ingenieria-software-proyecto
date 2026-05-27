@@ -12,6 +12,7 @@ router = APIRouter(prefix="/fases", tags=["Fases"])
 
 class FaseSchema(BaseModel):
     id_fase: int
+    id_torneo: int
     nombre: str
     orden_fase: int
 
@@ -20,11 +21,13 @@ class FaseSchema(BaseModel):
 
 
 class FaseCreate(BaseModel):
+    id_torneo: int
     nombre: str
     orden_fase: int
 
 
 class FaseUpdate(BaseModel):
+    id_torneo: Optional[int] = None
     nombre: Optional[str] = None
     orden_fase: Optional[int] = None
 

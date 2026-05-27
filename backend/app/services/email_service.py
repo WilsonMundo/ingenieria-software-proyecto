@@ -5,17 +5,30 @@ from email.mime.text import MIMEText
 from app.core.config import settings
 
 
+def _imprimir_correo_simulado(destinatario: str, asunto: str, contenido_html: str):
+    print("========================================")
+    print("CORREO SIMULADO")
+    print("========================================")
+    print(f"Para: {destinatario}")
+    print(f"Asunto: {asunto}")
+    print("Contenido HTML:")
+    print(contenido_html)
+    print("========================================")
+
+
+def _smtp_configurado() -> bool:
+    return all([
+        settings.SMTP_HOST,
+        settings.SMTP_USER,
+        settings.SMTP_PASSWORD,
+        settings.SMTP_FROM_EMAIL
+    ])
+
+
 def enviar_correo(destinatario: str, asunto: str, contenido_html: str):
-    if not settings.EMAIL_ENABLED:
-        print("========================================")
-        print("CORREO SIMULADO")
-        print("========================================")
-        print(f"Para: {destinatario}")
-        print(f"Asunto: {asunto}")
-        print("Contenido HTML:")
-        print(contenido_html)
-        print("========================================")
-        return
+    if not settings.EMAIL_ENABLED or not _smtp_configurado():
+        _imprimir_correo_simulado(destinatario, asunto, contenido_html)
+        return False
 
     mensaje = MIMEMultipart("alternative")
     mensaje["Subject"] = asunto
@@ -25,14 +38,20 @@ def enviar_correo(destinatario: str, asunto: str, contenido_html: str):
     parte_html = MIMEText(contenido_html, "html", "utf-8")
     mensaje.attach(parte_html)
 
-    with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as servidor:
-        servidor.starttls()
-        servidor.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
-        servidor.sendmail(
-            settings.SMTP_FROM_EMAIL,
-            destinatario,
-            mensaje.as_string()
-        )
+    try:
+        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=10) as servidor:
+            servidor.starttls()
+            servidor.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+            servidor.sendmail(
+                settings.SMTP_FROM_EMAIL,
+                destinatario,
+                mensaje.as_string()
+            )
+        return True
+    except (smtplib.SMTPException, OSError) as exc:
+        print(f"No se pudo enviar el correo por SMTP: {exc}")
+        _imprimir_correo_simulado(destinatario, asunto, contenido_html)
+        return False
 
 def enviar_correo_recuperacion_password(
     email_destino: str,

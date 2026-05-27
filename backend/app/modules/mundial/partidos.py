@@ -13,9 +13,9 @@ router = APIRouter(prefix="/partidos", tags=["Partidos"])
 # ─── Enum de estado ───────────────────────────────────────────────────────────
 
 class EstadoPartido(str, Enum):
-    PROGRAMADO  = "PROGRAMADO"
-    EN_CURSO    = "EN_CURSO"
-    FINALIZADO  = "FINALIZADO"
+    PROGRAMADO = "programado"
+    EN_CURSO = "en_curso"
+    FINALIZADO = "finalizado"
 
 
 # ─── Schemas ─────────────────────────────────────────────────────────────────
@@ -25,10 +25,10 @@ class PartidoSchema(BaseModel):
     id_torneo: int
     id_fase: int
     id_estadio: int
-    id_pais_local: int
-    id_pais_visitante: int
+    id_equipo_local: int
+    id_equipo_visitante: int
     fecha_hora_inicio: datetime
-    estado: EstadoPartido
+    estado_partido: EstadoPartido
     id_grupo: Optional[int] = None
 
     class Config:
@@ -39,10 +39,10 @@ class PartidoCreate(BaseModel):
     id_torneo: int
     id_fase: int
     id_estadio: int
-    id_pais_local: int
-    id_pais_visitante: int
+    id_equipo_local: int
+    id_equipo_visitante: int
     fecha_hora_inicio: datetime
-    estado: EstadoPartido = EstadoPartido.PROGRAMADO
+    estado_partido: EstadoPartido = EstadoPartido.PROGRAMADO
     id_grupo: Optional[int] = None
 
 
@@ -50,10 +50,10 @@ class PartidoUpdate(BaseModel):
     id_torneo: Optional[int] = None
     id_fase: Optional[int] = None
     id_estadio: Optional[int] = None
-    id_pais_local: Optional[int] = None
-    id_pais_visitante: Optional[int] = None
+    id_equipo_local: Optional[int] = None
+    id_equipo_visitante: Optional[int] = None
     fecha_hora_inicio: Optional[datetime] = None
-    estado: Optional[EstadoPartido] = None
+    estado_partido: Optional[EstadoPartido] = None
     id_grupo: Optional[int] = None
 
 
@@ -74,7 +74,7 @@ def obtener_partido(id_partido: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=PartidoSchema, status_code=status.HTTP_201_CREATED)
 def crear_partido(data: PartidoCreate, db: Session = Depends(get_db)):
-    if data.id_pais_local == data.id_pais_visitante:
+    if data.id_equipo_local == data.id_equipo_visitante:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="El país local y visitante no pueden ser el mismo"
@@ -92,8 +92,8 @@ def actualizar_partido(id_partido: int, data: PartidoUpdate, db: Session = Depen
     if not partido:
         raise HTTPException(status_code=404, detail="Partido no encontrado")
     # Validar que local ≠ visitante si se están actualizando ambos o uno de los dos
-    nuevo_local     = data.id_pais_local     or partido.id_pais_local
-    nuevo_visitante = data.id_pais_visitante or partido.id_pais_visitante
+    nuevo_local = data.id_equipo_local or partido.id_equipo_local
+    nuevo_visitante = data.id_equipo_visitante or partido.id_equipo_visitante
     if nuevo_local == nuevo_visitante:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -111,7 +111,7 @@ def eliminar_partido(id_partido: int, db: Session = Depends(get_db)):
     partido = db.query(Partido).filter(Partido.id_partido == id_partido).first()
     if not partido:
         raise HTTPException(status_code=404, detail="Partido no encontrado")
-    if partido.estado != EstadoPartido.PROGRAMADO:
+    if partido.estado_partido != EstadoPartido.PROGRAMADO:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Solo se pueden eliminar partidos con estado PROGRAMADO"
