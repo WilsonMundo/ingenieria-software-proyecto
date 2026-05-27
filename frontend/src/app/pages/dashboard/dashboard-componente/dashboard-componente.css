@@ -32,6 +32,11 @@
   padding: 24px;
 }
 
+.summary-card[role='link'],
+.panel-title[role='link'] {
+  cursor: pointer;
+}
+
 .summary-header {
   display: flex;
   justify-content: space-between;

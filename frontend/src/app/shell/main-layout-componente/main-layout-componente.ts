@@ -25,6 +25,7 @@ export class MainLayoutComponente implements OnInit {
 
   readonly mainMenu: MenuItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', exact: true },
+    { label: 'Ligas', icon: 'groups', route: '/principal/ligas' },
     { label: 'Vaticinios', icon: 'track_changes', route: '/vaticinios' },
     { label: 'Rankings', icon: 'workspace_premium', route: '/clasificacion/liga/1' },
     { label: 'Invitaciones', icon: 'mail', route: '/invitaciones' },

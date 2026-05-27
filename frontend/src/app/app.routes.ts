@@ -46,6 +46,26 @@ export const routes: Routes = [
           )
       },
       {
+        path: 'ligas',
+        loadChildren: () =>
+          import('./features/leagues/routes/leagues.routes').then((m) => m.LEAGUES_ROUTES)
+      },
+      {
+        path: 'principal',
+        children: [
+          {
+            path: '',
+            redirectTo: '/dashboard',
+            pathMatch: 'full'
+          },
+          {
+            path: 'ligas',
+            loadChildren: () =>
+              import('./features/leagues/routes/leagues.routes').then((m) => m.LEAGUES_ROUTES)
+          }
+        ]
+      },
+      {
         path: 'invitaciones',
         loadComponent: () =>
           import(

@@ -1,0 +1,111 @@
+<div class="main-layout">
+  <aside class="sidebar" aria-label="Menu principal">
+    <div class="brand">
+      <div class="brand-icon">
+        <mat-icon aria-hidden="true">emoji_events</mat-icon>
+      </div>
+      <div>
+        <strong>GolTech Solutions S.A.</strong>
+        <span>World Cup 2026</span>
+      </div>
+    </div>
+
+    <nav class="side-nav" aria-label="Navegacion principal">
+      <a
+        class="nav-item"
+        routerLink="/principal"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <mat-icon aria-hidden="true">dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/ligas" routerLinkActive="active">
+        <mat-icon aria-hidden="true">emoji_events</mat-icon>
+        <span>Mis Ligas</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/ligas/crear" routerLinkActive="active">
+        <mat-icon aria-hidden="true">add_circle_outline</mat-icon>
+        <span>Crear Liga</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/invitaciones" routerLinkActive="active">
+        <mat-icon aria-hidden="true">mail_outline</mat-icon>
+        <span>Invitaciones</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/predicciones" routerLinkActive="active">
+        <mat-icon aria-hidden="true">track_changes</mat-icon>
+        <span>Predicciones</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/rankings" routerLinkActive="active">
+        <mat-icon aria-hidden="true">workspace_premium</mat-icon>
+        <span>Rankings</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/partidos" routerLinkActive="active">
+        <mat-icon aria-hidden="true">calendar_month</mat-icon>
+        <span>Partidos</span>
+      </a>
+      <a class="nav-item" routerLink="/principal/configuracion" routerLinkActive="active">
+        <mat-icon aria-hidden="true">settings</mat-icon>
+        <span>Configuracion</span>
+      </a>
+    </nav>
+
+    <div class="event-card">
+      <strong>World Cup 2026</strong>
+      <span>USA, Canada & Mexico</span>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar">
+      <label class="search-box">
+        <mat-icon aria-hidden="true">search</mat-icon>
+        <input type="search" placeholder="Buscar ligas o usuarios..." />
+      </label>
+
+      <div class="topbar-actions">
+        <button class="icon-button" type="button" aria-label="Notificaciones">
+          <mat-icon aria-hidden="true">notifications_none</mat-icon>
+          <span class="notification-badge" *ngIf="notificationCount > 0">
+            {{ notificationCount }}
+          </span>
+        </button>
+
+        <details class="profile-menu">
+          <summary class="profile">
+            <img
+              class="avatar"
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+              alt="John Doe"
+            />
+            <span class="profile-copy">
+              <strong>John Doe</strong>
+              <span>john@example.com</span>
+            </span>
+            <mat-icon aria-hidden="true">expand_more</mat-icon>
+          </summary>
+
+          <div class="profile-dropdown">
+            <span class="dropdown-label">My Account</span>
+            <button type="button">
+              <mat-icon aria-hidden="true">person_outline</mat-icon>
+              Profile
+            </button>
+            <button type="button">
+              <mat-icon aria-hidden="true">settings</mat-icon>
+              Settings
+            </button>
+            <button class="logout-button" type="button" (click)="logout()">
+              <mat-icon aria-hidden="true">logout</mat-icon>
+              Logout
+            </button>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main class="shell-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
