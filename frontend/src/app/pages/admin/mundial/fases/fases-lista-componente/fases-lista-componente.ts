@@ -21,7 +21,7 @@ import { FaseDialogComponente } from '../fase-dialog-componente/fase-dialog-comp
 })
 export class FasesListaComponente implements OnInit {
   fases: Fase[] = [];
-  columnas = ['orden_fase', 'nombre', 'id_torneo', 'acciones'];
+  columnas = ['orden_fase', 'nombre', 'torneo', 'acciones'];
   cargando = false;
   constructor(private faseService: FaseService, private dialog: MatDialog, private snackBar: MatSnackBar) {}
   ngOnInit(): void { this.cargar(); }

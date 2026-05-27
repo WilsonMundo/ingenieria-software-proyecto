@@ -1,7 +1,10 @@
+import { Torneo } from './torneo.dto';
+
 export interface Grupo {
   id_grupo: number;
   id_torneo: number;
   nombre: string;
+  torneo?: Torneo;
 }
 
 export interface GrupoCreate {

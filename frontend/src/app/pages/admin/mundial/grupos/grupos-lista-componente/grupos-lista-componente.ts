@@ -21,7 +21,7 @@ import { GrupoDialogComponente } from '../grupo-dialog-componente/grupo-dialog-c
 })
 export class GruposListaComponente implements OnInit {
   grupos: Grupo[] = [];
-  columnas = ['id_grupo', 'nombre', 'id_torneo', 'acciones'];
+  columnas = ['id_grupo', 'nombre', 'torneo', 'acciones'];
   cargando = false;
   constructor(private grupoService: GrupoService, private dialog: MatDialog, private snackBar: MatSnackBar) {}
   ngOnInit(): void { this.cargar(); }

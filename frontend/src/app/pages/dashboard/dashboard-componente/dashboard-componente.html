@@ -12,8 +12,8 @@
       </div>
     </div>
 
-    <h2>342</h2>
-    <p>+24 esta semana</p>
+    <h2>{{ puntosTotales }}</h2>
+    <p>Puntos acumulados en tus ligas</p>
     <div class="bar green-bar"></div>
   </div>
 
@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <h2>3ro</h2>
-    <p>En Liga Global</p>
+    <h2>{{ etiquetaPosicionResumen() }}</h2>
+    <p>Mejor posicion actual</p>
     <div class="bar blue-bar"></div>
   </div>
 
@@ -38,8 +38,8 @@
       </div>
     </div>
 
-    <h2>5</h2>
-    <p>2 nuevas este mes</p>
+    <h2>{{ ligas.length }}</h2>
+    <p>{{ ligas.length === 1 ? 'Liga activa' : 'Ligas activas' }}</p>
     <div class="bar purple-bar"></div>
   </div>
 </section>
@@ -65,49 +65,21 @@
         </thead>
 
         <tbody>
-          <tr>
-            <td>Liga de Campeones</td>
-            <td><span class="badge green-badge">APUESTA</span></td>
-            <td>24</td>
-            <td class="success">#3</td>
-            <td class="success">$500</td>
-            <td class="success">activa</td>
+          <tr *ngFor="let liga of ligas">
+            <td>{{ liga.nombre }}</td>
+            <td>
+              <span class="badge" [ngClass]="esLigaApuesta(liga) ? 'green-badge' : 'blue-badge'">
+                {{ liga.tipo_liga | uppercase }}
+              </span>
+            </td>
+            <td>{{ liga.miembros_activos }}</td>
+            <td class="success">{{ formatoPosicion(liga.posicion_usuario) }}</td>
+            <td [ngClass]="{ success: esLigaApuesta(liga) }">{{ premioLiga(liga) }}</td>
+            <td [ngClass]="liga.estado === 'activa' ? 'success' : 'warning'">{{ liga.estado }}</td>
           </tr>
 
-          <tr>
-            <td>Mundial de Oficina</td>
-            <td><span class="badge blue-badge">DIVERSION</span></td>
-            <td>12</td>
-            <td class="success">#1</td>
-            <td>Sin premio</td>
-            <td class="success">activa</td>
-          </tr>
-
-          <tr>
-            <td>Amigos y Familia</td>
-            <td><span class="badge blue-badge">DIVERSION</span></td>
-            <td>8</td>
-            <td class="success">#5</td>
-            <td>Sin premio</td>
-            <td class="success">activa</td>
-          </tr>
-
-          <tr>
-            <td>Maestros Globales</td>
-            <td><span class="badge green-badge">APUESTA</span></td>
-            <td>156</td>
-            <td class="success">#42</td>
-            <td class="success">$200</td>
-            <td class="success">activa</td>
-          </tr>
-
-          <tr>
-            <td>Guerreros del Fin de Semana</td>
-            <td><span class="badge green-badge">APUESTA</span></td>
-            <td>48</td>
-            <td>-</td>
-            <td class="success">$300</td>
-            <td class="warning">pendiente</td>
+          <tr *ngIf="!cargando && ligas.length === 0">
+            <td colspan="6">No tienes ligas registradas.</td>
           </tr>
         </tbody>
       </table>
@@ -119,12 +91,12 @@
         <h3>Proximos Partidos</h3>
       </div>
 
-      <div class="match-card">
+      <div class="match-card" *ngIf="proximoPartido; else sinPartidos">
         <div class="team">
-          <strong>BR</strong>
+          <strong>{{ proximoPartido.equipo_local?.codigo_fifa || 'LOC' }}</strong>
           <div>
-            <h4>Brazil</h4>
-            <p>Odds: 1.8</p>
+            <h4>{{ proximoPartido.equipo_local?.nombre || 'Local' }}</h4>
+            <p>{{ proximoPartido.fecha_hora_inicio | date:'dd/MM/yyyy HH:mm' }}</p>
           </div>
         </div>
 
@@ -132,12 +104,18 @@
 
         <div class="team right">
           <div>
-            <h4>Argentina</h4>
-            <p>Odds: 2.1</p>
+            <h4>{{ proximoPartido.equipo_visitante?.nombre || 'Visitante' }}</h4>
+            <p>{{ proximoPartido.estadio?.nombre || 'Estadio por definir' }}</p>
           </div>
-          <strong>AR</strong>
+          <strong>{{ proximoPartido.equipo_visitante?.codigo_fifa || 'VIS' }}</strong>
         </div>
       </div>
+
+      <ng-template #sinPartidos>
+        <div class="match-card">
+          <span class="vs">No hay partidos registrados.</span>
+        </div>
+      </ng-template>
     </div>
   </div>
 
@@ -147,58 +125,40 @@
         <mat-icon>workspace_premium</mat-icon>
         <h3>Mejores Clasificaciones</h3>
       </div>
-      <span>Liga Global</span>
+      <span>{{ ligas[0]?.nombre || 'Sin liga' }}</span>
     </div>
 
     <div class="ranking-list">
-      <div class="ranking-item">
-        <div class="place gold">1</div>
-        <div class="avatar">SJ</div>
-        <div>
-          <strong>Sarah Johnson</strong>
-          <p>485 puntos</p>
+      <div class="ranking-item" *ngFor="let item of ranking" [class.current]="item.esUsuarioActual">
+        <div
+          class="place"
+          [ngClass]="{
+            gold: item.posicion === 1,
+            silver: item.posicion === 2,
+            bronze: item.posicion === 3,
+            normal: item.posicion > 3
+          }"
+        >
+          {{ item.posicion }}
         </div>
-        <span class="success">+2</span>
+        <div class="avatar">{{ item.esUsuarioActual ? 'TU' : item.iniciales }}</div>
+        <div>
+          <strong>{{ item.esUsuarioActual ? 'Tu' : item.nombre_usuario }}</strong>
+          <p>{{ item.puntos }} puntos</p>
+        </div>
+        <span [ngClass]="item.movimiento >= 0 ? 'success' : 'danger'">
+          {{ movimientoTexto(item) }}
+        </span>
       </div>
 
-      <div class="ranking-item">
-        <div class="place silver">2</div>
-        <div class="avatar">MC</div>
+      <div class="ranking-item" *ngIf="!cargando && ranking.length === 0">
+        <div class="place normal">-</div>
+        <div class="avatar">--</div>
         <div>
-          <strong>Mike Chen</strong>
-          <p>456 puntos</p>
+          <strong>Sin clasificacion</strong>
+          <p>No hay puntos registrados</p>
         </div>
-        <span class="danger">-1</span>
-      </div>
-
-      <div class="ranking-item current">
-        <div class="place bronze">3</div>
-        <div class="avatar">TU</div>
-        <div>
-          <strong>Tu</strong>
-          <p>342 puntos</p>
-        </div>
-        <span class="success">+3</span>
-      </div>
-
-      <div class="ranking-item">
-        <div class="place normal">4</div>
-        <div class="avatar">EW</div>
-        <div>
-          <strong>Emma Wilson</strong>
-          <p>318 puntos</p>
-        </div>
-        <span class="success">+1</span>
-      </div>
-
-      <div class="ranking-item">
-        <div class="place normal">5</div>
-        <div class="avatar">DB</div>
-        <div>
-          <strong>David Brown</strong>
-          <p>295 puntos</p>
-        </div>
-        <span class="danger">-2</span>
+        <span>-</span>
       </div>
     </div>
   </aside>
