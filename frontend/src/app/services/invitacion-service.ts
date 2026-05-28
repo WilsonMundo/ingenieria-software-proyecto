@@ -8,12 +8,13 @@ import {
   ValidarInvitacionResponse,
   AceptarInvitacionRequest
 } from '../models/dto/invitacion'; 
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvitacionService {
-  private apiUrl = 'http://127.0.0.1:8000/api/invitaciones';
+  private apiUrl = `${environment.apiBaseUrl}/api/invitaciones`;
 
   constructor(private http: HttpClient) {}
 

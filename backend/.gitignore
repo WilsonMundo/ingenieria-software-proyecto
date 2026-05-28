@@ -21,10 +21,12 @@ dist/
 # Variables de entorno
 .env
 .env.*
+!.env.example
 
 # Base de datos local
 *.db
 *.sqlite3
+postgres/
 
 # Cachés y testing
 .pytest_cache/
