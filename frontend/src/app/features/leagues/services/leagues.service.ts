@@ -56,11 +56,7 @@ export class LeaguesService {
     );
   }
 
-  createPrediction(
-    idLiga: number,
-    data: any
-  ): Observable<any> {
-
+  createPrediction(idLiga: number, data: any): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/api/vaticinios/${idLiga}`,
       data,
@@ -68,7 +64,73 @@ export class LeaguesService {
         headers: this.getAuthHeaders()
       }
     );
-
   }
 
+  getPredictions(idLiga: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/api/vaticinios/${idLiga}`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  getPendingRequests(idLiga: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/api/memberships/${idLiga}/requests`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  approveRequest(idLigaMiembro: number): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/api/memberships/requests/${idLigaMiembro}/approve`,
+      {},
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  rejectRequest(idLigaMiembro: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/api/memberships/requests/${idLigaMiembro}/reject`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  createJoinRequest(idLiga: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/api/solicitudes/${idLiga}`,
+      {},
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  getJoinRequests(idLiga: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/api/solicitudes/${idLiga}`,
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
+
+  resolveJoinRequest(idSolicitud: number, estado: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/api/solicitudes/${idSolicitud}`,
+      {
+        estado
+      },
+      {
+        headers: this.getAuthHeaders()
+      }
+    );
+  }
 }

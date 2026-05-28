@@ -67,6 +67,28 @@ mat-card-content {
   color: #9ca3af;
 }
 
+.role-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.role-badge.admin {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.role-badge.participante {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.role-badge {
+  background: rgba(156, 163, 175, 0.2);
+  color: #9ca3af;
+}
+
 .stats-section {
   display: flex;
   flex-direction: column;

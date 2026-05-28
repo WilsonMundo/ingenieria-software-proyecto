@@ -161,3 +161,132 @@
 .rules-list li {
   margin-bottom: 1rem;
 }
+
+.match-actions {
+  display: flex;
+  align-items: center;
+}
+
+.prediction-info {
+  margin-top: 10px;
+}
+
+.prediction-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.view-button {
+  border-color: #4b5563 !important;
+  color: #9ca3af !important;
+}
+
+.request-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-top: 16px;
+  border-radius: 14px;
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+.request-info h3 {
+  margin: 0;
+  font-size: 18px;
+  color: white;
+}
+
+.request-info p {
+  margin: 6px 0;
+  color: #9ca3af;
+}
+
+.request-info span {
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.request-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.approve-button {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #10b981;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.reject-button {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #ef4444;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.empty-state {
+  margin-top: 24px;
+  color: #9ca3af;
+}
+
+.league-actions {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-bottom: 20px;
+
+}
+
+.league-actions button {
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+.league-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.header-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 20px;
+
+}
+
+.league-actions {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  padding-top: 5px;
+
+}

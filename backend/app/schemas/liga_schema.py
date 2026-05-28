@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -12,12 +13,15 @@ class LigaCreate(BaseModel):
 
 
 class LigaResponse(BaseModel):
+
     id_liga: int
     nombre: str
     tipo_liga: str
-    precio_participacion: Decimal
+    precio_participacion: float
     estado: str
-    fecha_creacion: datetime
+
+    rol_liga: Optional[str] = None
+    total_participantes: Optional[int] = None
 
     class Config:
         from_attributes = True

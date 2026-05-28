@@ -9,37 +9,69 @@ from app.models.usuario import Usuario
 
 from app.schemas.liga_schema import LigaCreate
 
-def obtener_ligas_usuario(
-    db: Session,
-    usuario_actual: Usuario
-):
-    ligas = (
-        db.query(Liga)
-        .join(
-            LigaMiembro,
-            Liga.id_liga == LigaMiembro.id_liga
-        )
-        .filter(
-            LigaMiembro.id_usuario == usuario_actual.id_usuario
-        )
-        .all()
-    )
-    return ligas
+def obtener_ligas_usuario(db: Session, usuario_actual: Usuario):
 
-def obtener_liga_por_id(
-    db: Session,
-    id_liga: int,
-    usuario_actual: Usuario
-):
-    liga = db.query(Liga).filter(
-        Liga.id_liga == id_liga
+    resultados = db.query(Liga, LigaMiembro.rol_liga).join(
+        LigaMiembro,
+        Liga.id_liga == LigaMiembro.id_liga
+    ).filter(
+        LigaMiembro.id_usuario == usuario_actual.id_usuario
+    ).all()
+
+    response = []
+
+    for liga, rol_liga in resultados:
+
+        total_participantes = db.query(LigaMiembro).filter(
+            LigaMiembro.id_liga == liga.id_liga,
+            LigaMiembro.estado_membresia == "activo"
+        ).count()
+
+        response.append({
+            "id_liga": liga.id_liga,
+            "nombre": liga.nombre,
+            "tipo_liga": liga.tipo_liga,
+            "precio_participacion": liga.precio_participacion,
+            "estado": liga.estado,
+            "rol_liga": rol_liga,
+            "total_participantes": total_participantes
+        })
+
+    return response
+
+def obtener_liga_por_id(db: Session, id_liga: int, usuario_actual: Usuario):
+
+    liga_data = db.query(Liga, LigaMiembro.rol_liga).join(
+        LigaMiembro,
+        Liga.id_liga == LigaMiembro.id_liga
+    ).filter(
+        Liga.id_liga == id_liga,
+        LigaMiembro.id_usuario == usuario_actual.id_usuario
     ).first()
-    if not liga:
+
+    if not liga_data:
         raise HTTPException(
             status_code=404,
             detail="Liga no encontrada"
         )
-    return liga
+
+    liga, rol_usuario = liga_data
+
+    total_participantes = db.query(LigaMiembro).filter(
+        LigaMiembro.id_liga == id_liga,
+        LigaMiembro.estado_membresia == "activo"
+    ).count()
+
+    return {
+        "id_liga": liga.id_liga,
+        "nombre": liga.nombre,
+        "tipo_liga": liga.tipo_liga,
+        "precio_participacion": liga.precio_participacion,
+        "estado": liga.estado,
+        "fecha_creacion": liga.fecha_creacion,
+        "rol_liga": rol_usuario,
+        "total_participantes": total_participantes
+    }
 
 def crear_liga(
     db: Session,

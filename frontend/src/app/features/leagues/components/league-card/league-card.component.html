@@ -10,8 +10,11 @@
           <span class="type-badge">
             {{ league.tipo_liga }}
           </span>
-          <span class="status-badge" [ngClass]="league.estado?.toLowerCase()" >
+          <span class="status-badge" [ngClass]="league.estado.toLowerCase()">
             {{ league.estado }}
+          </span>
+          <span class="role-badge" [ngClass]="league.rol_liga">
+            {{ league.rol_liga }}
           </span>
         </div>
       </div>
@@ -23,7 +26,7 @@
           <span>Participantes</span>
         </div>
         <span class="value">
-        24/24
+        {{ league.total_participantes }}
         </span>
       </div>
       <div class="info-row">

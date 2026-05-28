@@ -3,23 +3,34 @@
     <button class="back-button" routerLink="/principal/ligas">← Volver a Mis Ligas</button>
   </div>
   <div class="header">
-    <div>
-      <h1>{{ league.nombre }}</h1>
-      <div class="badges">
-        <span class="badge type">{{ league.tipo_liga }}</span>
-        <span class="badge status">{{ league.estado }}</span>
+    <div class="header-top">
+      <div>
+        <h1>{{ league.nombre }}</h1>
+        <div class="badges">
+          <span class="badge type">
+            {{ league.tipo_liga }}
+          </span>
+          <span class="badge status">
+            {{ league.estado }}
+          </span>
+        </div>
+        <p class="description">
+          {{ league.descripcion }}
+        </p>
       </div>
-      <p class="description">{{ league.descripcion }}</p>
+      <div class="league-actions">
+        <button mat-flat-button color="primary" (click)="requestJoinLeague()" *ngIf="!isMember">Solicitar ingreso</button>
+      </div>
     </div>
   </div>
   <div class="stats-grid">
     <div class="stat-card">
       <h3>Participantes</h3>
-      <p>24/24</p>
+      <p>{{ league.total_participantes }}</p>
     </div>
     <div class="stat-card">
       <h3>Premio</h3>
-      <p>${{ league.precio_participacion }}</p>
+      <p>Q{{ league.precio_participacion }}</p>
     </div>
     <div class="stat-card">
       <h3>Estado</h3>
@@ -35,6 +46,7 @@
     <button class="tab-button" [class.active]="activeTab === 'rankings'" (click)="activeTab = 'rankings'">Rankings</button>
     <button class="tab-button" [class.active]="activeTab === 'matches'" (click)="activeTab = 'matches'">Partidos</button>
     <button class="tab-button" [class.active]="activeTab === 'rules'" (click)="activeTab = 'rules'">Reglas</button>
+    <button class="tab-button" [class.active]="activeTab === 'requests'" (click)="activeTab = 'requests'" *ngIf="isAdmin">Solicitudes</button>
   </div>
   <div class="tab-content">
     <!-- RANKINGS -->
@@ -83,8 +95,31 @@
             <p>
               {{ match.fecha_y_hora }}
             </p>
+            <!-- Vaticinio -->
+            <div *ngIf="match.prediction" class="prediction-info">
+              <span class="prediction-badge">
+                Tu vaticinio:
+                {{ match.prediction.goles_local_pred }}
+                -
+                {{ match.prediction.goles_visitante_pred }}
+              </span>
+            </div>
           </div>
-          <button class="predict-button" mat-flat-button color="primary" (click)="openPredictionModal(match)">Predecir</button>
+          <!-- BOTONES -->
+          <div class="match-actions">
+            <!-- No tiene vaticinio -->
+            <button *ngIf="!match.prediction" class="predict-button" mat-flat-button color="primary" (click)="openPredictionModal(match)">
+              Predecir
+            </button>
+            <!-- Editable -->
+            <button *ngIf="match.prediction?.editable" class="predict-button" mat-flat-button color="primary" (click)="openPredictionModal(match)">
+              Editar Vaticinio
+            </button>
+            <!-- Solo lectura -->
+            <button *ngIf="match.prediction && !match.prediction.editable" class="view-button" mat-stroked-button disabled>
+              Vaticinio Cerrado
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -143,6 +178,27 @@
               3er lugar: 20% del premio total
             </li>
           </ul>
+        </div>
+      </div>
+    </div>
+    <!-- SOLICITUDES -->
+    <div *ngIf="activeTab === 'requests' && isAdmin" class="content-card">
+      <h2>Solicitudes pendientes</h2>
+      <div *ngIf="joinRequests.length === 0">
+        No hay solicitudes pendientes
+      </div>
+      <div class="request-card" *ngFor="let request of joinRequests">
+        <div class="request-info">
+          <h3>
+            {{ request.nombre_usuario }}
+          </h3>
+          <p>
+            {{ request.email }}
+          </p>
+        </div>
+        <div class="request-actions">
+          <button class="approve-button" (click)="resolveRequest(request.id_solicitud, 'aceptada')">Aprobar</button>
+          <button class="reject-button" (click)="resolveRequest(request.id_solicitud, 'rechazada')">Rechazar</button>
         </div>
       </div>
     </div>

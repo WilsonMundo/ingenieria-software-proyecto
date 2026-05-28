@@ -9,7 +9,7 @@ from app.api.controllers.invitacion_controller import router as invitacion_route
 from app.api.controllers.liga_controller import router as liga_router
 from app.api.controllers.partido_controller import router as partido_router
 from app.api.controllers.vaticinio_controller import router as vaticinio_router
-
+from app.api.controllers import solicitud_controller
 
 from app.core.logging import configure_logging
 
@@ -39,6 +39,7 @@ app.include_router(invitacion_router)
 app.include_router(liga_router)
 app.include_router(partido_router)
 app.include_router(vaticinio_router)
+app.include_router(solicitud_controller.router)
 
 @app.middleware("http")
 async def log_server_errors(request: Request, call_next):
