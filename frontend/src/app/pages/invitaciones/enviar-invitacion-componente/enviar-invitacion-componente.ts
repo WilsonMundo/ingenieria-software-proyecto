@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { League } from '../../../features/leagues/interfaces/league.interface';
+import { LeaguesService } from '../../../features/leagues/services/leagues.service';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 import { InvitacionService } from '../../../services/invitacion-service';
 
@@ -22,12 +25,13 @@ import { InvitacionService } from '../../../services/invitacion-service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule
   ],
   templateUrl: './enviar-invitacion-componente.html',
   styleUrl: './enviar-invitacion-componente.css'
 })
-export class EnviarInvitacionComponente {
+export class EnviarInvitacionComponente implements OnInit{
   idLiga: number = 1;
   emailDestino: string = '';
 
@@ -35,8 +39,12 @@ export class EnviarInvitacionComponente {
   mensajeError: string = '';
   enlaceGenerado: string = '';
   usuarioRegistrado: boolean | null = null;
+  ligas: League[] = [];
 
-  constructor(private invitacionService: InvitacionService) {}
+  constructor(
+  private invitacionService: InvitacionService,
+  private leaguesService: LeaguesService
+) {}
 
   enviarInvitacion(): void {
     this.mensajeExito = '';
@@ -70,4 +78,24 @@ export class EnviarInvitacionComponente {
       }
     });
   }
+
+  ngOnInit(): void {
+  this.cargarLigas();
+}
+
+cargarLigas(): void {
+  this.leaguesService.getLeagues().subscribe({
+    next: (response) => {
+      this.ligas = response;
+
+      if (this.ligas.length > 0) {
+        this.idLiga = this.ligas[0].id_liga;
+      }
+    },
+    error: (error) => {
+      console.error('Error cargando ligas:', error);
+      this.mensajeError = 'No se pudieron cargar las ligas disponibles.';
+    }
+  });
+}
 }

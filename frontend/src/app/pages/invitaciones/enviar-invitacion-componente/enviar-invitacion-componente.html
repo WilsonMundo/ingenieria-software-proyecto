@@ -23,18 +23,23 @@
 
       <mat-card-content>
         <form (ngSubmit)="enviarInvitacion()" #inviteForm="ngForm">
-          <label class="field-label">ID de liga</label>
+          <label class="field-label">Liga</label>
           <mat-form-field appearance="outline" class="full-width">
             <mat-icon matPrefix>emoji_events</mat-icon>
-            <input
-              matInput
-              type="number"
+
+            <mat-select
               name="idLiga"
               [(ngModel)]="idLiga"
               required
-              min="1"
-              placeholder="Ejemplo: 1"
-            />
+              placeholder="Selecciona una liga"
+            >
+              <mat-option
+                *ngFor="let liga of ligas"
+                [value]="liga.id_liga"
+              >
+                {{ liga.nombre }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
 
           <label class="field-label">Correo destino</label>

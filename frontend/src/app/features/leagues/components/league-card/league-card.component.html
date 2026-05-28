@@ -10,7 +10,7 @@
           <span class="type-badge">
             {{ league.tipo_liga }}
           </span>
-          <span class="status-badge" [ngClass]="league.estado.toLowerCase()">
+          <span class="status-badge" [ngClass]="(league.estado || '').toLowerCase()">
             {{ league.estado }}
           </span>
         </div>
@@ -22,29 +22,39 @@
         <div class="info-label">
           <span>Participantes</span>
         </div>
-        <span class="value"> 24/24 </span>
+        <span class="value">
+        24/24
+        </span>
       </div>
       <div class="info-row">
         <div class="info-label">
           <span>Tu Posición</span>
         </div>
-        <span class="rank-value"> #3 </span>
+        <span class="rank-value">
+          #3
+        </span>
       </div>
       <div class="info-row">
         <div class="info-label">
           <span>Premio</span>
         </div>
-        <span class="prize-value"> Q{{ league.precio_participacion }} </span>
+        <span class="prize-value">
+          Q{{ league.precio_participacion }}
+        </span>
       </div>
     </div>
     <!-- Progress -->
     <div class="progress-section">
       <div class="progress-header">
-        <span class="progress-label"> Progreso </span>
-        <span class="progress-value"> 65% </span>
+        <span class="progress-label">
+          Progreso
+        </span>
+        <span class="progress-value">
+          65%
+        </span>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill" style="width: 65%"></div>
+        <div class="progress-fill" style="width: 65%;"></div>
       </div>
     </div>
   </mat-card-content>
