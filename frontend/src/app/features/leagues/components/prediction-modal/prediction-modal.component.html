@@ -2,31 +2,36 @@
   <h2 class="modal-title">Registrar Vaticinio</h2>
   <div class="match-info">
     <div class="match-name">
-      {{ data.encuentro }}
+      {{ nombreLocal }} vs {{ nombreVisitante }}
     </div>
     <div class="match-date">
-      {{ data.fecha_y_hora }}
+      {{ fechaPartido | date:'yyyy-MM-dd HH:mm' }}
     </div>
   </div>
   <div class="score-container">
     <div class="team-score">
-      <span class="team-label">Local</span>
+      <span class="team-label">{{ nombreLocal }}</span>
       <mat-form-field appearance="fill" class="score-input">
         <mat-label>Goles</mat-label>
-        <input matInput type="number" min="0" [(ngModel)]="golesLocal"/>
+        <input matInput type="number" min="0" step="1" [(ngModel)]="golesLocal"/>
       </mat-form-field>
     </div>
     <div class="vs-text">VS</div>
     <div class="team-score">
-      <span class="team-label">Visitante</span>
+      <span class="team-label">{{ nombreVisitante }}</span>
       <mat-form-field appearance="fill" class="score-input">
         <mat-label>Goles</mat-label>
-        <input matInput type="number" min="0" [(ngModel)]="golesVisitante"/>
+        <input matInput type="number" min="0" step="1" [(ngModel)]="golesVisitante"/>
       </mat-form-field>
     </div>
   </div>
+  @if (mensajeError) {
+    <div class="error-message">{{ mensajeError }}</div>
+  }
   <div class="actions">
     <button mat-button class="cancel-button" (click)="close()">Cancelar</button>
-    <button mat-flat-button color="primary" class="save-button" (click)="save()">Guardar</button>
+    <button mat-flat-button color="primary" class="save-button" (click)="save()" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Guardar' }}
+    </button>
   </div>
 </div>

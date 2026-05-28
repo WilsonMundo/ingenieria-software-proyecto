@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 
@@ -6,8 +6,8 @@ from typing import Optional
 class VaticinioCreate(BaseModel):
     id_partido: int
     id_liga_miembro: int
-    goles_local_pred: int
-    goles_visitante_pred: int
+    goles_local_pred: int = Field(ge=0)
+    goles_visitante_pred: int = Field(ge=0)
 
 # Lo que el Backend le responde al Frontend confirmando el éxito
 class VaticinioResponse(BaseModel):

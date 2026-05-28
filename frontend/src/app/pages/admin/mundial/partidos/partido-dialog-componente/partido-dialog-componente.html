@@ -17,9 +17,8 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Grupo (opcional)</mat-label>
+      <mat-label>Grupo</mat-label>
       <mat-select formControlName="id_grupo">
-        <mat-option [value]="null">— Sin grupo —</mat-option>
         @for (g of grupos; track g.id_grupo) { <mat-option [value]="g.id_grupo">{{g.nombre}}</mat-option> }
       </mat-select>
     </mat-form-field>
@@ -34,14 +33,22 @@
     <mat-form-field appearance="outline">
       <mat-label>Equipo Local</mat-label>
       <mat-select formControlName="id_equipo_local">
-        @for (p of paises; track p.id_pais) { <mat-option [value]="p.id_pais">{{p.nombre}} ({{p.codigo_fifa}})</mat-option> }
+        @for (p of paises; track p.id_pais) {
+          <mat-option [value]="p.id_pais" [disabled]="p.id_pais === form.get('id_equipo_visitante')?.value">
+            {{p.nombre}} ({{p.codigo_fifa}})
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Equipo Visitante</mat-label>
       <mat-select formControlName="id_equipo_visitante">
-        @for (p of paises; track p.id_pais) { <mat-option [value]="p.id_pais">{{p.nombre}} ({{p.codigo_fifa}})</mat-option> }
+        @for (p of paises; track p.id_pais) {
+          <mat-option [value]="p.id_pais" [disabled]="p.id_pais === form.get('id_equipo_local')?.value">
+            {{p.nombre}} ({{p.codigo_fifa}})
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 

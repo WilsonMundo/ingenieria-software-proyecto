@@ -12,7 +12,7 @@
     </div>
 
     <nav class="menu" aria-label="Navegacion principal">
-      @for (item of mainMenu; track item.route) {
+      @for (item of mainMenuVisible; track item.route) {
         <a
           class="menu-item"
           [routerLink]="item.route"
@@ -25,6 +25,7 @@
       }
     </nav>
 
+    @if (esAdministrador) {
     <section class="menu-section">
       <h3>Administracion</h3>
       <nav class="menu compact" aria-label="Administracion">
@@ -36,7 +37,9 @@
         }
       </nav>
     </section>
+    }
 
+    @if (esAdministrador) {
     <section class="menu-section">
       <h3>Mundial</h3>
       <nav class="menu compact" aria-label="Administracion del mundial">
@@ -53,6 +56,7 @@
         }
       </nav>
     </section>
+    }
 
     <div class="sidebar-footer">
       <strong>World Cup 2026</strong>

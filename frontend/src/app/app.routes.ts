@@ -82,7 +82,7 @@ export const routes: Routes = [
       {
         path: 'vaticinios',
         loadComponent: () =>
-          import('./pages/vaticinios/vaticinio.component').then((m) => m.VaticinioComponent)
+          import('./pages/vaticinios/predicciones.component').then((m) => m.PrediccionesComponent)
       },
       {
         path: 'clasificacion/liga/:idLiga',

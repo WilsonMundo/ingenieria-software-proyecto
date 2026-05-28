@@ -25,7 +25,7 @@ export interface Partido {
 export interface PartidoCreate {
   id_torneo: number;
   id_fase: number;
-  id_grupo?: number | null;
+  id_grupo: number;
   id_estadio: number;
   id_equipo_local: number;
   id_equipo_visitante: number;

@@ -11,6 +11,7 @@ from app.models.estadio import Estadio
 from app.models.fase import Fase
 from app.models.grupo import Grupo
 from app.models.pais import Pais
+from app.models.pais_grupo import PaisGrupo
 from app.models.partido import Partido
 
 router = APIRouter(prefix="/partidos", tags=["Partidos"])
@@ -77,7 +78,7 @@ class PartidoCreate(BaseModel):
     id_equipo_visitante: int
     fecha_hora_inicio: datetime
     estado_partido: EstadoPartido = EstadoPartido.PROGRAMADO
-    id_grupo: Optional[int] = None
+    id_grupo: int
 
 
 class PartidoUpdate(BaseModel):
@@ -176,6 +177,40 @@ def buscar_partido_con_relaciones(db: Session, id_partido: int):
     )
 
 
+def validar_partido_grupo(db: Session, id_grupo: int | None, id_equipo_local: int, id_equipo_visitante: int):
+    if id_grupo is None:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Selecciona un grupo para crear el partido"
+        )
+
+    if id_equipo_local == id_equipo_visitante:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="El pais local y visitante no pueden ser el mismo"
+        )
+
+    grupo = db.query(Grupo).filter(Grupo.id_grupo == id_grupo).first()
+    if not grupo:
+        raise HTTPException(status_code=404, detail="Grupo no encontrado")
+
+    asignaciones = (
+        db.query(PaisGrupo.id_pais)
+        .filter(
+            PaisGrupo.id_grupo == id_grupo,
+            PaisGrupo.id_pais.in_([id_equipo_local, id_equipo_visitante])
+        )
+        .all()
+    )
+    paises_en_grupo = {id_pais for (id_pais,) in asignaciones}
+
+    if id_equipo_local not in paises_en_grupo or id_equipo_visitante not in paises_en_grupo:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Los equipos del partido deben pertenecer al grupo seleccionado"
+        )
+
+
 @router.get("", response_model=List[PartidoSchema])
 def listar_partidos(db: Session = Depends(get_db)):
     Local = aliased(Pais)
@@ -208,11 +243,12 @@ def obtener_partido(id_partido: int, db: Session = Depends(get_db)):
 
 @router.post("", response_model=PartidoSchema, status_code=status.HTTP_201_CREATED)
 def crear_partido(data: PartidoCreate, db: Session = Depends(get_db)):
-    if data.id_equipo_local == data.id_equipo_visitante:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="El pais local y visitante no pueden ser el mismo"
-        )
+    validar_partido_grupo(
+        db,
+        data.id_grupo,
+        data.id_equipo_local,
+        data.id_equipo_visitante
+    )
 
     partido = Partido(**data.model_dump())
     db.add(partido)
@@ -230,11 +266,8 @@ def actualizar_partido(id_partido: int, data: PartidoUpdate, db: Session = Depen
 
     nuevo_local = data.id_equipo_local or partido.id_equipo_local
     nuevo_visitante = data.id_equipo_visitante or partido.id_equipo_visitante
-    if nuevo_local == nuevo_visitante:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="El pais local y visitante no pueden ser el mismo"
-        )
+    nuevo_grupo = data.id_grupo if data.id_grupo is not None else partido.id_grupo
+    validar_partido_grupo(db, nuevo_grupo, nuevo_local, nuevo_visitante)
 
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(partido, key, value)

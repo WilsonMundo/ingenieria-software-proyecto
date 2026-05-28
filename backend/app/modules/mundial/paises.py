@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.grupo import Grupo
 from app.models.pais import Pais
+from app.models.pais_grupo import PaisGrupo
 
 router = APIRouter(prefix="/paises", tags=["Paises"])
 
@@ -75,6 +76,13 @@ def obtener_pais_con_grupo(db: Session, id_pais: int):
     )
 
 
+def sincronizar_pais_grupo(db: Session, pais: Pais):
+    db.query(PaisGrupo).filter(PaisGrupo.id_pais == pais.id_pais).delete()
+
+    if pais.id_grupo is not None:
+        db.add(PaisGrupo(id_pais=pais.id_pais, id_grupo=pais.id_grupo))
+
+
 def validar_codigo_fifa_disponible(
     db: Session,
     codigo_fifa: str,
@@ -106,13 +114,23 @@ def manejar_error_integridad():
 
 
 @router.get("", response_model=List[PaisSchema])
-def listar_paises(db: Session = Depends(get_db)):
-    filas = (
-        db.query(Pais, Grupo)
-        .outerjoin(Grupo, Grupo.id_grupo == Pais.id_grupo)
-        .order_by(Pais.nombre)
-        .all()
-    )
+def listar_paises(grupo: Optional[int] = None, db: Session = Depends(get_db)):
+    if grupo is not None:
+        filas = (
+            db.query(Pais, Grupo)
+            .join(PaisGrupo, PaisGrupo.id_pais == Pais.id_pais)
+            .join(Grupo, Grupo.id_grupo == PaisGrupo.id_grupo)
+            .filter(PaisGrupo.id_grupo == grupo)
+            .order_by(Pais.nombre)
+            .all()
+        )
+    else:
+        filas = (
+            db.query(Pais, Grupo)
+            .outerjoin(Grupo, Grupo.id_grupo == Pais.id_grupo)
+            .order_by(Pais.nombre)
+            .all()
+        )
     return [pais_resumen(pais, grupo) for pais, grupo in filas]
 
 
@@ -136,6 +154,8 @@ def crear_pais(data: PaisCreate, db: Session = Depends(get_db)):
     db.add(pais)
 
     try:
+        db.flush()
+        sincronizar_pais_grupo(db, pais)
         db.commit()
     except IntegrityError:
         db.rollback()
@@ -165,6 +185,9 @@ def actualizar_pais(id_pais: int, data: PaisUpdate, db: Session = Depends(get_db
         setattr(pais, key, value)
 
     try:
+        db.flush()
+        if "id_grupo" in valores:
+            sincronizar_pais_grupo(db, pais)
         db.commit()
     except IntegrityError:
         db.rollback()

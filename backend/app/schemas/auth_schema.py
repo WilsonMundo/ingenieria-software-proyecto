@@ -10,6 +10,7 @@ class UsuarioResponse(BaseModel):
     id_usuario: int
     nombre_completo: str
     email: EmailStr
+    id_rol: int
     rol: str
 
 
@@ -41,6 +42,7 @@ class PerfilResponse(BaseModel):
     id_usuario: int
     nombre_completo: str
     email: EmailStr
+    id_rol: int
     rol: str
     estado: str
 

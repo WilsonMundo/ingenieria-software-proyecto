@@ -74,6 +74,7 @@ def autenticar_usuario(db: Session, login_data: LoginRequest, ip_address: str | 
             "id_usuario": usuario.id_usuario,
             "nombre_completo": usuario.nombre_completo,
             "email": usuario.email,
+            "id_rol": usuario.id_rol,
             "rol": usuario.rol.nombre_rol
         }
     }
@@ -90,12 +91,15 @@ def registrar_usuario(db: Session, registro_data: RegistroRequest):
             detail="El correo ya estÃ¡ registrado"
         )
 
-    rol_jugador = db.query(Rol).filter(Rol.nombre_rol == "jugador").first()
+    rol_jugador = db.query(Rol).filter(
+        Rol.id_rol == 2,
+        Rol.nombre_rol == "jugador"
+    ).first()
 
     if not rol_jugador:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="No existe el rol jugador en la base de datos"
+            detail="No existe el rol jugador con id 2 en la base de datos"
         )
 
     nuevo_usuario = Usuario(
@@ -219,6 +223,7 @@ def obtener_perfil_usuario(usuario: Usuario):
         "id_usuario": usuario.id_usuario,
         "nombre_completo": usuario.nombre_completo,
         "email": usuario.email,
+        "id_rol": usuario.id_rol,
         "rol": usuario.rol.nombre_rol,
         "estado": usuario.estado
     }

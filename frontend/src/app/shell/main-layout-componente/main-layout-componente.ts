@@ -11,6 +11,7 @@ interface MenuItem {
   icon: string;
   route: string;
   exact?: boolean;
+  adminOnly?: boolean;
 }
 
 @Component({
@@ -30,7 +31,7 @@ export class MainLayoutComponente implements OnInit {
     { label: 'Rankings', icon: 'workspace_premium', route: '/clasificacion/liga/1' },
     { label: 'Invitaciones', icon: 'mail', route: '/invitaciones' },
     { label: 'Perfil', icon: 'person', route: '/perfil' },
-    { label: 'Premios', icon: 'emoji_events', route: '/admin/premios' }
+    { label: 'Premios', icon: 'emoji_events', route: '/admin/premios', adminOnly: true }
   ];
 
   readonly adminMenu: MenuItem[] = [
@@ -64,6 +65,17 @@ export class MainLayoutComponente implements OnInit {
     }
 
     this.usuario = this.authService.obtenerUsuario();
+  }
+
+  get mainMenuVisible(): MenuItem[] {
+    return this.mainMenu.filter((item) => !item.adminOnly || this.esAdministrador);
+  }
+
+  get esAdministrador(): boolean {
+    const rol = `${this.usuario?.rol ?? ''}`.trim().toLowerCase();
+    const idRol = Number(this.usuario?.id_rol);
+
+    return rol === 'administrador' || idRol === 1;
   }
 
   cerrarSesion(): void {

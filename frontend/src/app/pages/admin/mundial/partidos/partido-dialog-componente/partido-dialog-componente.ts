@@ -61,7 +61,7 @@ export class PartidoDialogComponente implements OnInit {
     this.form = this.fb.group({
       id_torneo:          [this.data?.id_torneo ?? '', Validators.required],
       id_fase:            [this.data?.id_fase ?? '', Validators.required],
-      id_grupo:           [this.data?.id_grupo ?? null],
+      id_grupo:           [this.data?.id_grupo ?? null, Validators.required],
       id_estadio:         [this.data?.id_estadio ?? '', Validators.required],
       id_equipo_local:    [this.data?.id_equipo_local ?? '', Validators.required],
       id_equipo_visitante:[this.data?.id_equipo_visitante ?? '', Validators.required],
@@ -73,7 +73,17 @@ export class PartidoDialogComponente implements OnInit {
     this.faseService.getAll().subscribe((f) => (this.fases = f));
     this.grupoService.getAll().subscribe((g) => (this.grupos = g));
     this.estadioService.getAll().subscribe((e) => (this.estadios = e));
-    this.paisService.getAll().subscribe((p) => (this.paises = p));
+
+    const idGrupo = this.form.get('id_grupo')?.value;
+    if (idGrupo) {
+      this.cargarPaisesPorGrupo(idGrupo, false);
+    } else {
+      this.paises = [];
+    }
+
+    this.form.get('id_grupo')?.valueChanges.subscribe((idGrupoSeleccionado) => {
+      this.cargarPaisesPorGrupo(idGrupoSeleccionado, true);
+    });
   }
 
   guardar(): void {
@@ -93,6 +103,29 @@ export class PartidoDialogComponente implements OnInit {
     accion$.subscribe({
       next: () => { this.snackBar.open(this.esEdicion ? 'Partido actualizado' : 'Partido creado', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] }); this.dialogRef.close(true); },
       error: () => { this.snackBar.open('Error al guardar el partido', 'Cerrar', { duration: 3500, panelClass: ['snack-error'] }); this.guardando = false; },
+    });
+  }
+
+  private cargarPaisesPorGrupo(idGrupo: number | null, limpiarEquipos: boolean): void {
+    if (!idGrupo) {
+      this.paises = [];
+      if (limpiarEquipos) {
+        this.form.patchValue({
+          id_equipo_local: '',
+          id_equipo_visitante: ''
+        }, { emitEvent: false });
+      }
+      return;
+    }
+
+    this.paisService.getByGrupo(idGrupo).subscribe((paises) => {
+      this.paises = paises;
+      if (limpiarEquipos) {
+        this.form.patchValue({
+          id_equipo_local: '',
+          id_equipo_visitante: ''
+        }, { emitEvent: false });
+      }
     });
   }
   cancelar(): void { this.dialogRef.close(false); }

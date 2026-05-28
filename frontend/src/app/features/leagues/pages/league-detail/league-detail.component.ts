@@ -74,7 +74,8 @@ export class LeagueDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(
       PredictionModalComponent,
       {
-        width: '850px',
+        width: '460px',
+        maxWidth: 'calc(100vw - 32px)',
         data: {
           ...match,
           id_liga: this.league.id_liga
@@ -84,7 +85,7 @@ export class LeagueDetailComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe((result) => {
         if (!result) return;
-        alert('Vaticinio guardado');
+        this.loadMatches();
       });
   }
 
