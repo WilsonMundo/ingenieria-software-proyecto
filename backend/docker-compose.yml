@@ -17,7 +17,7 @@ services:
       SECRET_KEY: ${SECRET_KEY:-change_me}
       ALGORITHM: ${ALGORITHM:-HS256}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-60}
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:4200}
+      FRONTEND_URL: ${FRONTEND_URL:-https://goltech.mundoalonzo.com}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_USER: ${SMTP_USER:-}
@@ -26,7 +26,7 @@ services:
       SMTP_FROM_NAME: ${SMTP_FROM_NAME:-Liga Mundial}
       EMAIL_ENABLED: ${EMAIL_ENABLED:-true}
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -52,7 +52,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - ./postgres:/var/lib/postgresql
       - ../init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro

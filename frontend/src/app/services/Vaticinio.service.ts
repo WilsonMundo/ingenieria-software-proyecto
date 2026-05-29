@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class VaticinioService {
-  private apiUrl = 'http://127.0.0.1:8000/api/vaticinios';
+  private apiUrl = `${environment.apiBaseUrl}/api/vaticinios`;
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +36,7 @@ export class VaticinioService {
 
   calcularPuntos(partidoId: number, golesLocal: number, golesVisitante: number): Observable<any> {
     return this.http.post(
-      `http://127.0.0.1:8000/vaticinios/calcular-puntos/${partidoId}?goles_local_real=${golesLocal}&goles_visitante_real=${golesVisitante}`,
+      `${environment.apiBaseUrl}/vaticinios/calcular-puntos/${partidoId}?goles_local_real=${golesLocal}&goles_visitante_real=${golesVisitante}`,
       {}
     );
   }

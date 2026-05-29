@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 export interface CierreLiga {
   id_cierre_liga: number;
   id_liga: number;
@@ -74,7 +76,7 @@ export interface CierreLigaResponse {
   providedIn: 'root'
 })
 export class PremiosService {
-  private apiUrl = 'http://127.0.0.1:8000/api/premios';
+  private apiUrl = `${environment.apiBaseUrl}/api/premios`;
   private requestTimeoutMs = 10000;
 
   constructor(private http: HttpClient) {}

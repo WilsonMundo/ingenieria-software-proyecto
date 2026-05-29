@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 import {
   ClasificacionHistoricoItem,
   ClasificacionResponse,
@@ -13,7 +15,7 @@ import {
   providedIn: 'root'
 })
 export class ClasificacionService {
-  private apiUrl = 'http://127.0.0.1:8000/api/ligas';
+  private apiUrl = `${environment.apiBaseUrl}/api/ligas`;
   private requestTimeoutMs = 10000;
 
   constructor(private http: HttpClient) {}

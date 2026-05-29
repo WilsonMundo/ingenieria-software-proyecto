@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 export interface DashboardGlobal {
   total_usuarios: number;
   total_ligas: number;
@@ -51,7 +53,7 @@ export interface AuditLogFiltros {
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'http://127.0.0.1:8000/api/admin';
+  private apiUrl = `${environment.apiBaseUrl}/api/admin`;
   private requestTimeoutMs = 10000;
 
   constructor(private http: HttpClient) {}
