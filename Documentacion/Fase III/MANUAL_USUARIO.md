@@ -1,7 +1,7 @@
-# Manual de Usuario: WorldBet League
+# Manual de Usuario: Sistema Web de Apuestas  League
 
 ## 1. Introducción
-**WorldBet League** es una plataforma interactiva diseñada para que los aficionados al fútbol puedan participar en quinielas y vaticinios deportivos. Los usuarios pueden unirse a ligas privadas, predecir resultados de partidos y competir por los primeros puestos en las tablas de clasificación.
+**Sistema Web de Apuestas ** es una plataforma interactiva diseñada para que los aficionados al fútbol puedan participar en quinielas y vaticinios deportivos. Los usuarios pueden unirse a ligas privadas, predecir resultados de partidos y competir por los primeros puestos en las tablas de clasificación.
 
 ## 2. Primeros Pasos
 * **Acceso:** Ingrese a la plataforma desde su navegador en: `https://goltech.mundoalonzo.com`.
