@@ -46,8 +46,8 @@ export class CreateLeagueComponent {
 
     this.leagueForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
-      tipo_liga: ['privada', Validators.required],
-      precio_participacion: [0],
+      tipo_liga: ['diversion', Validators.required],
+      precio_participacion: [0, [Validators.min(0)]],
       nombre_equipo: ['', [Validators.required, Validators.minLength(3)]]
     });
 

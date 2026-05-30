@@ -102,7 +102,10 @@ export class PartidoDialogComponente implements OnInit {
 
     accion$.subscribe({
       next: () => { this.snackBar.open(this.esEdicion ? 'Partido actualizado' : 'Partido creado', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] }); this.dialogRef.close(true); },
-      error: () => { this.snackBar.open('Error al guardar el partido', 'Cerrar', { duration: 3500, panelClass: ['snack-error'] }); this.guardando = false; },
+      error: (error) => {
+        this.snackBar.open(this.obtenerMensajeError(error), 'Cerrar', { duration: 4500, panelClass: ['snack-error'] });
+        this.guardando = false;
+      },
     });
   }
 
@@ -127,6 +130,14 @@ export class PartidoDialogComponente implements OnInit {
         }, { emitEvent: false });
       }
     });
+  }
+
+  private obtenerMensajeError(error: any): string {
+    const detail = error?.error?.detail;
+    if (Array.isArray(detail)) {
+      return detail.map((item) => item?.msg ?? String(item)).join('. ');
+    }
+    return detail ?? 'Error al guardar el partido';
   }
   cancelar(): void { this.dialogRef.close(false); }
 }

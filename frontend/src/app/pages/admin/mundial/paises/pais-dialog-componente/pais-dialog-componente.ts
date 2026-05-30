@@ -47,9 +47,15 @@ export class PaisDialogComponente implements OnInit {
   guardar(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.guardando = true;
+    const payload = {
+      ...this.form.value,
+      nombre: String(this.form.value.nombre).trim(),
+      codigo_fifa: String(this.form.value.codigo_fifa).trim().toUpperCase(),
+      confederacion: this.form.value.confederacion || null,
+    };
     const accion$ = this.esEdicion
-      ? this.paisService.update(this.data!.id_pais, this.form.value)
-      : this.paisService.create(this.form.value);
+      ? this.paisService.update(this.data!.id_pais, payload)
+      : this.paisService.create(payload);
     accion$.subscribe({
       next: () => { this.snackBar.open(this.esEdicion ? 'País actualizado' : 'País creado', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] }); this.dialogRef.close(true); },
       error: (error) => {

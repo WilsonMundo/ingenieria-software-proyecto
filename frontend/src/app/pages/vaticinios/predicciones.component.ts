@@ -95,7 +95,7 @@ export class PrediccionesComponent implements OnInit {
     return this.partidos.filter((partido) => {
       const cumpleFiltro =
         this.filtroActivo === 'TODAS' ||
-        (this.filtroActivo === 'SIN_PREDECIR' && !partido.ha_predicho && partido.estado_partido !== 'FINALIZADO') ||
+        (this.filtroActivo === 'SIN_PREDECIR' && !partido.ha_predicho && partido.estado_partido === 'ABIERTO') ||
         (this.filtroActivo === 'PREDICHAS' && partido.ha_predicho) ||
         (this.filtroActivo === 'FINALIZADAS' && partido.estado_partido === 'FINALIZADO');
 
@@ -135,7 +135,7 @@ export class PrediccionesComponent implements OnInit {
   }
 
   puedePredecir(partido: PartidoVaticinioDTO): boolean {
-    return partido.estado_partido !== 'FINALIZADO' && partido.estado_partido !== 'CERRADO';
+    return partido.estado_partido === 'ABIERTO';
   }
 
   trackByPrediccion(_: number, partido: PartidoVaticinioDTO): string {
@@ -171,7 +171,7 @@ export class PrediccionesComponent implements OnInit {
 
     return {
       total: partidos.length,
-      pendientes: partidos.filter((partido) => !partido.ha_predicho && partido.estado_partido !== 'FINALIZADO').length,
+      pendientes: partidos.filter((partido) => !partido.ha_predicho && partido.estado_partido === 'ABIERTO').length,
       correctas,
       precision: predichas ? Math.round((correctas / predichas) * 100) : 0
     };

@@ -61,10 +61,12 @@ def crear_liga(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Ya existe una liga con ese nombre"
         )
+    modalidad_liga = obtener_modalidad_liga(data.tipo_liga)
+
     nueva_liga = Liga(
         nombre=data.nombre,
-        tipo_liga=data.tipo_liga,
-        modalidad_liga=obtener_modalidad_liga(data.tipo_liga),
+        tipo_liga=modalidad_liga,
+        modalidad_liga=modalidad_liga,
         precio_participacion=data.precio_participacion,
         id_creador_usuario=usuario_actual.id_usuario,
         id_admin_usuario=usuario_actual.id_usuario

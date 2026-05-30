@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, aliased
 
 from app.database.session import get_db
@@ -194,21 +195,78 @@ def validar_partido_grupo(db: Session, id_grupo: int | None, id_equipo_local: in
     if not grupo:
         raise HTTPException(status_code=404, detail="Grupo no encontrado")
 
-    asignaciones = (
-        db.query(PaisGrupo.id_pais)
-        .filter(
-            PaisGrupo.id_grupo == id_grupo,
-            PaisGrupo.id_pais.in_([id_equipo_local, id_equipo_visitante])
-        )
-        .all()
-    )
-    paises_en_grupo = {id_pais for (id_pais,) in asignaciones}
+    paises_fuera_grupo = [
+        id_pais for id_pais in (id_equipo_local, id_equipo_visitante)
+        if not asegurar_pais_en_grupo(db, id_pais, id_grupo)
+    ]
 
-    if id_equipo_local not in paises_en_grupo or id_equipo_visitante not in paises_en_grupo:
+    if paises_fuera_grupo:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Los equipos del partido deben pertenecer al grupo seleccionado"
         )
+
+
+def asegurar_pais_en_grupo(db: Session, id_pais: int, id_grupo: int) -> bool:
+    asignacion = (
+        db.query(PaisGrupo)
+        .filter(
+            PaisGrupo.id_pais == id_pais,
+            PaisGrupo.id_grupo == id_grupo
+        )
+        .first()
+    )
+    if asignacion:
+        return True
+
+    pais = db.query(Pais).filter(Pais.id_pais == id_pais).first()
+    if not pais:
+        raise HTTPException(status_code=404, detail=f"Equipo {id_pais} no encontrado")
+
+    if pais.id_grupo != id_grupo:
+        return False
+
+    db.add(PaisGrupo(id_pais=id_pais, id_grupo=id_grupo))
+    db.flush()
+    return True
+
+
+def validar_relaciones_partido(
+    db: Session,
+    id_torneo: int,
+    id_fase: int,
+    id_grupo: int | None,
+    id_estadio: int
+):
+    fase = db.query(Fase).filter(Fase.id_fase == id_fase).first()
+    if not fase:
+        raise HTTPException(status_code=404, detail="Fase no encontrada")
+    if fase.id_torneo != id_torneo:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="La fase seleccionada no pertenece al torneo"
+        )
+
+    if id_grupo is not None:
+        grupo = db.query(Grupo).filter(Grupo.id_grupo == id_grupo).first()
+        if not grupo:
+            raise HTTPException(status_code=404, detail="Grupo no encontrado")
+        if grupo.id_torneo != id_torneo:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="El grupo seleccionado no pertenece al torneo"
+            )
+
+    estadio = db.query(Estadio).filter(Estadio.id_estadio == id_estadio).first()
+    if not estadio:
+        raise HTTPException(status_code=404, detail="Estadio no encontrado")
+
+
+def manejar_error_integridad_partido():
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="No se pudo guardar el partido. Verifica torneo, fase, grupo, estadio y equipos."
+    )
 
 
 @router.get("", response_model=List[PartidoSchema])
@@ -243,6 +301,13 @@ def obtener_partido(id_partido: int, db: Session = Depends(get_db)):
 
 @router.post("", response_model=PartidoSchema, status_code=status.HTTP_201_CREATED)
 def crear_partido(data: PartidoCreate, db: Session = Depends(get_db)):
+    validar_relaciones_partido(
+        db,
+        data.id_torneo,
+        data.id_fase,
+        data.id_grupo,
+        data.id_estadio
+    )
     validar_partido_grupo(
         db,
         data.id_grupo,
@@ -252,7 +317,13 @@ def crear_partido(data: PartidoCreate, db: Session = Depends(get_db)):
 
     partido = Partido(**data.model_dump())
     db.add(partido)
-    db.commit()
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        manejar_error_integridad_partido()
+
     db.refresh(partido)
 
     return obtener_partido(partido.id_partido, db)
@@ -264,15 +335,24 @@ def actualizar_partido(id_partido: int, data: PartidoUpdate, db: Session = Depen
     if not partido:
         raise HTTPException(status_code=404, detail="Partido no encontrado")
 
+    nuevo_torneo = data.id_torneo or partido.id_torneo
+    nueva_fase = data.id_fase or partido.id_fase
+    nuevo_estadio = data.id_estadio or partido.id_estadio
     nuevo_local = data.id_equipo_local or partido.id_equipo_local
     nuevo_visitante = data.id_equipo_visitante or partido.id_equipo_visitante
     nuevo_grupo = data.id_grupo if data.id_grupo is not None else partido.id_grupo
+    validar_relaciones_partido(db, nuevo_torneo, nueva_fase, nuevo_grupo, nuevo_estadio)
     validar_partido_grupo(db, nuevo_grupo, nuevo_local, nuevo_visitante)
 
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(partido, key, value)
 
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        manejar_error_integridad_partido()
+
     db.refresh(partido)
 
     return obtener_partido(partido.id_partido, db)

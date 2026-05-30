@@ -77,6 +77,10 @@
             <div class="match-action">
               @if (partido.estado_partido === 'FINALIZADO') {
                 <span class="badge bg-secondary">Finalizado</span>
+              } @else if (partido.estado_partido === 'EN_VIVO') {
+                <span class="badge bg-danger">En vivo</span>
+              } @else if (partido.estado_partido === 'CERRADO') {
+                <span class="badge bg-secondary">Cerrado</span>
               } @else if (partido.ha_predicho) {
                 <button class="btn-action btn-edit" (click)="abrirPrediccion(partido)" [disabled]="!puedePredecir(partido)">
                   Editar

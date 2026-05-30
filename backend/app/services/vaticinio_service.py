@@ -26,6 +26,37 @@ def validar_cierre_vaticinio(fecha_partido):
         )
 
 
+def validar_estado_partido_para_vaticinio(estado_partido: str | None):
+    estado = (estado_partido or "programado").strip().lower()
+    if estado != "programado":
+        raise HTTPException(
+            status_code=400,
+            detail="Solo se pueden registrar vaticinios para partidos programados."
+        )
+
+
+def obtener_estado_prediccion(estado_partido: str | None, fecha_partido):
+    estado = (estado_partido or "programado").strip().lower()
+
+    if estado == "finalizado":
+        return "FINALIZADO"
+
+    if estado in ("en_juego", "en_curso"):
+        return "EN_VIVO"
+
+    if estado in ("suspendido", "cancelado"):
+        return "CERRADO"
+
+    fecha = fecha_partido
+    if fecha and fecha.tzinfo is None:
+        fecha = fecha.replace(tzinfo=timezone.utc)
+
+    if fecha and datetime.now(timezone.utc) > fecha - timedelta(minutes=15):
+        return "CERRADO"
+
+    return "ABIERTO"
+
+
 def crear_vaticinio(
     db: Session,
     data: VaticinioCreate,
@@ -44,6 +75,7 @@ def crear_vaticinio(
             detail="Partido no encontrado"
         )
 
+    validar_estado_partido_para_vaticinio(partido.estado_partido)
     validar_cierre_vaticinio(partido.fecha_hora_inicio)
 
     miembro = (
@@ -145,9 +177,10 @@ def listar_predicciones_usuario(db: Session, usuario_actual: Usuario):
 
     predicciones = []
     for fila in filas:
-        estado = (fila["estado_partido"] or "programado").upper()
-        if estado == "PROGRAMADO":
-            estado = "ABIERTO"
+        estado = obtener_estado_prediccion(
+            fila["estado_partido"],
+            fila["fecha_hora_inicio"]
+        )
 
         predicciones.append({
             "id_liga_miembro": fila["id_liga_miembro"],
@@ -180,7 +213,7 @@ def listar_predicciones_usuario(db: Session, usuario_actual: Usuario):
             "total": len(predicciones),
             "pendientes": sum(
                 1 for item in predicciones
-                if not item["ha_predicho"] and item["estado_partido"] != "FINALIZADO"
+                if not item["ha_predicho"] and item["estado_partido"] == "ABIERTO"
             ),
             "correctas": correctas,
             "precision": round((correctas / total_predichas) * 100) if total_predichas else 0,

@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
+from sqlalchemy import and_, or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -116,14 +117,24 @@ def manejar_error_integridad():
 @router.get("", response_model=List[PaisSchema])
 def listar_paises(grupo: Optional[int] = None, db: Session = Depends(get_db)):
     if grupo is not None:
-        filas = (
-            db.query(Pais, Grupo)
-            .join(PaisGrupo, PaisGrupo.id_pais == Pais.id_pais)
-            .join(Grupo, Grupo.id_grupo == PaisGrupo.id_grupo)
-            .filter(PaisGrupo.id_grupo == grupo)
+        grupo_model = db.query(Grupo).filter(Grupo.id_grupo == grupo).first()
+        if not grupo_model:
+            return []
+
+        paises = (
+            db.query(Pais)
+            .outerjoin(
+                PaisGrupo,
+                and_(
+                    PaisGrupo.id_pais == Pais.id_pais,
+                    PaisGrupo.id_grupo == grupo
+                )
+            )
+            .filter(or_(PaisGrupo.id_grupo == grupo, Pais.id_grupo == grupo))
             .order_by(Pais.nombre)
             .all()
         )
+        return [pais_resumen(pais, grupo_model) for pais in paises]
     else:
         filas = (
             db.query(Pais, Grupo)
