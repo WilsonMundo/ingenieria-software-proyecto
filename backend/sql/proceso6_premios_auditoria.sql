@@ -20,6 +20,11 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 ALTER TABLE liga
     ADD COLUMN IF NOT EXISTS modalidad_liga VARCHAR(30) NOT NULL DEFAULT 'diversion';
 
+UPDATE liga
+SET modalidad_liga = 'apuesta'
+WHERE LOWER(tipo_liga) = 'apuesta'
+  AND modalidad_liga <> 'apuesta';
+
 -- Restriccion de valores permitidos (solo si aun no existe)
 DO $$
 BEGIN

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { LoginResponse } from '../models/dto/login-response';
+import { environment } from '../../environments/environment';
 
 export interface RegistroRequest {
   nombre_completo: string;
@@ -18,7 +19,7 @@ export interface OlvidoContraseniaRequest {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8000/api/auth';
+  private apiUrl = `${environment.apiBaseUrl}/api/auth`;
 
   constructor(private http: HttpClient) {}
 
@@ -78,7 +79,7 @@ export class AuthService {
   }
 
   obtenerRefreshToken(): string | null {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
   }
 
   obtenerUsuario(): any {
@@ -89,7 +90,7 @@ export class AuthService {
   obtenerUsuarios(): Observable<any[]> {
     const token = this.obtenerToken();
 
-    return this.http.get<any[]>('http://127.0.0.1:8000/api/usuarios', {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}/api/usuarios`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -99,7 +100,7 @@ export class AuthService {
   darBajaUsuario(idUsuario: number): Observable<any> {
     const token = this.obtenerToken();
 
-    return this.http.patch(`http://127.0.0.1:8000/api/usuarios/${idUsuario}/dar-baja`, {}, {
+    return this.http.patch(`${environment.apiBaseUrl}/api/usuarios/${idUsuario}/dar-baja`, {}, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -114,6 +115,11 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('usuario');
+    localStorage.removeItem('recordar_sesion');
+
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('usuario');
   }
 
   cambiarPassword(passwordActual: string, nuevaPassword: string): Observable<any> {
@@ -126,6 +132,13 @@ export class AuthService {
       headers: {
         Authorization: `Bearer ${token}`
       }
+    });
+  }
+
+  resetPassword(token: string, nuevaPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token: token,
+      nueva_password: nuevaPassword
     });
   }
 }

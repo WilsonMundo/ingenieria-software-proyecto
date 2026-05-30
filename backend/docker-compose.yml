@@ -1,0 +1,70 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: liga_mundial_api
+    restart: unless-stopped
+    environment:
+      APP_NAME: "Liga Mundial API"
+      APP_ENV: development
+      APP_DEBUG: "true"
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USERNAME}
+      DB_PASSWORD: ${PASSWORD_DB}
+      SECRET_KEY: ${SECRET_KEY:-change_me}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-60}
+      FRONTEND_URL: ${FRONTEND_URL:-https://goltech.mundoalonzo.com}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME:-Liga Mundial}
+      EMAIL_ENABLED: ${EMAIL_ENABLED:-true}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=3)\""
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - liga_mundial_net
+
+  db:
+    image: postgres:18.1
+    container_name: gestion-corporativa
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql
+      - ../init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - liga_mundial_net
+
+networks:
+  liga_mundial_net:
+    driver: bridge

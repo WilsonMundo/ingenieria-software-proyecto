@@ -1,0 +1,124 @@
+<div class="dashboard-container">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon icon-blue"></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ estadisticas.total }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-yellow"></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ estadisticas.pendientes }}</span>
+        <span class="stat-label">Pendientes</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-green"></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ estadisticas.correctas }}</span>
+        <span class="stat-label">Correctas</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-purple"></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ estadisticas.precision }}%</span>
+        <span class="stat-label">Precision</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="search-bar">
+      <span class="search-icon"></span>
+      <input type="text" placeholder="Buscar partidos..." (input)="onSearch($event)">
+    </div>
+
+    <div class="filter-buttons">
+      <button [class.active]="filtroActivo === 'TODAS'" (click)="cambiarFiltro('TODAS')">Todas</button>
+      <button [class.active]="filtroActivo === 'SIN_PREDECIR'" (click)="cambiarFiltro('SIN_PREDECIR')">Sin Predecir</button>
+      <button [class.active]="filtroActivo === 'PREDICHAS'" (click)="cambiarFiltro('PREDICHAS')">Predichas</button>
+      <button [class.active]="filtroActivo === 'FINALIZADAS'" (click)="cambiarFiltro('FINALIZADAS')">Finalizadas</button>
+    </div>
+  </div>
+
+  @if (mensajeError) {
+    <div class="notice error">{{ mensajeError }}</div>
+  }
+
+  @if (cargando) {
+    <div class="notice">Cargando predicciones...</div>
+  } @else {
+    <div class="matches-list">
+      @for (partido of partidosFiltrados; track trackByPrediccion($index, partido)) {
+        <div class="match-card">
+          <div class="match-group">{{ partido.liga_nombre }}</div>
+
+          <div class="match-content">
+            <div class="team local">
+              <span class="team-code">{{ partido.codigo_local }}</span>
+              <span class="team-name">{{ partido.nombre_local }}</span>
+            </div>
+
+            <div class="match-status-center">
+              <span class="vs-text">VS</span>
+            </div>
+
+            <div class="team visitante">
+              <span class="team-code">{{ partido.codigo_visitante }}</span>
+              <span class="team-name">{{ partido.nombre_visitante }}</span>
+            </div>
+
+            <div class="match-action">
+              @if (partido.estado_partido === 'FINALIZADO') {
+                <span class="badge bg-secondary">Finalizado</span>
+              } @else if (partido.estado_partido === 'EN_VIVO') {
+                <span class="badge bg-danger">En vivo</span>
+              } @else if (partido.estado_partido === 'CERRADO') {
+                <span class="badge bg-secondary">Cerrado</span>
+              } @else if (partido.ha_predicho) {
+                <button class="btn-action btn-edit" (click)="abrirPrediccion(partido)" [disabled]="!puedePredecir(partido)">
+                  Editar
+                </button>
+              } @else {
+                <button class="btn-action btn-predict" (click)="abrirPrediccion(partido)" [disabled]="!puedePredecir(partido)">
+                  Predecir
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="match-footer">
+            <span class="match-date">{{ partido.fecha_hora_inicio | date:'yyyy-MM-dd HH:mm' }}</span>
+
+            <div class="match-meta">
+              @if (partido.ha_predicho) {
+                <span class="prediction-chip">
+                  Tu prediccion: {{ partido.goles_local_pred }} - {{ partido.goles_visitante_pred }}
+                </span>
+                @if (partido.estado_partido === 'FINALIZADO') {
+                  <span class="points-chip">{{ partido.puntos }} pts</span>
+                }
+              } @else {
+                <span class="pending-chip">Sin prediccion</span>
+              }
+
+              @if (partido.estado_partido === 'EN_VIVO') {
+                <span class="badge bg-danger animate-pulse">EN VIVO</span>
+              }
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <p>No se encontraron partidos para este filtro.</p>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar Partido' : 'Nuevo Partido' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form dialog-2col">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Torneo</mat-label>
+      <mat-select formControlName="id_torneo">
+        @for (t of torneos; track t.id_torneo) { <mat-option [value]="t.id_torneo">{{t.nombre}} {{t.anio}}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fase</mat-label>
+      <mat-select formControlName="id_fase">
+        @for (f of fases; track f.id_fase) { <mat-option [value]="f.id_fase">{{f.nombre}}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Grupo</mat-label>
+      <mat-select formControlName="id_grupo">
+        @for (g of grupos; track g.id_grupo) { <mat-option [value]="g.id_grupo">{{g.nombre}}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Estadio</mat-label>
+      <mat-select formControlName="id_estadio">
+        @for (e of estadios; track e.id_estadio) { <mat-option [value]="e.id_estadio">{{e.nombre}}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Equipo Local</mat-label>
+      <mat-select formControlName="id_equipo_local">
+        @for (p of paises; track p.id_pais) {
+          <mat-option [value]="p.id_pais" [disabled]="p.id_pais === form.get('id_equipo_visitante')?.value">
+            {{p.nombre}} ({{p.codigo_fifa}})
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Equipo Visitante</mat-label>
+      <mat-select formControlName="id_equipo_visitante">
+        @for (p of paises; track p.id_pais) {
+          <mat-option [value]="p.id_pais" [disabled]="p.id_pais === form.get('id_equipo_local')?.value">
+            {{p.nombre}} ({{p.codigo_fifa}})
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha del Partido</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha_hora_inicio" />
+      <mat-datepicker-toggle matSuffix [for]="picker" />
+      <mat-datepicker #picker />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora (HH:mm)</mat-label>
+      <input matInput type="time" formControlName="hora_inicio" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado_partido">
+        @for (e of estados; track e) { <mat-option [value]="e">{{e}}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="guardando">
+    @if (guardando) { <mat-spinner diameter="20"/> } @else { {{ esEdicion ? 'Actualizar' : 'Guardar' }} }
+  </button>
+</mat-dialog-actions>

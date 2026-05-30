@@ -1,0 +1,16 @@
+.bracket-header { margin-bottom: 16px; }
+.bracket-container { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 16px; }
+.fase-columna { min-width: 220px; display: flex; flex-direction: column; gap: 12px; }
+.fase-titulo { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #555; padding: 6px 12px; background: #f0f0f0; border-radius: 6px; text-align: center; }
+.partido-card { cursor: default; transition: box-shadow 0.2s; }
+.partido-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.partido-card.finalizado { border-left: 4px solid #4caf50; }
+.partido-card.en-juego { border-left: 4px solid #ff9800; }
+.equipo { display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+.equipo-nombre { flex: 1; font-weight: 500; font-size: 0.9rem; }
+.codigo { font-size: 0.75rem; color: #888; font-weight: 600; }
+.vs-separator { text-align: center; font-size: 0.75rem; color: #999; font-weight: 700; padding: 2px 0; }
+.partido-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: #666; }
+.sin-partidos { text-align: center; color: #aaa; font-size: 0.85rem; padding: 16px; border: 1px dashed #ddd; border-radius: 8px; }
+.spinner-container { display: flex; justify-content: center; padding: 40px; }
+.lista-titulo { display: flex; align-items: center; gap: 8px; }

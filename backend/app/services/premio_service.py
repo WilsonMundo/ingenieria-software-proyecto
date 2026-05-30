@@ -217,7 +217,12 @@ def cerrar_liga_y_calcular_premios(db: Session, id_liga: int):
 
     liga = obtener_liga(db, id_liga)
 
-    if liga["modalidad_liga"] != "apuesta":
+    es_liga_apuesta = (
+        str(liga["modalidad_liga"]).lower() == "apuesta"
+        or str(liga["tipo_liga"]).lower() == "apuesta"
+    )
+
+    if not es_liga_apuesta:
         raise HTTPException(
             status_code=400,
             detail="Las ligas de diversion no generan premios monetarios"
@@ -456,7 +461,8 @@ def listar_ligas_apuesta(db: Session):
             LEFT JOIN liga_miembro lm ON lm.id_liga = l.id_liga
             LEFT JOIN cierre_liga cl
                 ON cl.id_liga = l.id_liga AND cl.deleted_at IS NULL
-            WHERE l.modalidad_liga = 'apuesta'
+            WHERE LOWER(l.modalidad_liga) = 'apuesta'
+               OR LOWER(l.tipo_liga) = 'apuesta'
             GROUP BY
                 l.id_liga, l.nombre, l.estado, l.precio_participacion,
                 cl.id_cierre_liga, cl.total_recaudado, cl.fecha_cierre

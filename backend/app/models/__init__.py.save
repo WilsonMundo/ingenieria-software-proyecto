@@ -1,0 +1,11 @@
+echo "from .sede import Sede
+from .usuario import Usuario
+from .liga import Liga
+from .rol import Rol
+from .liga_miembro import LigaMiembro
+from .invitacion_liga import InvitacionLiga
+from .solicitud_ingreso import SolicitudIngreso
+from .user_session import UserSession
+from .password_reset_token import PasswordResetToken
+from .Modelo import Partido, Vaticinio, Puntaje" > app/models/__init__.py
+

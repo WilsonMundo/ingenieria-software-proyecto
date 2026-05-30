@@ -1,0 +1,52 @@
+
+<div class="container mt-4">
+  <div class="alert alert-success text-center" *ngIf="mensajeExito">
+     {{ mensajeExito }}
+  </div>
+  <div class="alert alert-danger" *ngIf="mensajeError">
+     {{ mensajeError }}
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Registrar Vaticinio - Copa 2026</h5>
+      
+      <span class="badge" [ngClass]="partidoAbierto ? 'bg-success' : 'bg-danger'">
+        {{ partidoAbierto ? ' ABIERTO' : ' CERRADO' }}
+      </span>
+    </div>
+
+    <div class="card-body">
+      <div class="alert alert-warning text-center" *ngIf="!partidoAbierto">
+        Este partido ya no acepta más predicciones.
+      </div>
+
+      <form (ngSubmit)="enviarVaticinio()" #vaticinioForm="ngForm">
+        <div class="row align-items-center text-center">
+          <div class="col-5">
+            <label class="fw-bold d-block mb-2">{{ partido.equipo_local }}</label>
+            <input type="number" class="form-control text-center form-control-lg" 
+                   [(ngModel)]="prediccion.goles_local_pred" name="local" required min="0"
+                   [disabled]="!partidoAbierto">
+          </div>
+          
+          <div class="col-2"><strong class="fs-4 text-muted">VS</strong></div>
+          
+          <div class="col-5">
+            <label class="fw-bold d-block mb-2">{{ partido.equipo_visitante }}</label>
+            <input type="number" class="form-control text-center form-control-lg" 
+                   [(ngModel)]="prediccion.goles_visitante_pred" name="visita" required min="0"
+                   [disabled]="!partidoAbierto">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-success w-100 mt-4 py-2 fw-bold" 
+                [disabled]="!vaticinioForm.valid || !partidoAbierto">
+          Guardar Predicción
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
